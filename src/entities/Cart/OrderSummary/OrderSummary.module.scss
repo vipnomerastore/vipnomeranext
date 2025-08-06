@@ -1,0 +1,180 @@
+@use "../../../styles/variables.scss" as *;
+
+.stickySummary {
+  position: sticky;
+  top: 122px;
+  height: fit-content;
+  width: 300px;
+  padding: 25px;
+  background-color: rgba(30, 30, 30, 0.98);
+  border: 1px solid $cart-border-color;
+  border-radius: 20px;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex-shrink: 0;
+  align-self: flex-start;
+  transition: top 0.3s;
+
+  @media (min-width: 768px) and (max-width: 1199px) {
+    width: 250px;
+    padding: 15px;
+    gap: 16px;
+    top: 100px;
+  }
+
+  @media (max-width: 767px) {
+    position: static;
+    width: 100%;
+    padding: 15px;
+    gap: 18px;
+    margin-top: 0;
+  }
+}
+
+.orderSummary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.summaryTitle {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: $primary-color;
+  letter-spacing: 0.01em;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  gap: 16px;
+  font-size: 13px;
+  align-items: center;
+}
+
+.title {
+  color: #fff;
+  opacity: 0.86;
+}
+
+.itemValue {
+  color: #fff;
+  font-weight: 600;
+}
+
+.deliveryValue {
+  color: #257210;
+  font-weight: 600;
+}
+
+.installmentSummary {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid $cart-border-color;
+  color: #fff;
+  font-weight: 700;
+}
+
+.firstPaymentLabel,
+.firstPaymentValue {
+  color: #fff;
+  font-weight: 600;
+}
+
+.stickySummary .checkoutButton {
+  position: relative;
+  z-index: 0;
+  padding: 13px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient($secondary-color, $primary-color);
+  color: $darker-background;
+  cursor: pointer;
+  transition: box-shadow 0.25s, background 0.28s, color 0.18s, transform 0.13s,
+    opacity 0.3s;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+  outline: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    background: linear-gradient($primary-color, $secondary-color);
+    z-index: -1;
+    transition: opacity 0.4s;
+    pointer-events: none;
+  }
+
+  &:hover:not(:disabled),
+  &:focus-visible:not(:disabled) {
+    box-shadow: 0 4px 16px rgba($secondary-color, 0.45);
+    background: linear-gradient(
+      92.2deg,
+      $primary-color 0,
+      $secondary-color 113.53%
+    );
+    color: $darker-background;
+    outline: none;
+  }
+
+  &:active:not(:disabled) {
+    background: linear-gradient($primary-color, $secondary-color);
+    box-shadow: 0 2px 6px rgba($secondary-color, 0.48);
+    color: #fff;
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $primary-color;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px $primary-color;
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+    background: linear-gradient($grey-text-color, $grey-text-color);
+    color: $grey-text-color;
+    border: none;
+
+    &::before {
+      opacity: 0.12;
+      background: none;
+      border: none;
+    }
+  }
+
+  @supports not (
+    background: linear-gradient($secondary-color, $primary-color)
+  ) {
+    background: $primary-color;
+
+    &:hover:not(:disabled) {
+      background: $secondary-color;
+    }
+
+    &:disabled {
+      background: $grey-text-color;
+    }
+  }
+}

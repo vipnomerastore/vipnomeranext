@@ -1,0 +1,112 @@
+@use "../../styles/variables" as *;
+@use "sass:color";
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  position: relative;
+  background-color: $dark-background;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 0 20px $shadow-color;
+  color: $text-color;
+
+  @media (max-width: 480px) {
+    padding: 1.2rem;
+  }
+}
+
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: $primary-color;
+  text-align: center;
+
+  @media (max-width: 480px) {
+    font-size: 1.25rem;
+  }
+}
+
+.closeButton {
+  position: absolute;
+  top: 0.6rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 3rem;
+  color: $gray-light;
+  cursor: pointer;
+
+  &:hover {
+    color: $primary-color;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+}
+
+.regionList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 10px;
+  text-align: center;
+  height: 400px; /* Fixed height */
+  overflow-y: auto; /* Enable scrolling */
+  color: white; /* Set text color to white */
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns on medium screens */
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr); /* 4 columns on large screens */
+  }
+}
+
+.regionButton {
+  font-size: 14px; /* Reduced font size */
+  background: none; /* Remove button styles */
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  color: inherit; /* Inherit text color */
+}
+
+.searchInput {
+  width: 100%;
+  height: 40px;
+  margin: 0;
+  padding: 0 12px;
+  background-color: #2a2a2a;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 14px;
+  transition: all 0.3s linear;
+  margin-bottom: 30px;
+
+  &:hover {
+    border-color: #fdfca4;
+  }
+
+  &:focus {
+    border-color: #fdfca4;
+    color: #ffffff;
+    outline: none;
+  }
+
+  &::placeholder {
+    color: rgba($text-color-light, 0.5);
+  }
+}

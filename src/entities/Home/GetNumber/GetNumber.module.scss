@@ -1,0 +1,233 @@
+.wrapper {
+  width: 100%;
+}
+
+.container {
+  max-width: 1166px;
+  border-radius: 20px;
+  border: 2px solid;
+  height: 160px;
+  margin: 0 auto;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5rem;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 2px;
+    background-image: linear-gradient(to right, #fdfca4, #d9ad49);
+    border-radius: inherit;
+    -webkit-mask: linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude,
+      linear-gradient(#000 0 0);
+    pointer-events: none;
+  }
+
+  .img {
+    right: 3%;
+    bottom: 0;
+    background: url(/assets/home/getNumber/bg.webp) center / cover no-repeat;
+    position: absolute;
+    width: 60%;
+    height: 100%;
+    z-index: -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      max-width: 100%;
+      object-fit: contain;
+      border: 0;
+    }
+  }
+
+  .info {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .title {
+      font-size: 32px;
+      color: #ffffff;
+
+      .titleSpan {
+        color: #e4c565;
+      }
+    }
+
+    .pretitle {
+      font-size: 20px;
+      color: #ffffff;
+    }
+  }
+}
+
+.chooseButton {
+  min-height: 48px;
+  position: relative;
+  z-index: 1;
+  padding: 8px 16px;
+  gap: 8px;
+  border-radius: 8px;
+  color: #222;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow: hidden;
+  transition: all 0.4s;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 4px 12px 0 rgba(253, 252, 164, 0.25);
+
+  &::after {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    content: "";
+    left: 0;
+    top: 0;
+    background: linear-gradient(131deg, #fdfca4 0, #d9ad49 100%);
+  }
+
+  &:hover {
+    box-shadow: 0 8px 24px 0 rgba(253, 252, 164, 0.25);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .container {
+    max-width: 90%;
+    padding: 30px;
+    height: auto;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .info {
+    .title {
+      font-size: 28px;
+    }
+
+    .pretitle {
+      font-size: 18px;
+    }
+  }
+
+  .img {
+    right: -10%;
+    width: 50%;
+    height: 80%;
+
+    background: none;
+  }
+
+  .chooseButton {
+    padding: 6px 12px;
+    font-size: 13px;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: center;
+  }
+
+  .info {
+    align-items: center;
+
+    .title {
+      font-size: 24px;
+    }
+
+    .pretitle {
+      font-size: 16px;
+    }
+  }
+
+  .img {
+    position: relative;
+    right: 0;
+    width: 100%;
+    height: auto;
+
+    img {
+      max-width: 80%;
+      margin: 0 auto;
+    }
+
+    background: none;
+  }
+
+  .chooseButton {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 15px;
+    border-radius: 12px;
+  }
+
+  .info {
+    .title {
+      font-size: 20px;
+    }
+
+    .pretitle {
+      font-size: 14px;
+    }
+  }
+
+  .img {
+    img {
+      max-width: 70%;
+      display: none;
+    }
+  }
+
+  .chooseButton {
+    padding: 8px;
+    font-size: 12px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}

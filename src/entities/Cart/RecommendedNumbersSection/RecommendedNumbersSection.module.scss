@@ -1,0 +1,297 @@
+@use "../../../styles/variables.scss" as *;
+
+.recommendWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  gap: 24px;
+  margin: 0 auto;
+  width: 100%;
+
+  @media (max-width: 1199px) {
+    max-width: 960px;
+    padding: 0 10px;
+  }
+
+  @media (max-width: 767px) {
+    max-width: 100%;
+    gap: 18px;
+  }
+}
+
+.recommendTitle {
+  --gradient-border-width: 4px;
+  position: relative;
+  font-size: 40px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: $text-color;
+  padding-left: calc(var(--gradient-border-width) + 16px);
+  margin-bottom: 20px;
+  margin-top: 40px;
+  border-left: none;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--gradient-border-width);
+    background: $title-gradient;
+    border-radius: 4px;
+  }
+
+  @media (max-width: 1199px) {
+    font-size: 32px;
+    padding-left: calc(var(--gradient-border-width) + 12px);
+  }
+
+  @media (max-width: 767px) {
+    --gradient-border-width: 3px;
+    font-size: 22px;
+    padding-left: calc(var(--gradient-border-width) + 10px);
+    margin-bottom: 13px;
+    margin-top: 24px;
+  }
+}
+
+.recommendList {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 10px 0;
+  width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #222;
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #262626;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+    opacity: 0.5;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #c2b052;
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  @media (max-width: 767px) {
+    gap: 10px;
+    padding: 5px 0;
+  }
+}
+
+.numberItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: 20px;
+  min-width: 420px;
+  max-width: 480px;
+  flex-shrink: 0;
+  min-height: 80px;
+  background: radial-gradient(
+      100% 120% at 60% 120%,
+      rgba($primary-color, 0.13) 0%,
+      rgba(30, 30, 30, 0.98) 80%
+    ),
+    linear-gradient(90deg, rgba($primary-color, 0.03), rgba(0, 0, 0, 0.08));
+  border: 1.5px solid rgba($primary-color, 0.35);
+  box-shadow: 0 4px 12px 0 rgba($primary-color, 0.1);
+
+  @media (max-width: 767px) {
+    min-width: 0;
+    width: clamp(260px, 80vw, 340px);
+    padding: 14px 10px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    border-radius: 12px;
+  }
+}
+
+.numberItemNumber {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+
+  @media (max-width: 767px) {
+    width: 100%;
+  }
+}
+
+.numberItemNumberImg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.numberItemNumberTitle {
+  color: $text-color;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+.numberItemPrice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-grow: 1;
+  justify-content: flex-end;
+
+  @media (max-width: 767px) {
+    flex-grow: 0;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.numberItemPriceTitle {
+  color: $text-color;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  white-space: nowrap;
+  padding-right: 18px;
+
+  @media (max-width: 767px) {
+    padding-right: 0;
+    white-space: normal;
+  }
+}
+
+.numberItemCredit {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.02),
+      rgba(255, 255, 255, 0.03)
+    ),
+    radial-gradient(
+      177.78% 177.78% at 50% 100%,
+      rgba($secondary-color, 0.13) 0,
+      rgba($primary-color, 0) 100%
+    );
+  padding: 6px;
+  align-items: center;
+  border-radius: 10px;
+  flex-shrink: 0;
+  min-width: 110px;
+
+  @media (max-width: 767px) {
+    align-items: flex-start;
+    padding: 8px 10px;
+    width: fit-content;
+    min-width: 0;
+  }
+}
+
+.numberItemCreditTitle {
+  color: $text-color;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.numberItemCreditContent {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.numberItemCreditContentImg {
+  width: 10px;
+  height: 10px;
+}
+
+.numberItemCreditContentText {
+  color: $credit-text-color;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.numberItemCart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.04),
+      rgba(255, 255, 255, 0.01)
+    ),
+    radial-gradient(
+      177.78% 177.78% at 50% 100%,
+      rgba($secondary-color, 0.13) 0,
+      rgba($primary-color, 0) 100%
+    );
+  transition: background 0.25s, box-shadow 0.21s, filter 0.22s;
+  flex-shrink: 0;
+  border: none;
+
+  img {
+    transition: filter 0.23s;
+    filter: brightness(110%);
+  }
+
+  &:hover {
+    background: linear-gradient(
+      92.2deg,
+      $primary-color 0,
+      $secondary-color 113.53%
+    );
+    box-shadow: 0 4px 14px 0 rgba($secondary-color, 0.25);
+
+    img {
+      filter: brightness(0%) invert(1);
+    }
+  }
+
+  &:active {
+    box-shadow: 0 2px 6px 0 rgba($secondary-color, 0.28);
+    transform: translateY(1px);
+    background: linear-gradient(
+      92.2deg,
+      $secondary-color 0,
+      $primary-color 113.53%
+    );
+  }
+
+  @media (max-width: 767px) {
+    width: 100%;
+    height: 44px;
+    border-radius: 9px;
+  }
+}
+
+.error,
+.loading {
+  color: $primary-color;
+  font-size: 16px;
+  margin: 30px auto 40px;
+  text-align: center;
+}

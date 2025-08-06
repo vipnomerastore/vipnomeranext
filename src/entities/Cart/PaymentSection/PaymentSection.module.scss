@@ -1,0 +1,167 @@
+@use "../../../styles/variables.scss" as *;
+
+@mixin gradient-border($radius: 5px, $width: 2px) {
+  position: relative;
+  z-index: 1;
+
+  &::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    border-radius: $radius;
+    padding: $width;
+    background: $title-gradient;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
+.paymentSection {
+  background-color: $dark-background;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid $cart-border-color;
+
+  @media (max-width: 767px) {
+    padding: 15px;
+  }
+}
+
+.paymentTitle {
+  --gradient-border-width: 4px;
+  position: relative;
+  font-size: 40px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: $text-color;
+  padding-left: calc(var(--gradient-border-width) + 16px);
+  margin-bottom: 20px;
+  border-left: none;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--gradient-border-width);
+    background: $title-gradient;
+  }
+
+  @media (max-width: 1199px) {
+    font-size: 32px;
+    padding-left: calc(var(--gradient-border-width) + 12px);
+  }
+
+  @media (max-width: 767px) {
+    --gradient-border-width: 3px;
+    font-size: 24px;
+    padding-left: calc(var(--gradient-border-width) + 10px);
+    margin-bottom: 15px;
+  }
+}
+
+.paymentTabs,
+.installmentPeriodTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  justify-content: flex-start;
+
+  @media (max-width: 767px) {
+    justify-content: center;
+    gap: 8px;
+  }
+}
+
+.paymentTab,
+.installmentPeriodTab {
+  padding: 12px 18px;
+  border: 1.5px solid #555555;
+  border-radius: 5px;
+  background-color: transparent;
+  color: $grey-text-color;
+  cursor: pointer;
+  transition: color 0.25s, border-color 0.25s, background 0.28s,
+    box-shadow 0.18s;
+  font-size: 14px;
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+  appearance: none;
+  outline: none;
+
+  &:hover,
+  &:focus-visible {
+    border-color: $primary-color;
+    color: $text-color;
+    background: rgba($primary-color, 0.07);
+  }
+
+  &.active {
+    @include gradient-border(5px, 1px);
+    border: none;
+    color: $text-color;
+    background: rgba($primary-color, 0.13);
+    box-shadow: 0 2px 12px 0 rgba($primary-color, 0.13);
+  }
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+
+  &:active {
+    background: rgba($primary-color, 0.16);
+    color: $primary-color;
+  }
+
+  @media (max-width: 767px) {
+    padding: 10px 15px;
+    font-size: 12px;
+    flex: 1 1 100%;
+    min-width: 0;
+    text-align: center;
+  }
+}
+
+.installmentPeriodTitle {
+  font-size: 16px;
+  font-weight: bold;
+  color: $text-color;
+  margin-bottom: 15px;
+
+  @media (max-width: 767px) {
+    font-size: 14px;
+  }
+}
+
+.paymentContent {
+  width: 100%;
+  padding: 0;
+  background-color: transparent;
+  box-sizing: border-box;
+  color: $text-color;
+  margin-top: 10px;
+}
+
+.noBankInstallmentOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background-color: rgba($darker-background, 0.5);
+  border: 1px solid $cart-border-color;
+  border-radius: 10px;
+  padding: 15px;
+
+  @media (max-width: 767px) {
+    padding: 10px;
+  }
+}

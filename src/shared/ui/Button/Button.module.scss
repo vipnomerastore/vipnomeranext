@@ -1,0 +1,43 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 8px;
+  background-color: #d9ad49;
+  color: #000;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #fdfca4;
+}
+
+.outline {
+  background-color: transparent;
+  border: 2px solid #d9ad49;
+  color: #d9ad49;
+}
+
+.outline:hover {
+  background-color: #d9ad49;
+  color: #000;
+}
+
+.arrow {
+  gap: 8px;
+}
+
+.arrowIcon {
+  font-size: 16px;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.button:hover .arrowIcon {
+  transform: translateX(4px);
+}

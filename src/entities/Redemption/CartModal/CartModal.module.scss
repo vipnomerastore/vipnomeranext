@@ -1,0 +1,59 @@
+@use "../../../styles/variables.scss" as *;
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  backdrop-filter: blur(5px);
+}
+
+.modalContent {
+  background: linear-gradient(92.2deg, #fdfca4 0, #d9ad49 113.53%);
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  color: #000;
+  outline: none;
+}
+
+.modalText {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.modalButton {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  background-color: #1a1a1a;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  &:hover {
+    background-color: #333;
+    color: #fdfca4;
+  }
+
+  &:active {
+    background-color: #000;
+    transform: translateY(1px);
+  }
+}

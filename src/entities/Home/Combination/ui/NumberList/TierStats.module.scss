@@ -1,0 +1,177 @@
+@use "../../../../../styles/variables.scss" as *;
+
+.tierStats {
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid #333333;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+
+  .title {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 15px 0;
+    text-align: center;
+  }
+
+  .statsGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+  }
+
+  .statItem {
+    position: relative;
+    padding: 14px 24px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    min-width: 140px;
+    width: 140px;
+    min-height: 60px;
+    height: 60px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    &.active {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .tierName {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 0;
+      line-height: 1.1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 6px;
+
+      .tierSubName {
+        color: #ffffff;
+        font-size: 12px;
+      }
+    }
+
+    .tierCount {
+      display: none;
+    }
+
+    .tierPercentage {
+      font-size: 10px;
+      opacity: 0.8;
+      margin-bottom: 8px;
+    }
+
+    .progressBar {
+      height: 4px;
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    // Tier-specific styles
+    &.all {
+      border-color: #666666;
+
+      .tierName,
+      .tierCount,
+      .tierPercentage {
+        color: #cccccc;
+      }
+
+      .tierCount {
+        display: none !important;
+      }
+    }
+
+    &.bronze {
+      border-color: #cd7f32;
+
+      .tierName,
+      .tierCount,
+      .tierPercentage {
+        color: #cd7f32;
+      }
+    }
+
+    &.gold {
+      border-color: #ffd700;
+
+      .tierName,
+      .tierCount,
+      .tierPercentage {
+        color: #ffd700;
+      }
+    }
+
+    &.silver {
+      border-color: #e5e4e2;
+
+      .tierName,
+      .tierCount,
+      .tierPercentage {
+        color: #e5e4e2;
+        text-shadow: none;
+      }
+    }
+
+    &.platinum {
+      border-color: #b9f2ff;
+
+      .tierName,
+      .tierCount,
+      .tierPercentage {
+        color: #b9f2ff;
+        text-shadow: none;
+      }
+    }
+
+    &.vip {
+      border-color: #a259ff;
+
+      .tierName,
+      .tierCount,
+      .tierPercentage {
+        color: #a259ff;
+        text-shadow: 0 1px 8px #a259ff33;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .tierStats {
+    padding: 8px;
+
+    .statsGrid {
+      gap: 8px;
+    }
+
+    .statItem {
+      padding: 3.5px 3.5px;
+      min-width: 95px;
+      width: 80px;
+      min-height: 60px;
+      height: 60px;
+
+      .tierName {
+        font-size: 12px;
+      }
+    }
+  }
+}

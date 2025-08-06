@@ -1,0 +1,102 @@
+@use "../../styles/variables.scss" as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  height: 100vh;
+  width: 100%;
+  max-width: 1166px;
+  margin: 0 auto;
+
+  p {
+    font-size: 14px;
+    color: #ffffff;
+  }
+
+  .title1 {
+    border-top: 1px solid #ffffff;
+    padding-top: 10px;
+
+    span {
+      font-weight: 600;
+    }
+  }
+
+  .title2 {
+    border-bottom: 1px solid #ffffff;
+    padding-bottom: 10px;
+  }
+
+  .note {
+    padding: 15px 20px;
+    background-color: #d9edf7;
+    color: #31708f;
+
+    span {
+      font-weight: 600;
+    }
+  }
+
+  .button {
+    width: 16.5625rem;
+    height: 2.75rem;
+    cursor: pointer;
+    font: 700 0.875rem/1.43 sans-serif;
+    color: #222222;
+    border-radius: 0.625rem;
+    background: linear-gradient(to right, $secondary-color, $primary-color);
+    border: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba($secondary-color, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      width: 100%;
+      max-width: 18rem;
+    }
+  }
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  max-width: 1166px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 15px 0px;
+
+  @media (max-width: 1199px) {
+    max-width: 960px;
+    padding: 10px 15px;
+  }
+
+  @media (max-width: 767px) {
+    font-size: 12px;
+    padding: 10px;
+  }
+
+  .breadcrumbLink {
+    color: $primary-color;
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $text-color;
+      text-decoration: underline;
+    }
+  }
+
+  .breadcrumbSeparator {
+    color: $gray-light;
+  }
+
+  .breadcrumbCurrent {
+    color: $gray-medium;
+  }
+}

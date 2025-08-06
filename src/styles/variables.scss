@@ -1,0 +1,52 @@
+$primary-color: #fdfca4;
+$secondary-color: #d9ad49;
+$border-color: #f0df82;
+$text-color: #ffffff;
+$text-color-light: #ffffff;
+$text-color-dark: #000000;
+$gray-light: rgba(255, 255, 255, 0.6);
+$gray-medium: rgba(255, 255, 255, 0.8);
+$gray-dark: rgb(120, 120, 120);
+$input-bg: #2a2a2a;
+$input-background: #373737;
+$shadow-color: rgba(219, 203, 0, 0.2);
+$dark-background: #212121;
+$darker-background: #1a1a1a;
+$cart-border-color: #333333;
+$breadcrumb-inactive: rgba(255, 255, 255, 0.6);
+$breadcrumb-active: rgba(255, 255, 255, 0.8);
+$credit-text-color: #928f82;
+$grey-text-color: #cccccc;
+$title-gradient: linear-gradient(to bottom, $primary-color, $secondary-color);
+$max-container-width: 1166px;
+$header-height: 102px;
+$container-padding-top: 20px;
+$mobile-header-height: 70px;
+$mobile-container-padding-top: 15px;
+$background-form: rgba(0, 0, 0, 0.7);
+$border-color-hover-focus: $primary-color;
+$breakpoint-desktop: 1200px;
+$breakpoint-tablet: 768px;
+$primary-gradient: linear-gradient(#d9ad49, #fdfca4);
+$primary-color: #d9ad49;
+$text-color: #ffffff;
+$background-dark: #272727;
+$button-bg: #322e25;
+$button-hover-bg: linear-gradient(92.2deg, #fdfca4 0, #d9ad49 113.53%);
+
+@mixin gradient-border($radius: 10px, $border-width: 1px) {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: $radius;
+  padding: $border-width;
+  background: linear-gradient(
+    92.2deg,
+    $primary-color 0,
+    $secondary-color 113.53%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}

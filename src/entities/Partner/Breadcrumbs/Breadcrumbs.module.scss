@@ -1,0 +1,41 @@
+@use "../../../styles/variables.scss" as *;
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  max-width: 1166px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 10px 20px;
+
+  @media (max-width: 1199px) {
+    max-width: 960px;
+    padding: 10px 15px;
+  }
+
+  @media (max-width: 767px) {
+    font-size: 12px;
+    padding: 10px;
+  }
+
+  .breadcrumbLink {
+    color: $primary-color;
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $text-color;
+      text-decoration: underline;
+    }
+  }
+
+  .breadcrumbSeparator {
+    color: $gray-light;
+  }
+
+  .breadcrumbCurrent {
+    color: $gray-medium;
+  }
+}

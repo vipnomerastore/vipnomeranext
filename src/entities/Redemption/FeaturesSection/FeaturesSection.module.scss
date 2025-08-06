@@ -1,0 +1,83 @@
+@use "../../../styles/variables.scss" as *;
+
+.tabWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-width: 1166px;
+  gap: 20px;
+  margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+  width: 100%;
+  padding: 0 10px;
+
+  @media (max-width: 1200px) {
+    max-width: 960px;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    gap: 10px;
+    padding: 0 15px;
+  }
+}
+
+.tabItemTop,
+.tabItemBottom {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+.tabItem {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  flex: 1 1 0;
+  height: 80px;
+  border: 1px solid $secondary-color;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  transition: background-color 0.3s ease;
+
+  &:hover,
+  &:focus-within {
+    background-color: rgba($secondary-color, 0.1);
+  }
+
+  @media (max-width: 768px) {
+    padding: 15px;
+    height: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  img {
+    width: 32px;
+    height: 32px;
+
+    @media (max-width: 768px) {
+      width: 28px;
+      height: 28px;
+    }
+  }
+}
+
+.tabItemTitle {
+  color: $text-color;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
+}

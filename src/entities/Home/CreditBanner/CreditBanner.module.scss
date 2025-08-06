@@ -1,0 +1,874 @@
+// Existing variables remain unchanged
+$max-container-width: 1166px;
+$primary-color: #fdfca4;
+$secondary-color: #d9ad49;
+$border-color: #f0df82;
+$text-color: #ffffff;
+$gray-light: rgba(255, 255, 255, 0.6);
+$gray-medium: rgba(255, 255, 255, 0.8);
+$gray-dark: rgb(120, 120, 120);
+$input-bg: #2a2a2a;
+$shadow-color: rgba(219, 203, 0, 0.2);
+$header-height: 102px;
+$container-padding-top: 20px;
+$mobile-header-height: 70px;
+$mobile-container-padding-top: 15px;
+$border-color-select: rgba(255, 255, 255, 0.4);
+$background-select: rgba(40, 40, 40, 0.7);
+$dark-background: #212121;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .content {
+    width: 100%;
+    position: relative;
+    max-width: $max-container-width;
+    margin: 0 auto;
+    overflow-x: hidden;
+
+    .sixthAction {
+      border-radius: 20px;
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      margin: 20px;
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background: url("/assets/home/newBanner/bg-2.webp") center/cover
+          no-repeat;
+        filter: grayscale(100%);
+        z-index: -2;
+        border-radius: 20px;
+      }
+
+      .sixthActionContent {
+        position: relative;
+        z-index: 100;
+        height: 100%;
+        padding: 40px;
+
+        @media (max-width: 768px) {
+          padding: 20px;
+        }
+
+        .innerContent {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+          padding: 40px;
+          border: 1px solid $secondary-color;
+          border-radius: 20px;
+          position: relative;
+          z-index: 100;
+
+          @media (max-width: 768px) {
+            padding: 20px;
+          }
+
+          &::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            z-index: -1;
+          }
+        }
+
+        .sixthActionHeader {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+        }
+
+        .backIcon {
+          width: 50%;
+          position: absolute;
+          right: -13%;
+          top: 25%;
+          z-index: 2;
+          transform: translateY(-50%);
+          pointer-events: none;
+
+          @media (max-width: 1024px) {
+            display: none;
+          }
+        }
+
+        .timer {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          background-color: rgba(39, 39, 39, 0.5);
+          padding: 4px 8px;
+          border-radius: 6px;
+          width: max-content;
+
+          img {
+            width: 18px;
+            height: 18px;
+          }
+
+          .timerText {
+            background: linear-gradient($secondary-color, $primary-color);
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: clamp(12px, 2vw, 16px);
+            font-weight: 500;
+            margin: 0;
+          }
+        }
+
+        .sixthActionTitle {
+          font-size: clamp(20px, 3vw, 24px);
+          line-height: clamp(20px, 3.5vw, 30px);
+          font-weight: 700;
+          color: $text-color;
+          text-transform: uppercase;
+          margin: 0;
+
+          .sixthActionTitleSpan {
+            background: linear-gradient($secondary-color, $primary-color);
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+          }
+        }
+
+        .submitButton {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 15px;
+          padding: 10px 16px;
+          border: 1px solid transparent;
+          color: #000000;
+          border-radius: 8px;
+          transition: box-shadow 0.5s;
+          cursor: pointer;
+          background: linear-gradient(#d9ad49, #fdfca4);
+          font-size: 14px;
+          font-weight: 600;
+          width: max-content;
+
+          span {
+            color: #000000;
+          }
+
+          &:hover {
+            box-shadow: -1px 6px 22px 2px $shadow-color;
+          }
+
+          @media (max-width: 768px) {
+            align-self: center;
+            width: 100%;
+            font-size: 12px;
+            font-weight: 600;
+          }
+        }
+
+        .sixthActionPrices {
+          display: flex;
+          gap: 10px;
+          align-items: stretch;
+          flex-wrap: wrap;
+
+          .sixthActionPricesWrapper {
+            padding: 12px;
+            border-radius: 8px;
+            background: linear-gradient(
+                232.01deg,
+                rgba(53, 53, 53, 0.4) 8.85%,
+                rgba(34, 34, 34, 0.4) 98.8%
+              ),
+              radial-gradient(
+                50% 50% at 50% 100%,
+                rgba($secondary-color, 0.16) 0,
+                rgba($primary-color, 0) 100%
+              );
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            width: 470px;
+            max-width: 470px;
+            position: relative;
+            z-index: 5;
+
+            @media (max-width: 768px) {
+              align-items: flex-start;
+              gap: 12px;
+              padding: 10px;
+              width: 100%;
+              flex-direction: column; // Ensure vertical stacking
+            }
+
+            .phoneAndSelect {
+              display: flex;
+              align-items: center;
+              gap: 10px;
+
+              @media (max-width: 768px) {
+                flex-direction: row;
+                justify-content: space-between;
+                width: 100%;
+              }
+            }
+
+            .sixthActionPriceMenu {
+              display: flex;
+              gap: 10px;
+              align-items: center;
+
+              @media (max-width: 768px) {
+                gap: 10px;
+                padding: 0; // Remove padding to avoid extra spacing
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                justify-content: center;
+                margin: 0; // Remove margin to align with phoneAndSelect
+              }
+            }
+
+            .sixthActionPriceTitle {
+              background: linear-gradient($secondary-color, $primary-color);
+              background-clip: text;
+              -webkit-text-fill-color: transparent;
+              font-size: clamp(16px, 2.5vw, 18px);
+              font-weight: 600;
+              margin: 0;
+              white-space: nowrap;
+
+              @media (max-width: 768px) {
+                flex-shrink: 0;
+                font-size: 14px;
+              }
+            }
+
+            .calendarSelectWrapper {
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              background-color: $dark-background;
+              color: $text-color;
+              border: 1px solid $border-color-select;
+              border-radius: 10px;
+              padding: 6px 12px;
+              width: 140px;
+              height: 32px;
+              transition: border-color 0.3s ease, box-shadow 0.3s ease;
+              position: relative;
+              z-index: 10;
+
+              &.open {
+                z-index: 1000;
+              }
+
+              &:hover {
+                border-color: $primary-color;
+                box-shadow: 0 2px 6px rgba($secondary-color, 0.3);
+              }
+
+              @media (max-width: 768px) {
+                width: 100%;
+                max-width: 140px; // Limit width on mobile
+                padding: 6px 10px;
+                flex-grow: 1;
+              }
+
+              svg {
+                flex-shrink: 0;
+                width: 14px;
+                height: 14px;
+                fill: $primary-color;
+              }
+            }
+
+            .thirdPriceWrapper {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border-radius: 10px;
+              gap: 8LEANpx;
+              background: #fff;
+              padding: 8px 10px;
+              flex-wrap: nowrap;
+              cursor: pointer;
+              transition: background-color 0.8s;
+
+              // Ensure button stays below on mobile
+              @media (max-width: 768px) {
+                margin-top: 10px;
+                align-self: center;
+              }
+
+              &:hover {
+                background: linear-gradient(#d9ad49, #fdfca4);
+              }
+
+              .thirdPriceImg {
+                width: 16px;
+                height: 16px;
+                fill: none;
+                stroke: #222;
+              }
+
+              .thirdPriceTitle {
+                font-size: clamp(10px, 1.8vw, 12px);
+                font-weight: 600;
+                color: #1e1e1e;
+                margin: 0;
+              }
+            }
+
+            .cartIcon {
+              width: clamp(18px, 2.2vw, 22px);
+              height: clamp(18px, 2.2vw, 22px);
+              flex-shrink: 0;
+            }
+
+            .thirdPriceTitle {
+              color: $text-color;
+              font-size: clamp(14px, 2.2vw, 18px);
+              font-weight: 600;
+              margin: 0;
+              white-space: nowrap;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Existing media queries remain unchanged below this point
+@media (max-width: 768px) {
+  .actionGalleryWrapper {
+    gap: 10px;
+    padding: 10px 0;
+  }
+
+  .actionWrapper {
+    margin: 0 10px;
+    .action {
+      min-width: auto;
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+
+      .actionContent {
+        padding: 10px;
+        gap: 12px;
+        box-sizing: border-box;
+      }
+    }
+  }
+
+  .mainSwiper {
+    height: auto;
+  }
+
+  .firstAction,
+  .secondAction,
+  .thirdAction,
+  .fourthAction,
+  .fifthAction,
+  .sixthAction {
+    margin: 10px;
+    border-radius: 12px;
+
+    .backIcon {
+      display: none;
+    }
+
+    .firstActionContent,
+    .secondActionContent,
+    .thirdActionContent,
+    .fourthActionContent,
+    .fifthActionContent,
+    .sixthActionContent {
+      padding: 15px;
+
+      .innerContent {
+        padding: 15px;
+        gap: 12px;
+        border-radius: 12px;
+      }
+
+      .firstActionHeader,
+      .secondActionHeader,
+      .thirdActionHeader,
+      .fourthActionHeader,
+      .fifthActionHeader,
+      .sixthActionHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .timer {
+        gap: 6px;
+        padding: 3px 6px;
+
+        img {
+          width: 14px;
+          height: 14px;
+        }
+
+        .timerText {
+          font-size: clamp(10px, 1.8vw, 14px);
+        }
+      }
+
+      .firstActionTitle,
+      .secondActionTitle,
+      .thirdActionTitle,
+      .fourthActionTitle,
+      .fifthActionTitle,
+      .sixthActionTitle {
+        font-size: clamp(16px, 2.8vw, 20px);
+        line-height: clamp(18px, 3.2vw, 24px);
+        text-align: left;
+      }
+
+      .submitButton {
+        width: 100%;
+        height: 36px;
+        font-size: clamp(10px, 1.8vw, 12px);
+        align-self: center;
+      }
+
+      .firstActionPricesWrapper,
+      .secondActionPricesWrapper,
+      .thirdActionPricesWrapper,
+      .fourthActionPricesWrapper,
+      .fifthActionPricesWrapper,
+      .sixthActionPricesWrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 10px;
+        width: 100%;
+
+        .firstPrice,
+        .sixthActionPriceTitle {
+          font-size: clamp(12px, 2.2vw, 16px);
+          text-align: center;
+        }
+
+        .secondPrice {
+          font-size: clamp(8px, 1.6vw, 10px);
+        }
+
+        .thirdPriceWrapper {
+          width: 100%;
+          padding: 6px 8px;
+          gap: 6px;
+
+          .thirdPriceImg {
+            width: 12px;
+            height: 12px;
+          }
+
+          .thirdPriceTitle {
+            font-size: clamp(8px, 1.6vw, 10px);
+          }
+        }
+      }
+    }
+
+    .secondActionPrices {
+      flex-direction: column;
+      gap: 8px;
+
+      .secondActionPricesWrapper {
+        width: 100%;
+      }
+    }
+
+    .fourthActionPrices {
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .fifthActionPrices {
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .sixthActionPrices {
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .sixthActionBottom {
+      .sixthActionForm {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+
+        .formInputs {
+          flex-direction: column;
+          width: 100%;
+          gap: 8px;
+
+          input {
+            width: 100%;
+            height: 36px;
+            padding-inline: 10px;
+            font-size: clamp(10px, 1.8vw, 12px);
+          }
+        }
+      }
+
+      .sixthActionBottomTitle {
+        font-size: clamp(12px, 2vw, 16px);
+      }
+    }
+  }
+
+  .wrapper {
+    :global(.swiper-button-next),
+    :global(.swiper-button-prev) {
+      width: 30px;
+      height: 30px;
+      color: #fdfca4 !important;
+    }
+
+    :global(.swiper-pagination) {
+      margin-top: 8px;
+    }
+
+    :global(.swiper-pagination-bullet) {
+      width: 6px;
+      height: 6px;
+    }
+  }
+
+  .inputField {
+    input {
+      height: 40px;
+      font-size: 14px;
+    }
+  }
+}
+
+.wrapper {
+  :global(.swiper-button-next),
+  :global(.swiper-button-prev) {
+    color: #fdfca4 !important;
+  }
+
+  :global(.swiper-pagination) {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-top: 10px;
+  }
+
+  :global(.swiper-pagination-bullet) {
+    background: #fff !important;
+    opacity: 0.5 !important;
+    transition: opacity 0.3s ease;
+  }
+
+  :global(.swiper-pagination-bullet-active) {
+    background: #fdfca4 !important;
+    opacity: 1 !important;
+  }
+}
+
+.customSelect {
+  flex: 1;
+  width: calc(100% - 20px);
+  padding: 0 10px;
+  font-size: clamp(10px, 1.8vw, 14px);
+  font-weight: 500;
+  background: linear-gradient($secondary-color, $primary-color);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+
+  &:hover {
+    background: linear-gradient($primary-color, $secondary-color);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 8px;
+  }
+
+  .selectText {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+  }
+}
+
+.arrow {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  margin-left: 10px;
+
+  @media (max-width: 768px) {
+    margin-left: 8px;
+  }
+}
+
+.optionsList {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  min-width: 140px;
+  max-width: 100%;
+  background: $dark-background;
+  border: 1px solid $border-color-select;
+  border-radius: 8px;
+  z-index: 1000;
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    min-width: 100px;
+  }
+}
+
+.option {
+  padding: 8px 12px;
+  color: $text-color;
+  font-size: 14px;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+
+  &:hover {
+    background: rgba($primary-color, 0.1);
+  }
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  backdrop-filter: blur(5px);
+
+  @media (max-width: 768px) {
+    backdrop-filter: blur(5px);
+  }
+}
+
+.modalContent {
+  position: relative;
+  padding: 30px 40px;
+  border-radius: 20px;
+  max-width: 520px;
+  width: 90%;
+  z-index: 10001;
+  background: #242423;
+  border: 1px solid #2b2b2b;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  @media (max-width: 767px) {
+    padding: 20px 25px;
+    border-radius: 15px;
+    gap: 10px;
+  }
+}
+
+.closeButton {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #fdfca4;
+  }
+
+  @media (max-width: 767px) {
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+  }
+}
+
+.title {
+  font: 700 1.8rem/1.2 sans-serif;
+  color: #ffffff;
+  margin: 0;
+  text-transform: uppercase;
+
+  @media (max-width: 767px) {
+    font-size: 1.5rem;
+  }
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  padding-top: 20px;
+
+  @media (max-width: 767px) {
+    gap: 10px;
+    padding-top: 15px;
+  }
+}
+
+.inputField {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  input {
+    width: 100%;
+    height: 50px;
+    padding: 0 16px;
+    border-radius: 12px;
+    background-color: #2a2a2a;
+    border: 1px solid #2a2a2a;
+    color: #ffffff;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+
+    &:hover,
+    &:focus {
+      border-color: #fdfca4;
+    }
+
+    &::placeholder {
+      color: #888;
+      opacity: 1;
+    }
+  }
+}
+
+.checkboxWrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  width: 100%;
+  justify-content: center;
+
+  @media (max-width: 767px) {
+    gap: 3px;
+    width: 100%;
+  }
+}
+
+.checkboxText {
+  color: #a0a0a0;
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0;
+  text-align: left;
+  flex-grow: 1;
+  max-width: calc(100% - 30px);
+
+  @media (max-width: 767px) {
+    font-size: 11px;
+    max-width: calc(100% - 25px);
+    text-align: center;
+  }
+}
+
+.link {
+  color: #fdfca4;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.submitButton {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(#212121, #212121) padding-box,
+    linear-gradient(131deg, #d9ad49 0, #fdfca4 100%) border-box;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    background: linear-gradient(#3c3c3b, #3c3c3b) padding-box,
+      linear-gradient(131deg, #d9ad49 0, #fdfca4 100%) border-box;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 767px) {
+    padding: 8px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+}
+
+.errorMessage {
+  color: #ff6b6b;
+  font-size: 12px;
+  margin-top: 0;
+  margin-bottom: 0;
+  text-align: left;
+  width: 100%;
+  min-height: 1.2em;
+  box-sizing: border-box;
+
+  @media (max-width: 767px) {
+    font-size: 11px;
+  }
+}

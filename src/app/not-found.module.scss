@@ -1,0 +1,81 @@
+@use "../styles/variables.scss" as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #212121;
+  padding: 20px;
+  text-align: center;
+  color: #ffffff;
+
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
+}
+
+.errorCode {
+  font: 700 6rem/1.2 sans-serif;
+  margin: 0;
+  text-transform: uppercase;
+  background: linear-gradient(#d9ad49, #fdfca4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  @media (max-width: 768px) {
+    font-size: 4rem;
+  }
+
+  @media (max-width: 569px) {
+    font-size: 3rem;
+  }
+}
+
+.message {
+  font: 400 1.2rem/1.5 sans-serif;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 20px 0;
+  max-width: 600px;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    margin: 15px 0;
+  }
+
+  @media (max-width: 569px) {
+    font-size: 0.9rem;
+  }
+}
+
+.button {
+  display: inline-block;
+  padding: 12px 24px;
+  background: linear-gradient(#212121, #212121) padding-box,
+    linear-gradient(131deg, $primary-color 0, $secondary-color 100%) border-box;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: linear-gradient(#3c3c3b, #3c3c3b) padding-box,
+      linear-gradient(131deg, $primary-color 0, $secondary-color 100%)
+        border-box;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,913 @@
+$max-container-width: 1166px;
+$primary-color: #d9ad49;
+$secondary-color: #d9ad49;
+$border-color: #f0df82;
+$text-color: #ffffff;
+$gray-light: rgba(255, 255, 255, 0.6);
+$gray-medium: rgba(255, 255, 255, 0.8);
+$gray-dark: rgb(120, 120, 120);
+$input-bg: #2a2a2a;
+$shadow-color: rgba(219, 203, 0, 0.2);
+$header-height: 102px;
+$container-padding-top: 20px;
+$mobile-header-height: 70px;
+$mobile-container-padding-top: 15px;
+$border-color-select: rgba(255, 255, 255, 0.4);
+$background-select: rgba(40, 40, 40, 0.7);
+$dark-background: #212121;
+
+.actionGalleryWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.actionWrapper {
+  position: relative;
+  max-width: $max-container-width;
+  margin: 0 auto;
+  overflow-x: hidden;
+}
+
+.mainSwiper {
+  height: auto;
+  width: 100%;
+}
+
+.firstAction,
+.secondAction,
+.thirdAction,
+.fourthAction,
+.fifthAction {
+  border-radius: 20px;
+  position: relative;
+  z-index: 1;
+  height: auto;
+  margin: 20px;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: url("/assets/home/newBanner/bg-2.webp") center/cover no-repeat;
+    filter: grayscale(100%);
+    z-index: -2;
+    border-radius: 20px;
+  }
+
+  .firstActionContent,
+  .secondActionContent,
+  .thirdActionContent,
+  .fourthActionContent,
+  .fifthActionContent {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    padding: 40px;
+    overflow: hidden;
+
+    .innerContent {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 40px;
+      border: 1px solid $secondary-color;
+      border-radius: 20px;
+      position: relative;
+      z-index: 1;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(8px);
+        border-radius: 20px;
+        z-index: -1;
+      }
+    }
+
+    .firstActionHeader,
+    .secondActionHeader,
+    .thirdActionHeader,
+    .fourthActionHeader,
+    .fifthActionHeader {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .backIcon {
+      width: 55%;
+      position: absolute;
+      right: -9%;
+      top: 55%;
+      z-index: 2;
+      transform: translateY(-50%);
+    }
+
+    .timer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background-color: rgba(39, 39, 39, 0.5);
+      padding: 4px 8px;
+      border-radius: 6px;
+      width: max-content;
+
+      img {
+        width: 18px;
+        height: 18px;
+      }
+
+      .timerText {
+        background: linear-gradient($secondary-color, $primary-color);
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: clamp(12px, 2vw, 16px);
+        font-weight: 500;
+        margin: 0;
+      }
+    }
+
+    .firstActionTitle,
+    .secondActionTitle,
+    .thirdActionTitle,
+    .fourthActionTitle,
+    .fifthActionTitle {
+      font-size: clamp(16px, 3vw, 24px);
+      line-height: clamp(20px, 3.5vw, 28px);
+      font-weight: 700;
+      color: $text-color;
+      text-transform: uppercase;
+      margin: 0;
+
+      .firstActionTitleSpan,
+      .secondActionTitleSpan,
+      .thirdActionTitleSpan,
+      .fourthActionTitleSpan,
+      .fifthActionTitleSpan {
+        background: linear-gradient($secondary-color, $primary-color);
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+
+    .submitButton {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      padding: 12px 16px;
+      border: 1px solid transparent;
+      color: #000000;
+      border-radius: 8px;
+      transition: box-shadow 0.5s;
+      cursor: pointer;
+      background: linear-gradient($secondary-color, $primary-color);
+      font-size: 14px;
+      font-weight: 700;
+      width: max-content;
+
+      span {
+        color: #000000;
+      }
+
+      &:hover {
+        box-shadow: -1px 6px 22px 2px $shadow-color;
+      }
+    }
+
+    .firstActionPricesWrapper,
+    .secondActionPricesWrapper,
+    .thirdActionPricesWrapper,
+    .fourthActionPricesWrapper,
+    .fifthActionPricesWrapper {
+      display: flex;
+      align-items: center;
+      width: max-content;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 8px;
+      background: linear-gradient(
+          232.01deg,
+          rgba(53, 53, 53, 0.4) 8.85%,
+          rgba(34, 34, 34, 0.4) 98.8%
+        ),
+        radial-gradient(
+          50% 50% at 50% 100%,
+          rgba(217, 173, 73, 0.16) 0,
+          rgba(253, 252, 164, 0) 100%
+        );
+
+      .firstPrice {
+        font-size: clamp(14px, 2.5vw, 28px);
+        font-weight: 600;
+        background: linear-gradient(
+          131deg,
+          $primary-color 0,
+          $secondary-color 100%
+        );
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin: 0;
+      }
+
+      .secondPrice {
+        color: #a1a1a1;
+        font-size: clamp(10px, 1.8vw, 14px);
+        text-decoration: line-through;
+        margin: 0;
+      }
+
+      .thirdPriceWrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        gap: 8px;
+        background: #fff;
+        padding: 8px 10px;
+        flex-wrap: nowrap;
+        cursor: pointer;
+        white-space: nowrap;
+
+        .thirdPriceImg {
+          width: 16px;
+          height: 16px;
+          fill: none;
+          stroke: #222;
+        }
+
+        .thirdPriceTitle {
+          font-size: clamp(10px, 1.8vw, 16px);
+          font-weight: 600;
+          color: #1e1e1e;
+          margin: 0;
+          white-space: nowrap;
+        }
+
+        .cartIcon {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+  }
+
+  .secondActionPrices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+
+  .fourthActionPrices {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+  }
+
+  .fifthActionPrices {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+
+    .fifthActionPriceTitle {
+      background: linear-gradient($secondary-color, $primary-color);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: clamp(14px, 2.5vw, 20px);
+      font-weight: 600;
+    }
+  }
+
+  .fifthActionBottom {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+.fifthAction {
+  border-radius: 20px;
+  position: relative;
+  z-index: 1;
+  height: auto;
+  margin: 20px;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: url("/assets/home/newBanner/bg-2.webp") center/cover no-repeat;
+    filter: grayscale(100%);
+    z-index: -2;
+    border-radius: 20px;
+  }
+
+  .fifthActionContent {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    padding: 40px;
+
+    .innerContent {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 40px;
+      background: linear-gradient(144deg, #0f0c08 35%, #b89d60 100%);
+      border-radius: 20px;
+      position: relative;
+      z-index: 1;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(8px);
+        border-radius: 20px;
+        z-index: -1;
+      }
+    }
+
+    .fifthActionHeader {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .backIcon {
+      width: 35%;
+      position: absolute;
+      right: 3%;
+      top: 55%;
+      z-index: 2;
+      transform: translateY(-50%);
+    }
+
+    .timer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background-color: rgba(39, 39, 39, 0.5);
+      padding: 4px 8px;
+      border-radius: 6px;
+      width: max-content;
+
+      img {
+        width: 18px;
+        height: 18px;
+      }
+
+      .timerText {
+        background: linear-gradient(#d9ad49, #fdfca4);
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: clamp(12px, 2vw, 16px);
+        font-weight: 500;
+        margin: 0;
+      }
+    }
+
+    .fifthActionTitle {
+      font-size: 32px;
+      line-height: clamp(20px, 3.5vw, 28px);
+      font-weight: 700;
+      color: #ffffff;
+      text-transform: uppercase;
+      margin: 0;
+
+      .fifthActionTitleSpan {
+        background: linear-gradient(#d9ad49, #fdfca4);
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+
+    .equal {
+      font-size: 16px;
+      line-height: clamp(20px, 3.5vw, 28px);
+      font-weight: 700;
+      background: linear-gradient(#d9ad49, #fdfca4);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .submitButton {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      padding: 12px 16px;
+      border: 1px solid transparent;
+      color: #000000;
+      border-radius: 8px;
+      transition: box-shadow 0.5s;
+      cursor: pointer;
+      background: linear-gradient(#d9ad49, #fdfca4);
+      font-size: 14px;
+      font-weight: 700;
+      width: max-content;
+
+      span {
+        color: #000000;
+      }
+
+      &:hover {
+        box-shadow: -1px 6px 22px 2px $shadow-color;
+      }
+
+      @media (max-width: 768px) {
+        align-self: center;
+      }
+    }
+
+    .fifthActionPrices {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+
+      .fifthActionPricesWrapper {
+        padding: 12px;
+        border-radius: 8px;
+        background: linear-gradient(
+            232.01deg,
+            rgba(53, 53, 53, 0.4) 8.85%,
+            rgba(34, 34, 34, 0.4) 98.8%
+          ),
+          radial-gradient(
+            50% 50% at 50% 100%,
+            rgba(217, 173, 73, 0.16) 0,
+            rgba(253, 252, 164, 0) 100%
+          );
+
+        .fifthActionPriceTitle {
+          background: linear-gradient(#d9ad49, #fdfca4);
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font-size: clamp(14px, 2.5vw, 20px);
+          font-weight: 600;
+        }
+      }
+
+      .firstPrice {
+        font-size: clamp(14px, 2.5vw, 28px);
+        font-weight: 600;
+        background: linear-gradient(131deg, #fdfca4 0, #d9ad49 100%);
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .thirdPriceWrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        gap: 8px;
+        background: #fff;
+        padding: 8px 10px;
+        flex-wrap: nowrap;
+        cursor: pointer;
+
+        .cartIcon {
+          width: 24px;
+          height: 24px;
+          fill: none;
+          stroke: #222;
+        }
+
+        .thirdPriceTitle {
+          font-size: 16px;
+          font-weight: 600;
+          color: #1e1e1e;
+          margin: 0;
+          white-space: nowrap;
+        }
+      }
+    }
+
+    .fifthActionBottom {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .actionGalleryWrapper {
+    gap: 10px;
+    padding: $mobile-container-padding-top 0;
+  }
+
+  .actionWrapper {
+    margin: 0 10px;
+  }
+
+  .mainSwiper {
+    height: auto;
+  }
+
+  .firstAction,
+  .secondAction,
+  .thirdAction,
+  .fourthAction,
+  .fifthAction {
+    margin: 10px;
+    border-radius: 12px;
+
+    .backIcon {
+      display: none;
+    }
+
+    .firstActionContent,
+    .secondActionContent,
+    .thirdActionContent,
+    .fourthActionContent,
+    .fifthActionContent {
+      padding: 15px;
+
+      .innerContent {
+        padding: 15px;
+        gap: 12px;
+        border-radius: 12px;
+      }
+
+      .firstActionHeader,
+      .secondActionHeader,
+      .thirdActionHeader,
+      .fourthActionHeader,
+      .fifthActionHeader {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .timer {
+        gap: 6px;
+        padding: 3px 6px;
+
+        img {
+          width: 14px;
+          height: 14px;
+        }
+
+        .timerText {
+          font-size: clamp(10px, 1.8vw, 14px);
+        }
+      }
+
+      .firstActionTitle,
+      .secondActionTitle,
+      .thirdActionTitle,
+      .fourthActionTitle,
+      .fifthActionTitle {
+        font-size: clamp(14px, 2.8vw, 20px);
+        line-height: clamp(18px, 3.2vw, 24px);
+        text-align: left;
+      }
+
+      .submitButton {
+        width: 100%;
+        max-width: 180px;
+        height: 44px;
+        font-size: clamp(12px, 2vw, 14px);
+        align-self: center;
+        padding: 10px 16px;
+      }
+
+      .firstActionPricesWrapper,
+      .secondActionPricesWrapper,
+      .thirdActionPricesWrapper,
+      .fourthActionPricesWrapper,
+      .fifthActionPricesWrapper {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 10px;
+        width: 100%;
+
+        .firstPrice {
+          font-size: clamp(16px, 3vw, 24px);
+        }
+
+        .secondPrice {
+          font-size: clamp(10px, 1.8vw, 12px);
+        }
+
+        .thirdPriceWrapper {
+          padding: 8px 12px;
+          gap: 6px;
+          width: 100%;
+          justify-content: center;
+
+          .thirdPriceTitle {
+            font-size: clamp(12px, 2.2vw, 16px);
+          }
+
+          .cartIcon {
+            width: 20px;
+            height: 20px;
+          }
+        }
+      }
+    }
+
+    .secondActionPrices {
+      flex-direction: column;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .fourthActionPrices {
+      flex-direction: column;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .fifthActionPrices {
+      flex-direction: column;
+      gap: 12px;
+      align-items: stretch;
+
+      .fifthActionPriceTitle {
+        font-size: clamp(14px, 2.8vw, 20px);
+      }
+    }
+
+    .fifthActionBottom {
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+  }
+
+  .modalOverlay {
+    padding: 10px;
+  }
+
+  .modalContent {
+    padding: 20px;
+    gap: 10px;
+    max-width: 90%;
+  }
+
+  .modalTitle {
+    font-size: 1.5rem;
+  }
+
+  .modalForm {
+    gap: 10px;
+    padding-top: 15px;
+  }
+
+  .modalInputField input {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .modalCheckboxText {
+    font-size: 11px;
+  }
+
+  .modalSubmitButton {
+    padding: 10px;
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1180px) {
+  .actionWrapper {
+    margin: 0 20px;
+    max-width: 900px;
+  }
+
+  .fifthAction {
+    .backIcon {
+      display: none;
+    }
+  }
+
+  .firstAction,
+  .secondAction,
+  .thirdAction,
+  .fourthAction,
+  .fifthAction {
+    margin: 15px;
+    border-radius: 16px;
+
+    .firstActionContent,
+    .secondActionContent,
+    .thirdActionContent,
+    .fourthActionContent,
+    .fifthActionContent {
+      padding: 25px;
+
+      .innerContent {
+        padding: 20px;
+        gap: 16px;
+        border-radius: 16px;
+      }
+
+      .firstActionHeader,
+      .secondActionHeader,
+      .thirdActionHeader,
+      .fourthActionHeader,
+      .fifthActionHeader {
+        gap: 12px;
+      }
+
+      .firstActionTitle,
+      .secondActionTitle,
+      .thirdActionTitle,
+      .fourthActionTitle,
+      .fifthActionTitle {
+        font-size: clamp(15px, 2.5vw, 22px);
+        line-height: clamp(18px, 3vw, 26px);
+      }
+
+      .submitButton {
+        max-width: 200px;
+        font-size: 15px;
+        padding: 10px 16px;
+      }
+    }
+  }
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.modalContent {
+  position: relative;
+  padding: 30px 20px;
+  border-radius: 20px;
+  max-width: 520px;
+  width: 90%;
+  background: #242423;
+  border: 1px solid #2b2b2b;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.closeButton {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+.modalTitle {
+  font: 700 1.8rem/1.375 sans-serif;
+  color: $text-color;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.modalForm {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.modalInputField {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  input {
+    width: 100%;
+    height: 50px;
+    padding: 0 16px;
+    border-radius: 12px;
+    background-color: $input-bg;
+    border: 1px solid $input-bg;
+    color: $text-color;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+
+    &:hover,
+    &:focus {
+      border-color: $primary-color;
+    }
+
+    &::placeholder {
+      color: #888;
+      opacity: 1;
+    }
+  }
+}
+
+.modalCheckboxWrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  width: 100%;
+  justify-content: center;
+}
+
+.modalCheckboxText {
+  color: #a0a0a0;
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0;
+  text-align: left;
+  flex-grow: 1;
+  max-width: calc(100% - 30px);
+}
+
+.modalLink {
+  color: $primary-color;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.modalSubmitButton {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient($dark-background, $dark-background) padding-box,
+    linear-gradient(131deg, $secondary-color 0, $primary-color 100%) border-box;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: $text-color;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    background: linear-gradient(#3c3c3b, #3c3c3b) padding-box,
+      linear-gradient(131deg, $secondary-color 0, $primary-color 100%)
+        border-box;
+    transform: translateY(-2px);
+  }
+}
+
+.modalErrorMessage {
+  color: #ff6b6b;
+  font-size: 12px;
+  margin: 0;
+  text-align: left;
+  width: 100%;
+}
+
+.secondAction {
+  .secondActionContent {
+    .backIcon {
+      width: 50%;
+      position: absolute;
+      right: -13%;
+      top: 25%;
+      z-index: 1;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+  }
+}

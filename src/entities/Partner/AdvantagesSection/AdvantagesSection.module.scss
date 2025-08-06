@@ -1,0 +1,175 @@
+@use "../../../styles/variables.scss" as *;
+
+.section {
+  width: 100%;
+  max-width: 1166px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 80px;
+
+  @media (max-width: 1199px) {
+    max-width: 960px;
+    padding: 0 15px;
+    gap: 48px;
+  }
+
+  @media (max-width: 767px) {
+    padding: 0 8px;
+    gap: 28px;
+  }
+}
+
+.sectionContent {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+.textBlock {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  position: relative;
+  padding-left: 18px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, $primary-color, $secondary-color);
+  }
+
+  @media (max-width: 767px) {
+    padding-left: 9px;
+
+    &::before {
+      width: 2px;
+    }
+  }
+}
+
+.title {
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1.13;
+  color: $text-color;
+  background: linear-gradient(90deg, $primary-color 0%, $secondary-color 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  @media (max-width: 1200px) {
+    font-size: 30px;
+  }
+
+  @media (max-width: 767px) {
+    font-size: 20px;
+  }
+}
+
+.advantagesGrid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 26px;
+  padding: 18px 0;
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 9px 0;
+  }
+}
+
+.advantageItem {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  background: rgba($secondary-color, 0.05);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px 0 rgba($primary-color, 0.09),
+    0 1px 2px rgba(0, 0, 0, 0.03);
+  padding: 24px 22px;
+  min-height: 116px;
+  position: relative;
+  transition: box-shadow 0.22s, transform 0.18s;
+
+  &:hover {
+    box-shadow: 0 8px 36px 0 rgba($secondary-color, 0.19),
+      0 2px 8px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px) scale(1.025);
+    background: linear-gradient(
+      95deg,
+      rgba($primary-color, 0.09) 0%,
+      rgba($secondary-color, 0.09) 100%
+    );
+  }
+
+  img {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px 0 rgba($primary-color, 0.15);
+    background: linear-gradient(
+      120deg,
+      rgba(#fff, 0.17),
+      rgba($primary-color, 0.11)
+    );
+    padding: 6px;
+    transition: box-shadow 0.2s;
+    filter: drop-shadow(0 2px 6px rgba($secondary-color, 0.12));
+  }
+
+  @media (max-width: 767px) {
+    gap: 9px;
+    padding: 14px 10px;
+    border-radius: 10px;
+    min-height: 68px;
+
+    img {
+      width: 30px;
+      height: 30px;
+      padding: 4px;
+    }
+  }
+}
+
+.advantageTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: $primary-color;
+  margin: 0 0 6px;
+  letter-spacing: 0.01em;
+
+  @media (max-width: 767px) {
+    font-size: 16px;
+    margin-bottom: 2px;
+  }
+}
+
+.advantageDescription {
+  font-size: 15px;
+  color: $text-color;
+  margin: 0;
+  line-height: 1.45;
+  opacity: 0.86;
+
+  @media (max-width: 767px) {
+    font-size: 12.5px;
+  }
+}

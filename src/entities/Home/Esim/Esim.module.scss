@@ -1,0 +1,225 @@
+.wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 1166px;
+  min-width: 1166px;
+  margin: 0 auto;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    min-width: auto;
+    padding: 0 20px;
+  }
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 30px;
+  }
+}
+
+.phoneImage {
+  max-width: 100%;
+  height: auto;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  margin-top: 65px;
+
+  @media (max-width: 768px) {
+    margin-top: 0;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 60px;
+  position: relative;
+  z-index: 3;
+  border: 1px solid #2b2b2b;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 50px;
+  border-radius: 20px;
+  min-width: 480px;
+  backdrop-filter: blur(20px);
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    width: 70px;
+    height: 90px;
+    transform: translate(-35px, -38px);
+    background: url("/assets/home/esim/offer-icon.svg") center / contain
+      no-repeat;
+  }
+
+  @media (max-width: 768px) {
+    min-width: auto;
+    width: 100%;
+    padding: 30px;
+  }
+}
+
+.title {
+  font: 600 2.5rem/1.2 sans-serif;
+  color: #fff;
+  margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 1.75rem;
+  }
+}
+
+.feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.cardImage {
+  padding-top: 6px;
+
+  @media (max-width: 768px) {
+    width: 50px;
+  }
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.featureTitle {
+  font: 600 1.25rem/1.4 sans-serif;
+  color: #fff;
+  margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+}
+
+.featureSubtitle {
+  font: 400 0.875rem/1.4 sans-serif;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
+  }
+}
+
+.button {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 12px 16px;
+  background: linear-gradient(#212121, #212121) padding-box,
+    linear-gradient(131deg, #fdfca4 0, #d9ad49 100%) border-box;
+  border: 1px solid transparent;
+  color: #fff;
+  border-radius: 8px;
+  transition: all 0.4s;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  width: max-content;
+
+  span {
+    background: linear-gradient(#d9ad49, #fdfca4);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  &:hover {
+    box-shadow: -1px 6px 22px 2px rgba(219, 203, 0, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    align-self: center;
+  }
+}
+
+.circle {
+  width: 350px;
+  height: 350px;
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  &::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #41413c;
+    border-radius: 50%;
+    animation: circle-pulse 3.5s 0.6s linear infinite;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+@keyframes circle-pulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  60%,
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}

@@ -1,0 +1,149 @@
+@use "../../../../../styles/variables.scss" as *;
+
+.sorting {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+
+  height: 100%;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 1;
+  height: 30px;
+  overflow: hidden;
+  transition: opacity 0.3s ease-in-out, max-height 0.3s ease-in-out;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    max-width: 500px;
+  }
+}
+
+.filtersHidden {
+  opacity: 0;
+  max-height: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.sortMenuContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  .sortMenu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  @media (max-width: 480px) {
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+.sortMenuButton {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  padding: 0.7rem 1rem;
+  background-color: #242424;
+  border: 1px solid #3a3a3a;
+  border-radius: 0.65rem;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s, transform 0.2s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+  white-space: nowrap;
+}
+
+.copyButton {
+  font-weight: 700;
+  font-size: 18px;
+  color: #ffffff;
+  padding: 6px 12px;
+  background-color: #242424;
+  border: 1px solid #3a3a3a;
+  border-radius: 0.65rem;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s, transform 0.2s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+  white-space: nowrap;
+}
+
+.selectFilters {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  width: 100%;
+  max-width: 550px;
+  margin: 0 auto;
+  flex-wrap: nowrap;
+}
+
+.operatorsFilter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  min-width: 150px;
+
+  .operatorsFilterTitle {
+    font-size: 14px;
+    color: #ffffff;
+  }
+
+  .operatorsList {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+
+    .operatorItem {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background-color: #282828;
+      padding: 10px;
+      border-radius: 10px;
+      color: #ffffff;
+      cursor: pointer;
+      border: 1px solid #282828;
+      transition: border 0.3s linear;
+
+      &.active {
+        border-color: $primary-color;
+      }
+
+      &:hover:not(.active) {
+        border-color: #646464;
+      }
+
+      img {
+        height: 20px;
+        width: auto;
+      }
+
+      p {
+        margin: 0;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    min-width: 0;
+  }
+}

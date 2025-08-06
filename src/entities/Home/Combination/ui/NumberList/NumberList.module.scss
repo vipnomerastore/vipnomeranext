@@ -1,0 +1,955 @@
+// === Импорт переменных и базовые настройки ===
+@use "../../../../../styles/variables.scss" as *;
+
+// === КОНТЕЙНЕР ВИТРИНЫ НОМЕРОВ ===
+.list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: auto;
+  z-index: 1;
+  border: 1px solid #333333;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 1400px;
+  min-width: 340px;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+      100% 100% at 49.99% 100%,
+      rgba(217, 173, 73, 0.0002) 0,
+      rgba(253, 252, 164, 0.0002) 100%
+    );
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+  }
+
+  // === СЕТКА КАРТОЧЕК ===
+  .numberList {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    position: relative;
+    padding: 10px;
+    width: 100%;
+    z-index: 1;
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+
+    // Крупные карточки (gold, platinum, vip) на всю ширину
+    @media (min-width: 1200px) {
+      & > .gold,
+      & > .platinum,
+      & > .vip {
+        grid-column: 1 / -1;
+        justify-self: center;
+        width: 90%;
+        max-width: 900px;
+      }
+    }
+
+    // === КАРТОЧКА НОМЕРА ===
+    .numberItem {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background-color: #272624;
+      border-radius: 10px;
+      height: auto;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s ease;
+      min-height: 30px;
+
+      // --- Стили для разных Уровней ---
+      &.bronze {
+        border: 2px solid #cd7f32;
+        background: linear-gradient(135deg, #272624 0%, #2a2a2a 100%);
+        padding: 10px 14px !important;
+
+        .numberItemPriceTitle {
+          font-size: 14px;
+        }
+
+        .numberItemNumberTitle {
+          font-size: 17px !important;
+          font-weight: 900;
+          letter-spacing: 2.5px;
+        }
+      }
+
+      &.silver {
+        border: 2px solid #e5e4e2;
+        min-height: 70px;
+        padding: 12px 14px !important;
+
+        .numberItemPriceTitle {
+          font-size: 14px;
+        }
+
+        .numberItemNumberTitle {
+          font-size: 17px !important;
+          font-weight: 900;
+          letter-spacing: 2.5px;
+        }
+      }
+
+      &.gold {
+        border: 2px solid #ffd700;
+        background: linear-gradient(135deg, #272624 0%, #303030 100%);
+        padding: 16px 14px !important;
+
+        .numberItemPriceTitle {
+          font-size: 14px;
+        }
+
+        .numberItemNumberTitle {
+          font-size: 17px !important;
+          font-weight: 900;
+          letter-spacing: 2.5px;
+        }
+      }
+
+      &.platinum {
+        border: 2px solid #b9f2ff;
+        min-height: 70px !important;
+        padding: 18px 14px !important;
+        box-shadow: 0 0 16px 0 #b9f2ff55;
+
+        .numberItemPriceTitle {
+          font-size: 16px;
+        }
+
+        .numberItemNumberTitle {
+          font-size: 17px !important;
+          font-weight: 900;
+          letter-spacing: 2.5px;
+        }
+      }
+
+      &.vip {
+        position: relative;
+        z-index: 1; // чтобы контент был поверх псевдоэлемента
+        border: 2px solid transparent;
+        border-radius: 16px;
+        min-height: 70px !important;
+        padding: 22px 14px !important;
+        box-shadow: 0 0 20px 0 #a259ff55;
+
+        &::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          border-radius: 16px;
+          padding: 2px;
+          background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+          -webkit-mask: linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          pointer-events: none;
+          z-index: -1;
+        }
+
+        .numberItemPriceTitle {
+          font-size: 14px;
+          color: #e6deff;
+        }
+        .numberItemNumberTitle {
+          font-size: 19px !important;
+          font-weight: 900;
+          letter-spacing: 2.5px;
+          color: #fff;
+        }
+      }
+
+      // --- Строка с номером и ценой ---
+      .numberAndPriceRow {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 50px;
+      }
+
+      .numberAndPriceRowDiscount {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+      }
+
+      // --- Блок с рассрочкой и корзиной ---
+      .installmentAndCartRow {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        gap: 20px;
+      }
+
+      // --- Блок с номером и иконкой оператора ---
+      .numberItemNumber {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+
+        .numberItemNumberImg {
+          width: 24px;
+          height: 24px;
+        }
+
+        .numberItemNumberTitle {
+          color: #ffffff;
+          font-size: 16px;
+          line-height: 20px;
+          font-weight: 600;
+        }
+
+        .numberItemNumberTitle {
+          color: #ffffff;
+          font-size: 16px;
+          line-height: 20px;
+          font-weight: 600;
+        }
+      }
+
+      // --- Цена ---
+      .numberItemPriceTitle {
+        color: #fff !important;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 20px;
+        white-space: nowrap;
+      }
+
+      .numberItemPriceTitlePartner {
+        color: #fff !important;
+        font-size: 12px;
+        font-weight: 300;
+        line-height: 20px;
+        white-space: nowrap;
+        text-decoration: line-through;
+      }
+
+      // --- Рассрочка ---
+      .numberItemCredit {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        background: linear-gradient(
+            0deg,
+            rgba(255, 255, 255, 0.01),
+            rgba(255, 255, 255, 0.01)
+          ),
+          radial-gradient(
+            177.78% 177.78% at 50% 100%,
+            rgba(217, 173, 73, 0.1) 0,
+            rgba(253, 252, 164, 0) 100%
+          );
+        padding: 8px;
+        align-items: center;
+        border-radius: 10px;
+        flex-shrink: 0;
+
+        .numberItemCreditTitle {
+          color: #ffffff;
+          font-size: 10px;
+          font-weight: 600;
+          white-space: nowrap;
+        }
+
+        .numberItemCreditContent {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+
+          .numberItemCreditContentImg {
+            width: 10px;
+            height: 10px;
+          }
+          .numberItemCreditContentText {
+            color: #d4d3cf;
+            font-size: 10px;
+            font-weight: 600;
+            white-space: nowrap;
+          }
+        }
+      }
+
+      .numberItemCreditPartner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 10px;
+        flex-shrink: 0;
+
+        .numberItemCreditTitle {
+          color: #ffffff;
+          font-size: 10px;
+          font-weight: 600;
+          white-space: nowrap;
+        }
+
+        .numberItemCreditContent {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+
+          .numberItemCreditContentImg {
+            width: 10px;
+            height: 10px;
+          }
+          .numberItemCreditContentTextPartner {
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+          }
+        }
+      }
+
+      // --- Кнопка корзины ---
+      .numberItemCart {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        width: 38px;
+        height: 38px;
+        border-radius: 9px;
+        background: linear-gradient(
+            0deg,
+            rgba(255, 255, 255, 0.01),
+            rgba(255, 255, 255, 0.01)
+          ),
+          radial-gradient(
+            177.78% 177.78% at 50% 100%,
+            rgba(217, 173, 73, 0.1) 0,
+            rgba(253, 252, 164, 0) 100%
+          );
+        transition: background 0.8s linear, width 0.2s, height 0.2s;
+        flex-shrink: 0;
+
+        img {
+          width: 18px;
+          height: 18px;
+          transition: width 0.2s, height 0.2s, filter 0.2s;
+        }
+
+        &:hover {
+          background: linear-gradient(92.2deg, #fdfca4 0, #d9ad49 113.53%);
+
+          img {
+            filter: brightness(0%);
+          }
+        }
+      }
+    }
+
+    // --- Сообщение об отсутствии номеров ---
+    .noResults {
+      grid-column: 1 / -1;
+      text-align: center;
+      color: #ffffff;
+      padding: 20px;
+      font-size: 16px;
+    }
+  }
+}
+
+// === КНОПКА "ПЕРЕЙТИ В ОПИСАНИЕ" ===
+.numberItemDescription {
+  position: relative;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.01),
+      rgba(255, 255, 255, 0.01)
+    ),
+    radial-gradient(
+      177.78% 177.78% at 50% 100%,
+      rgba(217, 173, 73, 0.1) 0,
+      rgba(253, 252, 164, 0) 100%
+    );
+  color: #ffffff;
+  cursor: pointer;
+  transition: color 0.3s, box-shadow 0.3s;
+  flex-shrink: 0;
+  margin-top: 8px;
+  width: 100%;
+  overflow: hidden;
+  will-change: color, box-shadow;
+  z-index: 1;
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 10px;
+    background: linear-gradient(92.2deg, #fdfca4 0, #d9ad49 113.53%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    z-index: 2;
+  }
+  &:hover {
+    color: #fff !important;
+    text-shadow: 0 2px 8px #000, 0 0 2px #fff;
+    box-shadow: 0 2px 16px 0 rgba(253, 252, 164, 0.18);
+  }
+  &:focus {
+    outline: none;
+  }
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+// === ВСПОМОГАТЕЛЬНЫЕ ОБЁРТКИ ===
+.numberWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+// === МОДАЛКИ ===
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1001;
+  backdrop-filter: blur(5px);
+}
+
+.modalContent {
+  background: linear-gradient(92.2deg, #fdfca4 0, #d9ad49 113.53%);
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  color: #000000;
+}
+
+.modalDescriptionContent {
+  background: linear-gradient(0deg, #1e1e1e, #1e1e1e),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.01)),
+    radial-gradient(
+      100% 100% at 50% 100%,
+      rgba(217, 173, 73, 0.12) 0%,
+      rgba(253, 252, 164, 0) 100%
+    );
+  overflow: hidden;
+  padding: 50px;
+  border-radius: 40px;
+  max-width: 700px;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  color: #000000;
+}
+
+.modalText {
+  font-size: 50px;
+  font-weight: 600;
+  line-height: 28px;
+  color: #ffffff;
+  margin: 0;
+}
+
+.modalSubText {
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 28px;
+  color: #ffffff;
+  margin: 0;
+
+  span {
+    text-decoration: underline;
+  }
+}
+
+.priceWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .price {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 28px;
+    color: #ffffff;
+    margin: 0;
+
+    span {
+      font-size: 28px;
+      font-weight: 600;
+      background: linear-gradient($secondary-color, $primary-color);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      border-bottom: 1px solid;
+      border-image: linear-gradient($secondary-color, $primary-color) 1;
+      width: max-content;
+      display: inline-block;
+    }
+  }
+}
+
+.credit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 28px;
+  color: #ffffff;
+  margin: 0;
+
+  span {
+    font-size: 16px;
+    font-weight: 600;
+    background: linear-gradient($secondary-color, $primary-color);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-decoration: line-through;
+    padding-top: 5px;
+  }
+}
+
+.oformleniye {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .modalSubText {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 28px;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  .oformleniyeDescription {
+    font-size: 16px;
+    font-weight: 300;
+    background: linear-gradient($secondary-color, $primary-color);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    border-bottom: 1px solid;
+    border-image: linear-gradient($secondary-color, $primary-color) 1;
+    cursor: pointer;
+    width: 100px;
+    display: inline-block;
+  }
+}
+
+.modalButton {
+  padding: 16px 40px;
+  font-size: 20px;
+  font-weight: 600;
+  border: 1px solid #fdfca4;
+  border-radius: 70px;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  &:hover {
+    background-color: #333333;
+    color: #fdfca4;
+  }
+  &:active {
+    background-color: #000000;
+    transform: translateY(1px);
+  }
+}
+
+// === ЛОАДЕР, ОШИБКИ, ЭФФЕКТЫ ===
+.loaderContainer {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.loader {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid #fdfca4;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+.error {
+  color: #ff4444;
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 20px;
+  width: 100%;
+  grid-column: 1 / -1;
+}
+
+.sparkle-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.numberItemPriceTitle {
+  width: 100%;
+  max-width: 100vw;
+  overflow: visible;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1;
+  display: block;
+  text-align: center;
+}
+
+.priceRowWithDiscount {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.numberItemPriceTitleGreen {
+  color: #10c44c !important;
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.numberItemOldPrice {
+  color: #99a3ae;
+  font-size: 11px;
+  text-decoration: line-through;
+  margin-left: 4px;
+  margin-right: 4px;
+  white-space: nowrap;
+}
+
+.numberItemDiscountPercent {
+  color: #f1117e;
+  font-size: 14px;
+  font-weight: 600;
+  margin-left: 2px;
+  white-space: nowrap;
+}
+
+// === КАТЕГОРИИ ===
+.categoriesRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 12px;
+  margin-top: 8px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+// === ПАГИНАЦИЯ ===
+.paginationContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 24px 0 0 0;
+  min-height: 56px;
+}
+
+.MuiPagination-root,
+.MuiPagination-ul {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  margin: 0 auto !important;
+  padding: 0;
+}
+
+.MuiPagination-ul {
+  row-gap: 8px;
+}
+
+.MuiPaginationItem-root.Mui-selected {
+  background: linear-gradient(92.2deg, #fdfca4 0, #d9ad49 113.53%) !important;
+  color: transparent !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  border: none !important;
+  box-shadow: 0 2px 16px #ffd70099, 0 0 8px #fffbe6;
+  filter: drop-shadow(0 0 6px #ffd700);
+}
+
+.sortMenuContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  .sortMenu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+  }
+}
+
+.sortBy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  @media (max-width: 480px) {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .sortByTitle {
+    font-size: 12px;
+    font-weight: 500;
+    color: #ffffff;
+    opacity: 0.6;
+  }
+}
+
+// === АДАПТИВ ===
+@media (max-width: 1250px) {
+  .numberList {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .numberList {
+    .numberItem.gold .numberItemPriceTitle {
+      font-size: 80px;
+    }
+
+    .numberItem.vip .numberItemPriceTitle {
+      font-size: 100px;
+    }
+
+    .numberItem.epic .numberItemPriceTitle {
+      font-size: 120px;
+    }
+
+    .numberItem {
+      .priceRowWithDiscount {
+        // flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        // width: 100%;
+      }
+      .numberItemPriceTitle,
+      .numberItemPriceTitleGreen {
+        font-size: 15px;
+        text-align: center;
+        width: 100%;
+      }
+      .numberItemOldPrice {
+        font-size: 11px;
+        margin: 0;
+        text-align: center;
+        width: 100%;
+        display: block;
+      }
+      .numberItemDiscountPercent {
+        font-size: 12px;
+        margin: 0;
+        text-align: center;
+        width: 100%;
+        display: block;
+      }
+    }
+  }
+
+  .MuiPagination-root,
+  .MuiPagination-ul {
+    justify-content: center !important;
+    display: flex !important;
+    align-items: center !important;
+    margin: 0 auto !important;
+  }
+
+  .MuiPaginationItem-ellipsis {
+    display: flex !important;
+    align-items: center !important;
+    vertical-align: middle !important;
+    font-size: 2em;
+    height: 100%;
+  }
+
+  .categoriesRow {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 12px;
+    margin-top: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .numberItemCart {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+
+    img {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+@media (max-width: 760px) {
+  .list {
+    .numberList {
+      grid-template-columns: 1fr !important;
+      padding: 20px;
+      gap: 10px;
+
+      .numberItem {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 15px;
+        gap: 12px;
+
+        .numberAndPriceRowDiscount {
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .numberAndPriceRow {
+          display: flex;
+          justify-content: space-between;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+
+          .numberItemNumber {
+            position: relative;
+
+            .numberItemNumberTitle {
+              font-size: 15px;
+            }
+
+            .tierBadge {
+              position: absolute;
+              top: -5px;
+              right: -5px;
+              padding: 2px 6px;
+              font-size: 8px;
+              min-width: 30px;
+            }
+          }
+
+          .numberItemPriceTitle {
+            font-size: 15px;
+          }
+
+          .numberItemPriceTitlePartner {
+            font-size: 14px;
+          }
+        }
+
+        .installmentAndCartRow {
+          display: flex;
+          justify-content: space-between;
+
+          .numberItemCredit,
+          .numberItemCreditPartner {
+            flex-grow: 1;
+
+            .numberItemCreditTitle {
+              font-size: 14px;
+            }
+
+            .numberItemCreditContentText,
+            .numberItemCreditContentTextPartner {
+              font-size: 12px;
+            }
+          }
+
+          .numberItemCart {
+            align-self: center;
+            width: 36px;
+            height: 36px;
+            img {
+              max-width: 18px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

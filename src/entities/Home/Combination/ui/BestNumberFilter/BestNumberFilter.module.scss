@@ -1,0 +1,25 @@
+.bestNumberInput {
+  background: #212121;
+  color: #fff;
+  border-radius: 10px;
+  border: 1px solid #fdfca4;
+  padding: 8px 12px;
+  text-align: center;
+  height: 44px;
+  font-size: 16px;
+  outline: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+
+  &:focus {
+    box-shadow: 0 0 8px #fdfca4;
+    border-color: #fdfca4;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+    height: 40px;
+    padding: 6px 10px;
+    width: 100%;
+  }
+}

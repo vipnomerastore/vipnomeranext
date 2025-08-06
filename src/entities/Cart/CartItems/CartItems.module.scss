@@ -1,0 +1,304 @@
+@use "../../../styles/variables.scss" as *;
+
+@mixin card-gradient {
+  background: radial-gradient(
+      100% 100% at 50% 100%,
+      rgba($secondary-color, 0.02) 0,
+      rgba($primary-color, 0) 100%
+    ),
+    linear-gradient(0deg, rgba($text-color, 0.01), rgba($text-color, 0.01));
+}
+
+@mixin credit-bg {
+  background: linear-gradient(
+      0deg,
+      rgba($text-color, 0.01),
+      rgba($text-color, 0.01)
+    ),
+    radial-gradient(
+      177.78% 177.78% at 50% 100%,
+      rgba($secondary-color, 0.1) 0,
+      rgba($primary-color, 0) 100%
+    );
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: $dark-background;
+  border: 1px solid $cart-border-color;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+      100% 100% at 49.99% 100%,
+      rgba($secondary-color, 0.0002) 0,
+      rgba($primary-color, 0.0002) 100%
+    );
+    backdrop-filter: blur(20px);
+    border-radius: 10px;
+  }
+
+  @media (max-width: 767px) {
+    padding: 15px;
+    gap: 15px;
+  }
+}
+
+.numberItem {
+  @include card-gradient;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 16px 24px;
+  border-radius: 10px;
+  min-height: 60px;
+  color: $text-color;
+  width: 100%;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 12px;
+  }
+}
+
+.numberItemNumber {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+
+  @media (max-width: 767px) {
+    width: 100%;
+  }
+}
+
+.operatorIcon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+
+  @media (max-width: 767px) {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.numberItemNumberTitle {
+  color: $text-color;
+  font-size: 20px;
+  line-height: 20px;
+  font-weight: 600;
+
+  @media (max-width: 767px) {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+}
+
+.numberItemPrice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-grow: 1;
+  justify-content: flex-end;
+
+  @media (max-width: 767px) {
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+  }
+}
+
+.oldPrice {
+  text-decoration: line-through;
+  color: #999;
+  margin-right: 10px;
+}
+
+.numberItemPriceTitle {
+  color: $text-color;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  white-space: nowrap;
+
+  @media (max-width: 767px) {
+    font-size: 16px;
+    line-height: 1.4;
+    white-space: normal;
+  }
+}
+
+.numberItemCredit {
+  @include credit-bg;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  align-items: center;
+  border-radius: 10px;
+  flex-shrink: 0;
+
+  @media (max-width: 767px) {
+    padding: 6px;
+    width: 85%;
+  }
+}
+
+.numberItemCreditTitle {
+  color: $text-color;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+
+  @media (max-width: 767px) {
+    font-size: 12px;
+  }
+}
+
+.numberItemCreditContent {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  @media (max-width: 767px) {
+    gap: 3px;
+  }
+}
+
+.numberItemCreditContentImg {
+  width: 10px;
+  height: 10px;
+
+  @media (max-width: 767px) {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+.numberItemCreditContentText {
+  color: #ffffffe1;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+
+  @media (max-width: 767px) {
+    font-size: 11px;
+  }
+}
+
+.numberItemCart {
+  @include credit-bg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  transition: background 0.3s, box-shadow 0.2s, transform 0.15s;
+  flex-shrink: 0;
+  border: none;
+
+  &:focus,
+  &:active,
+  &:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .trashIcon,
+  .trashIcon:focus,
+  .trashIcon:active,
+  .trashIcon:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .trashIcon {
+    stroke: $text-color;
+
+    path {
+      stroke: $text-color;
+    }
+  }
+
+  &:hover {
+    background: linear-gradient(
+      92.2deg,
+      $primary-color 0,
+      $secondary-color 113.53%
+    );
+    box-shadow: 0 4px 12px rgba($secondary-color, 0.5);
+
+    .trashIcon,
+    .trashIcon path {
+      stroke: $dark-background;
+    }
+  }
+
+  &:active {
+    box-shadow: 0 2px 6px rgba($secondary-color, 0.5);
+    transform: translateY(1px);
+  }
+
+  @media (max-width: 767px) {
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    align-self: flex-end;
+  }
+}
+
+.numberItemCreditWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.trashIcon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: $text-color;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.2s;
+
+  @media (max-width: 767px) {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.noResults {
+  text-align: center;
+  color: $text-color;
+  padding: 20px;
+  font-size: 16px;
+  width: 100%;
+
+  @media (max-width: 767px) {
+    font-size: 14px;
+    padding: 15px;
+  }
+}
