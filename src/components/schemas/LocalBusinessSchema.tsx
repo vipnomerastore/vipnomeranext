@@ -38,6 +38,71 @@ export default function LocalBusinessSchema({
     },
   };
 
+  const commonProductData = {
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "5",
+      reviewCount: "12",
+    },
+    review: [
+      {
+        "@type": "Review",
+        author: {
+          "@type": "Person",
+          name: "Иван",
+        },
+        reviewRating: {
+          "@type": "Rating",
+          ratingValue: "5",
+        },
+        reviewBody: "Отличный номер. Всё быстро, удобно и качественно!",
+      },
+    ],
+  };
+
+  const operators = ["МТС", "Билайн", "Мегафон"];
+
+  const itemListElement = operators.map((operator) => ({
+    "@type": "Offer",
+    itemOffered: {
+      "@type": "Product",
+      name: `VIP номера ${operator}`,
+      description: `Красивый VIP номер телефона ${operator}. Эксклюзивный номер для статуса и запоминаемости.`,
+      image: "https://vipnomerastore.ru/og-image.jpg",
+      category: "Telecommunications",
+      brand: {
+        "@type": "Brand",
+        name: operator,
+      },
+      additionalProperty: [
+        {
+          "@type": "PropertyValue",
+          name: "Тип номера",
+          value: "VIP номер телефона",
+        },
+        {
+          "@type": "PropertyValue",
+          name: "Оператор",
+          value: operator,
+        },
+      ],
+      ...commonProductData,
+      offers: {
+        "@type": "Offer",
+        price: 2499,
+        priceCurrency: "RUB",
+        priceValidUntil: "2026-08-08",
+        availability: "https://schema.org/InStock",
+        shippingDetails,
+        hasMerchantReturnPolicy: {
+          "@type": "MerchantReturnPolicy",
+          applicableCountry: "RU",
+          returnPolicyCategory: "https://schema.org/MerchantReturnNotPermitted",
+        },
+      },
+    },
+  }));
+
   const businessData = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -62,80 +127,7 @@ export default function LocalBusinessSchema({
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: "VIP номера телефонов",
-      itemListElement: [
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Product",
-            name: "VIP номера МТС",
-            description:
-              "Красивый VIP номер телефона МТС. Эксклюзивный номер для статуса и запоминаемости.",
-            image: "https://vipnomerastore.ru/og-image.jpg",
-            category: "Telecommunications",
-            offers: {
-              "@type": "Offer",
-              price: 2499,
-              priceCurrency: "RUB",
-              availability: "https://schema.org/InStock",
-              shippingDetails,
-              hasMerchantReturnPolicy: {
-                "@type": "MerchantReturnPolicy",
-                applicableCountry: "RU",
-                returnPolicyCategory:
-                  "https://schema.org/MerchantReturnNotPermitted",
-              },
-            },
-          },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Product",
-            name: "VIP номера Билайн",
-            description:
-              "Красивый VIP номер телефона Билайн. Эксклюзивный номер для статуса и запоминаемости.",
-            image: "https://vipnomerastore.ru/og-image.jpg",
-            category: "Telecommunications",
-            offers: {
-              "@type": "Offer",
-              price: 2499,
-              priceCurrency: "RUB",
-              availability: "https://schema.org/InStock",
-              shippingDetails,
-              hasMerchantReturnPolicy: {
-                "@type": "MerchantReturnPolicy",
-                applicableCountry: "RU",
-                returnPolicyCategory:
-                  "https://schema.org/MerchantReturnNotPermitted",
-              },
-            },
-          },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Product",
-            name: "VIP номера Мегафон",
-            description:
-              "Красивый VIP номер телефона Мегафон. Эксклюзивный номер для статуса и запоминаемости.",
-            image: "https://vipnomerastore.ru/og-image.jpg",
-            category: "Telecommunications",
-            offers: {
-              "@type": "Offer",
-              price: 2499,
-              priceCurrency: "RUB",
-              availability: "https://schema.org/InStock",
-              shippingDetails,
-              hasMerchantReturnPolicy: {
-                "@type": "MerchantReturnPolicy",
-                applicableCountry: "RU",
-                returnPolicyCategory:
-                  "https://schema.org/MerchantReturnNotPermitted",
-              },
-            },
-          },
-        },
-      ],
+      itemListElement,
     },
     priceRange: "от 2499₽",
     image: "https://vipnomerastore.ru/assets/header/logo.svg",
