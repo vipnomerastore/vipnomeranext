@@ -24,9 +24,12 @@ export default function ProductSchema({
       "@type": "Brand",
       name: operator,
     },
+    image,
+    url,
+    category: "Telecommunications",
     offers: {
       "@type": "Offer",
-      price: price,
+      price,
       priceCurrency: "RUB",
       availability: "https://schema.org/InStock",
       priceValidUntil: "2026-08-08",
@@ -54,20 +57,12 @@ export default function ProductSchema({
     },
     aggregateRating: {
       "@type": "AggregateRating",
-      itemReviewed: {
-        "@type": "Product",
-        name: name,
-      },
       ratingValue: "5",
       reviewCount: "12",
     },
     review: [
       {
         "@type": "Review",
-        itemReviewed: {
-          "@type": "Product",
-          name: name,
-        },
         author: {
           "@type": "Person",
           name: "Иван",
@@ -79,9 +74,6 @@ export default function ProductSchema({
         reviewBody: "Отличный сервис!",
       },
     ],
-    image: image,
-    url: url,
-    category: "Telecommunications",
     additionalProperty: [
       {
         "@type": "PropertyValue",
