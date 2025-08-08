@@ -31,8 +31,8 @@ export default function ProductSchema({
       "@type": "Offer",
       price,
       priceCurrency: "RUB",
-      availability: "https://schema.org/InStock",
       priceValidUntil: "2026-08-08",
+      availability: "https://schema.org/InStock",
       seller: {
         "@type": "Organization",
         name: "VIP nomera store",
@@ -87,7 +87,7 @@ export default function ProductSchema({
           "@type": "Rating",
           ratingValue: "5",
         },
-        reviewBody: "Отличный сервис!",
+        reviewBody: "Отличный сервис! Быстрая доставка, всё чётко.",
       },
     ],
     additionalProperty: [
