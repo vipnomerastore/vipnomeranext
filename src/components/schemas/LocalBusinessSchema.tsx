@@ -39,12 +39,32 @@ export default function LocalBusinessSchema({
           itemOffered: {
             "@type": "Product",
             name: "VIP номера МТС",
+            description:
+              "Красивый VIP номер телефона МТС. Эксклюзивный номер для статуса и запоминаемости.",
+            image: "https://vipnomerastore.ru/og-image.jpg",
             category: "Telecommunications",
             offers: {
               "@type": "Offer",
               price: 2499,
               priceCurrency: "RUB",
               availability: "https://schema.org/InStock",
+              shippingDetails: {
+                "@type": "OfferShippingDetails",
+                shippingRate: {
+                  "@type": "MonetaryAmount",
+                  value: 0,
+                  currency: "RUB",
+                },
+                deliveryTime: {
+                  "@type": "ShippingDeliveryTime",
+                  businessDays: "Mo-Su",
+                },
+              },
+              hasMerchantReturnPolicy: {
+                "@type": "MerchantReturnPolicy",
+                applicableCountry: "RU",
+                returnPolicyCategory: "https://schema.org/NoReturns",
+              },
             },
           },
         },
@@ -53,12 +73,32 @@ export default function LocalBusinessSchema({
           itemOffered: {
             "@type": "Product",
             name: "VIP номера Билайн",
+            description:
+              "Красивый VIP номер телефона Билайн. Эксклюзивный номер для статуса и запоминаемости.",
+            image: "https://vipnomerastore.ru/og-image.jpg",
             category: "Telecommunications",
             offers: {
               "@type": "Offer",
               price: 2499,
               priceCurrency: "RUB",
               availability: "https://schema.org/InStock",
+              shippingDetails: {
+                "@type": "OfferShippingDetails",
+                shippingRate: {
+                  "@type": "MonetaryAmount",
+                  value: 0,
+                  currency: "RUB",
+                },
+                deliveryTime: {
+                  "@type": "ShippingDeliveryTime",
+                  businessDays: "Mo-Su",
+                },
+              },
+              hasMerchantReturnPolicy: {
+                "@type": "MerchantReturnPolicy",
+                applicableCountry: "RU",
+                returnPolicyCategory: "https://schema.org/NoReturns",
+              },
             },
           },
         },
@@ -67,12 +107,32 @@ export default function LocalBusinessSchema({
           itemOffered: {
             "@type": "Product",
             name: "VIP номера Мегафон",
+            description:
+              "Красивый VIP номер телефона Мегафон. Эксклюзивный номер для статуса и запоминаемости.",
+            image: "https://vipnomerastore.ru/og-image.jpg",
             category: "Telecommunications",
             offers: {
               "@type": "Offer",
               price: 2499,
               priceCurrency: "RUB",
               availability: "https://schema.org/InStock",
+              shippingDetails: {
+                "@type": "OfferShippingDetails",
+                shippingRate: {
+                  "@type": "MonetaryAmount",
+                  value: 0,
+                  currency: "RUB",
+                },
+                deliveryTime: {
+                  "@type": "ShippingDeliveryTime",
+                  businessDays: "Mo-Su",
+                },
+              },
+              hasMerchantReturnPolicy: {
+                "@type": "MerchantReturnPolicy",
+                applicableCountry: "RU",
+                returnPolicyCategory: "https://schema.org/NoReturns",
+              },
             },
           },
         },

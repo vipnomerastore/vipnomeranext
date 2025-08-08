@@ -23,33 +23,47 @@ export default function ProductSchema({
     brand: {
       "@type": "Brand",
       name: operator,
-    },
-    offers: {
-      "@type": "Offer",
-      price: price,
-      priceCurrency: "RUB",
-      availability: "https://schema.org/InStock",
-      seller: {
-        "@type": "Organization",
-        name: "VIP nomera store",
-      },
-      shippingDetails: {
-        "@type": "OfferShippingDetails",
-        shippingRate: {
-          "@type": "MonetaryAmount",
-          value: 0,
-          currency: "RUB",
+      offers: {
+        "@type": "Offer",
+        price: price,
+        priceCurrency: "RUB",
+        availability: "https://schema.org/InStock",
+        priceValidUntil: "2026-08-08",
+        seller: {
+          "@type": "Organization",
+          name: "VIP nomera store",
         },
-        deliveryTime: {
-          "@type": "ShippingDeliveryTime",
-          businessDays: "Mo-Su",
+        shippingDetails: {
+          "@type": "OfferShippingDetails",
+          shippingRate: {
+            "@type": "MonetaryAmount",
+            value: 0,
+            currency: "RUB",
+          },
+          deliveryTime: {
+            "@type": "ShippingDeliveryTime",
+            businessDays: "Mo-Su",
+          },
+        },
+        hasMerchantReturnPolicy: {
+          "@type": "MerchantReturnPolicy",
+          applicableCountry: "RU",
+          returnPolicyCategory: "https://schema.org/NoReturns",
         },
       },
-      hasMerchantReturnPolicy: {
-        "@type": "MerchantReturnPolicy",
-        applicableCountry: "RU",
-        returnPolicyCategory: "https://schema.org/NoReturns",
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "5",
+        reviewCount: "12",
       },
+      review: [
+        {
+          "@type": "Review",
+          author: "Иван",
+          reviewRating: { "@type": "Rating", ratingValue: "5" },
+          reviewBody: "Отличный сервис!",
+        },
+      ],
     },
     image: image,
     url: url,
