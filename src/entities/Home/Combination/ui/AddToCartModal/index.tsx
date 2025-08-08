@@ -175,8 +175,10 @@ const AddToCartModal = ({ isOpen, onClose, item }: GetNumberModalProps) => {
         </button>
 
         <h2 id="get-number-modal-title" className={styles.title}>
-          Заполните форму
+          Оставьте заявку на покупку номера
         </h2>
+
+        <p className={styles.titlePhone}>{item?.phone}</p>
 
         <form onSubmit={handleSubmit} className={styles.form} noValidate>
           <div className={styles.inputField}>

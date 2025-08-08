@@ -60,18 +60,30 @@
 }
 
 .title {
-  font: 700 1.8rem/1.2 sans-serif;
+  font: 700 1.8rem/1.2;
   color: #ffffff;
   margin: 0;
   text-transform: uppercase;
 
   @media (max-width: 767px) {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+  }
+}
+
+.titlePhone {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  text-transform: uppercase;
+
+  @media (max-width: 767px) {
+    font-size: 1.2rem;
   }
 }
 
 .subtitle {
-  font: 400 1rem/1.2 sans-serif;
+  font: 400 1rem/1.2;
   color: rgba(255, 255, 255, 0.8);
   margin: 0;
 
