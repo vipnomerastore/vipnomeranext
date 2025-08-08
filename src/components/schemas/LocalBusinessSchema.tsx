@@ -19,6 +19,8 @@ export default function LocalBusinessSchema({
       "@type": "PostalAddress",
       addressRegion: region,
       addressLocality: "Оренбург",
+      streetAddress: "ул. Примерная, д. 1",
+      postalCode: "460000",
       addressCountry: "RU",
     },
     telephone: "+7 (999) 999-99-99",
@@ -38,6 +40,12 @@ export default function LocalBusinessSchema({
             "@type": "Product",
             name: "VIP номера МТС",
             category: "Telecommunications",
+            offers: {
+              "@type": "Offer",
+              price: 2499,
+              priceCurrency: "RUB",
+              availability: "https://schema.org/InStock",
+            },
           },
         },
         {
@@ -46,6 +54,12 @@ export default function LocalBusinessSchema({
             "@type": "Product",
             name: "VIP номера Билайн",
             category: "Telecommunications",
+            offers: {
+              "@type": "Offer",
+              price: 2499,
+              priceCurrency: "RUB",
+              availability: "https://schema.org/InStock",
+            },
           },
         },
         {
@@ -54,10 +68,18 @@ export default function LocalBusinessSchema({
             "@type": "Product",
             name: "VIP номера Мегафон",
             category: "Telecommunications",
+            offers: {
+              "@type": "Offer",
+              price: 2499,
+              priceCurrency: "RUB",
+              availability: "https://schema.org/InStock",
+            },
           },
         },
       ],
     },
+    priceRange: "от 2499₽",
+    image: "https://vipnomerastore.ru/assets/header/logo.svg",
     sameAs: ["https://t.me/vip_nomerastore", "https://wa.me/79333333311"],
   };
 

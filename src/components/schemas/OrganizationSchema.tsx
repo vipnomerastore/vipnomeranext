@@ -23,11 +23,15 @@ export default function OrganizationSchema({
     name,
     url,
     logo,
+    image: logo,
     description,
     ...(phone && { telephone: phone }),
     ...(email && { email }),
     address: {
       "@type": "PostalAddress",
+      addressLocality: "Оренбург",
+      streetAddress: "пр. Победы 73/1",
+      postalCode: "460000",
       addressCountry: "RU",
     },
     sameAs: [

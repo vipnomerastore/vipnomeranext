@@ -33,6 +33,23 @@ export default function ProductSchema({
         "@type": "Organization",
         name: "VIP nomera store",
       },
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingRate: {
+          "@type": "MonetaryAmount",
+          value: 0,
+          currency: "RUB",
+        },
+        deliveryTime: {
+          "@type": "ShippingDeliveryTime",
+          businessDays: "Mo-Su",
+        },
+      },
+      hasMerchantReturnPolicy: {
+        "@type": "MerchantReturnPolicy",
+        applicableCountry: "RU",
+        returnPolicyCategory: "https://schema.org/NoReturns",
+      },
     },
     image: image,
     url: url,
