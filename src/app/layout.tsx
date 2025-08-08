@@ -111,6 +111,8 @@ export default function RootLayout({
           defer
         />
 
+        <meta name="yandex-verification" content="6d21e35d75423577" />
+
         <div id="modal-root"></div>
         <EmotionProvider>
           <ClientThemeProvider>
