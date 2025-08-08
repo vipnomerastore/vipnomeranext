@@ -37,8 +37,8 @@ export async function generateMetadata(): Promise<Metadata> {
     description,
     keywords:
       region !== "default"
-        ? `рассрочка ${city}, купить в рассрочку ${city}, номера в рассрочку ${city}`
-        : `рассрочка, купить в рассрочку, номера в рассрочку`,
+        ? `рассрочка ${city}, купить в рассрочку ${city}, номера в рассрочку ${city}, рассрочка без банка, рассрочка на номера телефонов`
+        : `рассрочка, купить в рассрочку, номера в рассрочку, рассрочка без банка, рассрочка на номера телефонов, рассрочка без банка на номера телефонов`,
     openGraph: {
       title,
       description,
@@ -84,7 +84,7 @@ export default async function CreditPage() {
         name={`Рассрочка на номера ${region !== "default" ? cityIn : ""}`}
         price={2990}
         phoneNumber="Рассрочка без банка на любые номера"
-        operator="МТС, Билайн, Мегафон, Теле2"
+        operator="МТС, Билайн, Мегафон, Теле2, Йота"
         url={siteUrl}
       />
 

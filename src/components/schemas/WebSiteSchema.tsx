@@ -4,8 +4,8 @@ const WebSiteSchema: React.FC = () => {
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "VIP nomera store",
-    alternateName: "VIP Номера",
+    name: "Красивые номера телефонов",
+    alternateName: "Уникальные и премиальные номера телефонов",
     url: "https://vipnomerastore.ru",
     description:
       "Купить красивые и уникальные номера телефонов, быстрая доставка. Лучшие предложения и эксклюзивные номера только у нас.",
@@ -19,7 +19,7 @@ const WebSiteSchema: React.FC = () => {
     },
     publisher: {
       "@type": "Organization",
-      name: "VIP nomera store",
+      name: "Красивые и уникальные номера",
       url: "https://vipnomerastore.ru",
       logo: {
         "@type": "ImageObject",

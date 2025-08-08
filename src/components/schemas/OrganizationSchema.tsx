@@ -36,8 +36,8 @@ export default function OrganizationSchema({
     },
     sameAs: [
       // Добавьте ваши социальные сети
-      "https://t.me/vipnomerastore",
-      "https://wa.me/79999999999",
+      "https://t.me/vip_nomerastore",
+      "https://wa.me/79333333311",
     ],
   };
 

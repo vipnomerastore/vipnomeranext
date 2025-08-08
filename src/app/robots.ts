@@ -20,7 +20,7 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
       {
-        userAgent: ["Googlebot", "Bingbot", "Slurp"],
+        userAgent: ["Googlebot", "Bingbot", "Slurp", "YandexBot"],
         allow: "/",
         disallow: [
           "/api/",

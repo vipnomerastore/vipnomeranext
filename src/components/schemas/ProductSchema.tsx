@@ -19,7 +19,7 @@ export default function ProductSchema({
     "@context": "https://schema.org",
     "@type": "Product",
     name,
-    description: `Красивый VIP номер телефона ${phoneNumber} оператора ${operator}. Эксклюзивный номер для статуса и запоминаемости.`,
+    description: `Красивые номера телефона ${phoneNumber} оператора ${operator}. Эксклюзивный номер для статуса и запоминаемости.`,
     brand: {
       "@type": "Brand",
       name: operator,

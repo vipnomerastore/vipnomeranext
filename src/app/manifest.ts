@@ -3,9 +3,9 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "VIP nomera store – Купить красивые VIP номера телефонов",
-    short_name: "VIP nomera",
+    short_name: "Купить красивые номера телефонов - vipnomerastore",
     description:
-      "Лучший выбор красивых VIP номеров телефонов с доставкой по всей России. Эксклюзивные номера от всех операторов.",
+      "Лучший выбор красивых номеров телефонов с доставкой по всей России. Эксклюзивные номера от всех операторов.",
     start_url: "/",
     display: "standalone",
     background_color: "#1e293b",

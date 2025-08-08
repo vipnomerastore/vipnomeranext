@@ -66,8 +66,8 @@ export default function LocalBusinessSchema({
     "@type": "Offer",
     itemOffered: {
       "@type": "Product",
-      name: `VIP номера ${operator}`,
-      description: `Красивый VIP номер телефона ${operator}. Эксклюзивный номер для статуса и запоминаемости.`,
+      name: `Красивые номера телефонов ${operator}`,
+      description: `Красивый номер телефона ${operator}. Эксклюзивный номер для статуса и запоминаемости.`,
       image: "https://vipnomerastore.ru/og-image.jpg",
       category: "Telecommunications",
       brand: {
@@ -78,7 +78,7 @@ export default function LocalBusinessSchema({
         {
           "@type": "PropertyValue",
           name: "Тип номера",
-          value: "VIP номер телефона",
+          value: "Красивые номера телефонов",
         },
         {
           "@type": "PropertyValue",
@@ -107,17 +107,17 @@ export default function LocalBusinessSchema({
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     name: `VIP nomera store ${city}`,
-    description: `Продажа красивых VIP номеров телефонов в ${city}. Быстрая доставка, лучшие цены.`,
+    description: `Продажа красивых номеров телефона в ${city}. Быстрая доставка, лучшие цены.`,
     url,
     address: {
       "@type": "PostalAddress",
       addressRegion: region,
       addressLocality: "Оренбург",
-      streetAddress: "ул. Примерная, д. 1",
+      streetAddress: "пр. Победы 73/1, д. 1",
       postalCode: "460000",
       addressCountry: "RU",
     },
-    telephone: "+7 (999) 999-99-99",
+    telephone: "+7 (933) 333-33-11",
     email: "info@vipnomerastore.ru",
     openingHours: "Mo-Su 09:00-21:00",
     serviceArea: {
@@ -126,7 +126,7 @@ export default function LocalBusinessSchema({
     },
     hasOfferCatalog: {
       "@type": "OfferCatalog",
-      name: "VIP номера телефонов",
+      name: "Красивые номера телефонов",
       itemListElement,
     },
     priceRange: "от 2499₽",

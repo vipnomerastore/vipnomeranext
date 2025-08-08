@@ -88,7 +88,7 @@ export default async function PartnerPage() {
         }`}
         price={0}
         phoneNumber="Партнёрская программа с высоким доходом"
-        operator="Работа с МТС, Билайн, Мегафон, Теле2"
+        operator="Работа с МТС, Билайн, Мегафон, Теле2, йота"
         url={siteUrl}
       />
 
