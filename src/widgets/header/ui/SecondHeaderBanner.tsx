@@ -1,5 +1,6 @@
-import styles from "../Header.module.scss";
 import { useRouter } from "next/navigation";
+
+import styles from "../Header.module.scss";
 
 const SecondHeaderBanner = ({
   onClose,

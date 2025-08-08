@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { useHydration } from "../../hooks/useHydration";
 
+import { useHydration } from "../../hooks/useHydration";
 import Logo from "./ui/Logo";
 import NavMenu from "./ui/NavMenu";
 import MobileMenu from "./ui/MobileMenu";
@@ -49,6 +49,7 @@ const Header = ({ hasBanner = true }: { hasBanner?: boolean }) => {
 
     if (typeof window !== "undefined") {
       window.addEventListener("scroll", handleScroll);
+
       return () => window.removeEventListener("scroll", handleScroll);
     }
   }, []);

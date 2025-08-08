@@ -158,15 +158,17 @@ const CartPage = () => {
 
       toast.success("Заказ успешно создан!");
 
-      setForm(initialFormState);
+      router.push("/success-order");
 
-      const orderId = crypto.randomUUID();
+      // setForm(initialFormState);
 
-      router.push(
-        `/payment?orderId=${orderId}&amount=${totalPrice}&items=${encodeURIComponent(
-          JSON.stringify(items)
-        )}&delivery=${activeDeliveryTab}&payment=${activePaymentTab}&installment=${activeInstallmentPeriod}`
-      );
+      // const orderId = crypto.randomUUID();
+
+      // router.push(
+      //   `/payment?orderId=${orderId}&amount=${totalPrice}&items=${encodeURIComponent(
+      //     JSON.stringify(items)
+      //   )}&delivery=${activeDeliveryTab}&payment=${activePaymentTab}&installment=${activeInstallmentPeriod}`
+      // );
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         toast.error(
@@ -237,7 +239,7 @@ const CartPage = () => {
               isPartner={isPartner}
             />
 
-            <DeliverySection
+            {/* <DeliverySection
               activeTab={activeDeliveryTab}
               onTabChange={setActiveDeliveryTab}
             />
@@ -249,9 +251,7 @@ const CartPage = () => {
               onInstallmentPeriodChange={setActiveInstallmentPeriod}
               maxInstallment={maxInstallment}
               hasPartPriceNine={hasPartPriceNine}
-            />
-
-            <RecommendedNumbersSection onAddToCart={handleAddToCart} />
+            /> */}
           </div>
 
           <OrderSummary
@@ -291,6 +291,8 @@ const CartPage = () => {
           checked={form.agreedToTerms}
           setChecked={(val) => handleFormChange("agreedToTerms", val)}
         />
+
+        <RecommendedNumbersSection onAddToCart={handleAddToCart} />
       </div>
     </>
   );

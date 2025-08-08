@@ -19,6 +19,7 @@ const RotatingHeaderBanner = ({
 
   useEffect(() => {
     if (hidden) return;
+
     const interval = setInterval(() => {
       setShowFirst((prev) => !prev);
     }, 20000);

@@ -148,6 +148,8 @@ const LoginModal = ({ isOpen, onClose, onOpenRegister }: LoginModalProps) => {
             >
               <Image
                 loading="lazy"
+                width={13}
+                height={13}
                 src={
                   showPassword
                     ? "/assets/header/eyeoff.svg"

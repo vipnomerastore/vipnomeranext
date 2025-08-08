@@ -75,7 +75,7 @@ const CheckoutForm = memo(function CheckoutForm(props: CheckoutFormProps) {
         <input
           type="text"
           name="fullName"
-          placeholder="ФИО"
+          placeholder="Имя"
           value={fullName}
           onChange={(e) => onFullNameChange(e.target.value)}
           className={styles.input}
@@ -95,7 +95,7 @@ const CheckoutForm = memo(function CheckoutForm(props: CheckoutFormProps) {
           aria-label="Телефон для связи"
         />
 
-        <input
+        {/* <input
           type="email"
           name="email"
           placeholder="Электронная почта"
@@ -167,7 +167,7 @@ const CheckoutForm = memo(function CheckoutForm(props: CheckoutFormProps) {
           className={styles.textarea}
           rows={5}
           aria-label="Комментарий"
-        />
+        /> */}
 
         <div className={styles.bottom}>
           <div className={styles.checkboxContainer}>

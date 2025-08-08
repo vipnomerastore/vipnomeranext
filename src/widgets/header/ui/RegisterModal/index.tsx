@@ -196,6 +196,8 @@ const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
             >
               <Image
                 loading="lazy"
+                width={13}
+                height={13}
                 src={
                   showPassword
                     ? "/assets/header/eyeoff.svg"
