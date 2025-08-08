@@ -63,7 +63,8 @@ export default function LocalBusinessSchema({
               hasMerchantReturnPolicy: {
                 "@type": "MerchantReturnPolicy",
                 applicableCountry: "RU",
-                returnPolicyCategory: "https://schema.org/NoReturns",
+                returnPolicyCategory:
+                  "https://schema.org/MerchantReturnNotPermitted",
               },
             },
           },
@@ -97,7 +98,8 @@ export default function LocalBusinessSchema({
               hasMerchantReturnPolicy: {
                 "@type": "MerchantReturnPolicy",
                 applicableCountry: "RU",
-                returnPolicyCategory: "https://schema.org/NoReturns",
+                returnPolicyCategory:
+                  "https://schema.org/MerchantReturnNotPermitted",
               },
             },
           },
@@ -131,7 +133,8 @@ export default function LocalBusinessSchema({
               hasMerchantReturnPolicy: {
                 "@type": "MerchantReturnPolicy",
                 applicableCountry: "RU",
-                returnPolicyCategory: "https://schema.org/NoReturns",
+                returnPolicyCategory:
+                  "https://schema.org/MerchantReturnNotPermitted",
               },
             },
           },
