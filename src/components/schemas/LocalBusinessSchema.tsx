@@ -9,12 +9,41 @@ export default function LocalBusinessSchema({
   city,
   url,
 }: LocalBusinessSchemaProps) {
+  const shippingDetails = {
+    "@type": "OfferShippingDetails",
+    shippingRate: {
+      "@type": "MonetaryAmount",
+      value: 0,
+      currency: "RUB",
+    },
+    shippingDestination: {
+      "@type": "DefinedRegion",
+      addressCountry: "RU",
+    },
+    deliveryTime: {
+      "@type": "ShippingDeliveryTime",
+      handlingTime: {
+        "@type": "QuantitativeValue",
+        minValue: 1,
+        maxValue: 2,
+        unitCode: "d",
+      },
+      transitTime: {
+        "@type": "QuantitativeValue",
+        minValue: 1,
+        maxValue: 3,
+        unitCode: "d",
+      },
+      businessDays: "Mo-Su",
+    },
+  };
+
   const businessData = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     name: `VIP nomera store ${city}`,
     description: `Продажа красивых VIP номеров телефонов в ${city}. Быстрая доставка, лучшие цены.`,
-    url: url,
+    url,
     address: {
       "@type": "PostalAddress",
       addressRegion: region,
@@ -48,18 +77,7 @@ export default function LocalBusinessSchema({
               price: 2499,
               priceCurrency: "RUB",
               availability: "https://schema.org/InStock",
-              shippingDetails: {
-                "@type": "OfferShippingDetails",
-                shippingRate: {
-                  "@type": "MonetaryAmount",
-                  value: 0,
-                  currency: "RUB",
-                },
-                deliveryTime: {
-                  "@type": "ShippingDeliveryTime",
-                  businessDays: "Mo-Su",
-                },
-              },
+              shippingDetails,
               hasMerchantReturnPolicy: {
                 "@type": "MerchantReturnPolicy",
                 applicableCountry: "RU",
@@ -83,18 +101,7 @@ export default function LocalBusinessSchema({
               price: 2499,
               priceCurrency: "RUB",
               availability: "https://schema.org/InStock",
-              shippingDetails: {
-                "@type": "OfferShippingDetails",
-                shippingRate: {
-                  "@type": "MonetaryAmount",
-                  value: 0,
-                  currency: "RUB",
-                },
-                deliveryTime: {
-                  "@type": "ShippingDeliveryTime",
-                  businessDays: "Mo-Su",
-                },
-              },
+              shippingDetails,
               hasMerchantReturnPolicy: {
                 "@type": "MerchantReturnPolicy",
                 applicableCountry: "RU",
@@ -118,18 +125,7 @@ export default function LocalBusinessSchema({
               price: 2499,
               priceCurrency: "RUB",
               availability: "https://schema.org/InStock",
-              shippingDetails: {
-                "@type": "OfferShippingDetails",
-                shippingRate: {
-                  "@type": "MonetaryAmount",
-                  value: 0,
-                  currency: "RUB",
-                },
-                deliveryTime: {
-                  "@type": "ShippingDeliveryTime",
-                  businessDays: "Mo-Su",
-                },
-              },
+              shippingDetails,
               hasMerchantReturnPolicy: {
                 "@type": "MerchantReturnPolicy",
                 applicableCountry: "RU",

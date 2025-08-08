@@ -44,8 +44,24 @@ export default function ProductSchema({
           value: 0,
           currency: "RUB",
         },
+        shippingDestination: {
+          "@type": "DefinedRegion",
+          addressCountry: "RU",
+        },
         deliveryTime: {
           "@type": "ShippingDeliveryTime",
+          handlingTime: {
+            "@type": "QuantitativeValue",
+            minValue: 1,
+            maxValue: 2,
+            unitCode: "d",
+          },
+          transitTime: {
+            "@type": "QuantitativeValue",
+            minValue: 1,
+            maxValue: 3,
+            unitCode: "d",
+          },
           businessDays: "Mo-Su",
         },
       },
