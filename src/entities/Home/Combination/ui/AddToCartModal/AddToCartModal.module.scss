@@ -1,0 +1,222 @@
+@use "../../../../../styles/variables.scss" as *;
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  backdrop-filter: blur(5px);
+
+  @media (max-width: 768px) {
+    backdrop-filter: blur(5px);
+  }
+}
+
+.modalContent {
+  position: relative;
+  padding: 30px 40px;
+  border-radius: 20px;
+  max-width: 520px;
+  width: 90%;
+  z-index: 10001;
+  background: #242423;
+  border: 1px solid #2b2b2b;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  @media (max-width: 767px) {
+    padding: 20px 25px;
+    border-radius: 15px;
+    gap: 10px;
+  }
+}
+
+.closeButton {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #fdfca4;
+  }
+
+  @media (max-width: 767px) {
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+  }
+}
+
+.title {
+  font: 700 1.8rem/1.2 sans-serif;
+  color: #ffffff;
+  margin: 0;
+  text-transform: uppercase;
+
+  @media (max-width: 767px) {
+    font-size: 1.5rem;
+  }
+}
+
+.subtitle {
+  font: 400 1rem/1.2 sans-serif;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+
+  @media (max-width: 767px) {
+    font-size: 0.9rem;
+  }
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  padding-top: 20px;
+
+  @media (max-width: 767px) {
+    gap: 10px;
+    padding-top: 15px;
+  }
+}
+
+.inputField {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  input {
+    width: 100%;
+    height: 50px;
+    padding: 0 16px;
+    border-radius: 12px;
+    background-color: #2a2a2a;
+    border: 1px solid #2a2a2a;
+    color: #ffffff;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+
+    &:hover {
+      border-color: #fdfca4;
+    }
+
+    &:focus {
+      border-color: #fdfca4;
+    }
+
+    &::placeholder {
+      color: #888;
+      opacity: 1;
+    }
+
+    &:-ms-input-placeholder,
+    &::-ms-input-placeholder {
+      color: #888;
+    }
+
+    @media (max-width: 767px) {
+      height: 44px;
+      padding: 0 12px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+  }
+}
+
+.checkboxWrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  width: 100%;
+  justify-content: center;
+
+  @media (max-width: 767px) {
+    gap: 3px;
+  }
+}
+
+.checkboxText {
+  color: #a0a0a0;
+  font-size: 13px;
+  margin: 0;
+  line-height: 1.3;
+  text-align: left;
+  flex-grow: 1;
+  max-width: calc(100% - 30px);
+
+  @media (max-width: 767px) {
+    font-size: 11px;
+    max-width: calc(100% - 25px);
+    text-align: center;
+  }
+}
+
+.link {
+  color: $primary-color;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.submitButton {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(#212121, #212121) padding-box,
+    linear-gradient(131deg, #d9ad49 0, #fdfca4 100%) border-box;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    background: linear-gradient(#3c3c3b, #3c3c3b) padding-box,
+      linear-gradient(131deg, #d9ad49 0, #fdfca4 100%) border-box;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 767px) {
+    padding: 10px;
+    font-size: 13px;
+  }
+}
+
+.errorMessage {
+  color: #ff6b6b;
+  font-size: 12px;
+  margin-top: 0;
+  margin-bottom: 0;
+  text-align: left;
+  width: 100%;
+  min-height: 1.2em;
+  box-sizing: border-box;
+
+  @media (max-width: 767px) {
+    font-size: 11px;
+  }
+}

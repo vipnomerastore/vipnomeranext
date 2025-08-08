@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useMemo, useCallback, useEffect } from "react";
+import { memo, useMemo, useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Pagination from "@mui/material/Pagination";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -23,6 +23,7 @@ import TierStats from "./TierStats";
 import CustomizedMenus from "@/shared/ui/Menu";
 
 import styles from "./NumberList.module.scss";
+import AddToCartModal from "../AddToCartModal";
 
 const operatorIcons: Record<string, string> = {
   МТС: "/assets/home/operators/mts.svg",
@@ -97,6 +98,9 @@ const NumberList: React.FC<NumberListProps> = memo((props) => {
   // Всегда вызываем useMediaQuery, но используем результат только после гидрации
   const mediaQueryResult = useMediaQuery("(max-width: 600px)");
   const isMobile = isHydrated ? mediaQueryResult : false;
+
+  const [openAddToCartModal, setOpenAddToCartModal] = useState(false);
+  const [phone, setPhone] = useState<NumberItem | null>(null);
 
   // Мемоизируем possibleTiers чтобы избежать пересоздания на каждом рендере
   const possibleTiers = useMemo(
@@ -200,45 +204,48 @@ const NumberList: React.FC<NumberListProps> = memo((props) => {
 
   const handleAddToCart = useCallback(
     (item: NumberItem) => {
-      const cartItem = {
-        id: item.id,
-        phone: item.phone,
-        price: isPartner ? item.partner_price : item.price,
-        operator: item.operator,
-        credit_month_count: item.credit_month_count,
-        currency: item.currency,
-        old_price: item.old_price,
-        region: item.region,
-        description: item.description,
-        part_price: item.part_price,
-        partner_price: item.partner_price,
-        quantity: 1,
-      };
+      // const cartItem = {
+      //   id: item.id,
+      //   phone: item.phone,
+      //   price: isPartner ? item.partner_price : item.price,
+      //   operator: item.operator,
+      //   credit_month_count: item.credit_month_count,
+      //   currency: item.currency,
+      //   old_price: item.old_price,
+      //   region: item.region,
+      //   description: item.description,
+      //   part_price: item.part_price,
+      //   partner_price: item.partner_price,
+      //   quantity: 1,
+      // };
 
-      const isAlreadyInCart = useCartStore
-        .getState()
-        .items.some((i) => i.phone === cartItem.phone);
+      // const isAlreadyInCart = useCartStore
+      //   .getState()
+      //   .items.some((i) => i.phone === cartItem.phone);
 
-      if (isAlreadyInCart) {
-        toast.error(`Номер ${item.phone} уже в корзине!`, {
-          duration: 6000,
-          position: "top-right",
-        });
+      // if (isAlreadyInCart) {
+      //   toast.error(`Номер ${item.phone} уже в корзине!`, {
+      //     duration: 6000,
+      //     position: "top-right",
+      //   });
 
-        return;
-      }
+      //   return;
+      // }
 
-      addItem(cartItem);
+      // addItem(cartItem);
 
-      toast.success(`Номер ${item.phone} добавлен в корзину!`, {
-        duration: 3000,
-        position: "top-right",
-      });
+      // toast.success(`Номер ${item.phone} добавлен в корзину!`, {
+      //   duration: 3000,
+      //   position: "top-right",
+      // });
 
-      if (showDescriptionModal) {
-        setShowDescriptionModal(false);
-        router.push("/");
-      }
+      // if (showDescriptionModal) {
+      //   setShowDescriptionModal(false);
+      //   router.push("/");
+      // }
+
+      setPhone(item);
+      setOpenAddToCartModal(true);
     },
     [addItem, isPartner, router, setShowDescriptionModal, showDescriptionModal]
   );
@@ -487,6 +494,12 @@ const NumberList: React.FC<NumberListProps> = memo((props) => {
           /> */}
         </div>
       )}
+
+      <AddToCartModal
+        isOpen={openAddToCartModal}
+        onClose={() => setOpenAddToCartModal(false)}
+        item={phone}
+      />
     </div>
   );
 });
