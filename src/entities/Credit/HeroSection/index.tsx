@@ -2,6 +2,7 @@ import { memo } from "react";
 import Image from "next/image";
 
 import styles from "./HeroSection.module.scss";
+import Button from "@/shared/ui/Button";
 
 interface HeroSectionProps {
   onScrollToForm: () => void;
@@ -22,9 +23,7 @@ const HeroSection = memo(({ onScrollToForm }: HeroSectionProps) => (
         </p>
       </div>
 
-      <button type="button" onClick={onScrollToForm} className={styles.button}>
-        Купить в рассрочку
-      </button>
+      <Button onClick={onScrollToForm}>Купить в рассрочку</Button>
 
       <Image
         src="/assets/credit/credit-img.svg"

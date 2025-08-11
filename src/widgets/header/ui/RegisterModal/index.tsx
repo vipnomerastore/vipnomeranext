@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useAuthStore } from "@/store/authStore";
 
 import styles from "./RegisterModal.module.scss";
+import Button from "@/shared/ui/Button";
 
 interface RegisterModalProps {
   isOpen: boolean;
@@ -213,14 +214,9 @@ const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
             )}
           </div>
 
-          <button
-            type="submit"
-            className={styles.submitButton}
-            disabled={isSubmitting}
-            aria-busy={isSubmitting}
-          >
+          <Button disabled={isSubmitting} fullWidth variant="outline">
             {isSubmitting ? "Регистрация..." : "Зарегистрироваться"}
-          </button>
+          </Button>
         </form>
       </div>
     </div>

@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import Image from "next/image";
 
 import styles from "./Esim.module.scss";
+import Button from "@/shared/ui/Button";
 
 const HomeEsim = () => {
   const handleButtonClick = useCallback(() => {
@@ -41,13 +42,9 @@ const HomeEsim = () => {
             </div>
           </div>
 
-          <button
-            className={styles.button}
-            onClick={handleButtonClick}
-            aria-label="Прокрутить к разделу выбора номера"
-          >
-            <span>Выбрать номер</span>
-          </button>
+          <Button onClick={handleButtonClick} variant="outline">
+            Выбрать номер
+          </Button>
         </div>
       </div>
     </div>

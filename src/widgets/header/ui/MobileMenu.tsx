@@ -112,6 +112,14 @@ const MobileMenu = (props: MobileMenuProps) => {
         <ScrollNavLink href="/#contacts" setMenuOpen={toggleMenu}>
           Контакты
         </ScrollNavLink>
+
+        <Link
+          href="/blog"
+          onClick={toggleMenu}
+          className={getLinkClass("/redemption")}
+        >
+          Блог
+        </Link>
       </nav>
 
       <div className={styles.mobileActions}>

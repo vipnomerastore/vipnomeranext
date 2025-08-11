@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import styles from "../../Header.module.scss";
+import Button from "@/shared/ui/Button";
 
 interface HeaderContentProps {
   openModal: () => void;
@@ -28,9 +29,7 @@ const HeaderContent = ({ openModal }: HeaderContentProps) => {
         официальным оформлением
       </p>
 
-      <button onClick={openModal} className={styles.ctaButton}>
-        Получить VIP номер от 2 499 р.
-      </button>
+      <Button onClick={openModal}>Получить VIP номер от 2 499 р.</Button>
     </div>
   );
 };

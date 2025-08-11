@@ -12,6 +12,7 @@ import Image from "next/image";
 import { SERVER_URL } from "@/shared/api";
 import { phoneMask } from "@/shared/const";
 import styles from "./Map.module.scss";
+import Button from "@/shared/ui/Button";
 
 const YANDEX_MAPS_API_KEY = "11bca4c6-71bc-4e20-85ae-39d33f81d802";
 
@@ -229,15 +230,9 @@ const HomeMap = () => {
                   </p>
                 </div>
 
-                <button type="submit" className={styles.button}>
-                  <span>Отправить</span>
-                  <Image
-                    src="/assets/home/question/next.svg"
-                    alt="Отправить"
-                    width={16}
-                    height={16}
-                  />
-                </button>
+                <Button type="submit" variant="outline" arrow>
+                  Отправить
+                </Button>
               </div>
             </form>
           </div>

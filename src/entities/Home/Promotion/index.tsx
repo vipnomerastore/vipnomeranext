@@ -13,6 +13,7 @@ import { NumberItem, useCartStore } from "@/store/cartStore";
 import { SERVER_URL } from "@/shared/api";
 
 import styles from "./Promotion.module.scss";
+import Button from "@/shared/ui/Button";
 
 const operatorIcons: Record<string, string> = {
   МТС: "/assets/home/operators/mts.svg",
@@ -172,6 +173,7 @@ const HomePromotion = () => {
   );
 
   const handleCloseModal = () => clearLastAddedItem();
+
   const handleGoToCart = () => {
     clearLastAddedItem();
     router.push("/cart");
@@ -261,13 +263,12 @@ const HomePromotion = () => {
                       )}
                     </div>
 
-                    <button
-                      className={styles.PromotionCaruselButton}
+                    <Button
                       onClick={() => handleAddToCart(item)}
-                      aria-label={`Добавить номер ${item.phone} в корзину`}
+                      variant="outline"
                     >
                       В корзину
-                    </button>
+                    </Button>
                   </article>
                 </SwiperSlide>
               ))}

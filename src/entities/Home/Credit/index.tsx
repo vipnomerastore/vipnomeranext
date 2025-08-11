@@ -4,6 +4,7 @@ import Image from "next/image";
 import { CREDIT_ITEMS } from "./const";
 
 import styles from "./Credit.module.scss";
+import Button from "@/shared/ui/Button";
 
 const HomeCredit = () => {
   const handleButtonClick = useCallback(() => {
@@ -39,13 +40,9 @@ const HomeCredit = () => {
           ))}
         </div>
 
-        <button
-          type="button"
-          className={styles.button}
-          onClick={handleButtonClick}
-        >
-          <span>Выбрать номер</span>
-        </button>
+        <Button onClick={handleButtonClick} variant="outline">
+          Выбрать номер
+        </Button>
       </div>
     </div>
   );
