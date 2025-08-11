@@ -20,6 +20,16 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "vipnomerastore.ru",
       },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "1337",
+      },
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+        port: "1337",
+      },
     ],
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
