@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useAuthStore } from "@/store/authStore";
 
 import styles from "./LoginModal.module.scss";
+import Button from "@/shared/ui/Button";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -165,9 +166,9 @@ const LoginModal = ({ isOpen, onClose, onOpenRegister }: LoginModalProps) => {
             </p>
           )}
 
-          <button type="submit" className={styles.submitButton}>
+          <Button fullWidth variant="outline">
             Войти
-          </button>
+          </Button>
 
           <p className={styles.registerLink}>
             Нет аккаунта?{" "}

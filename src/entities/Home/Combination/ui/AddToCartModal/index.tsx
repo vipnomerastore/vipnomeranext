@@ -44,7 +44,7 @@ const checkboxStyle = {
 
 const AddToCartModal = ({ isOpen, onClose, item }: GetNumberModalProps) => {
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState("+7 ");
   const [agreed, setAgreed] = useState(true);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const router = useRouter();
@@ -115,12 +115,6 @@ const AddToCartModal = ({ isOpen, onClose, item }: GetNumberModalProps) => {
     };
 
     try {
-      // await axios.post(
-      //   `${SERVER_URL}/forma-s-banneras`,
-      //   { data: { name, phone } },
-      //   { headers: { "Content-Type": "application/json" } }
-      // );
-
       await axios.post(`${SERVER_URL}/zayavkas`, payload, {
         headers: { "Content-Type": "application/json" },
       });
@@ -199,16 +193,19 @@ const AddToCartModal = ({ isOpen, onClose, item }: GetNumberModalProps) => {
           </div>
 
           <div className={styles.inputField}>
-            <MaskedInput
-              mask={phoneMask}
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className={styles.inputField}
-              type="tel"
-              placeholder="Номер телефона"
-              aria-invalid={!!errors.phone}
-              aria-describedby={errors.phone ? "phone-error" : undefined}
-            />
+            <div className={styles.phoneInputWrapper}>
+              {/* <span className={styles.phonePrefix}>+7</span> */}
+              <MaskedInput
+                mask={phoneMask}
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className={styles.inputField}
+                type="tel"
+                placeholder="(___) ___-__-__"
+                aria-invalid={!!errors.phone}
+                aria-describedby={errors.phone ? "phone-error" : undefined}
+              />
+            </div>
 
             {errors.phone && (
               <p id="phone-error" className={styles.errorMessage}>

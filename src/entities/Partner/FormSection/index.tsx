@@ -17,6 +17,7 @@ import { SERVER_URL } from "@/shared/api";
 import { phoneMask } from "@/shared/const";
 
 import styles from "./FormSection.module.scss";
+import Button from "@/shared/ui/Button";
 
 type FormData = {
   fullName: string;
@@ -48,7 +49,7 @@ const FormSection = forwardRef<HTMLElement>((_, ref) => {
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     city: "",
-    phoneNumber: "",
+    phoneNumber: "+7 ",
     agreedToTerms: true,
   });
   const [errors, setErrors] = useState<Errors>({});
@@ -219,21 +220,9 @@ const FormSection = forwardRef<HTMLElement>((_, ref) => {
             {errors.agreedToTerms && (
               <span className={styles.error}>{errors.agreedToTerms}</span>
             )}
-            <button
-              type="submit"
-              className={styles.submitButton}
-              disabled={isSubmitting}
-            >
-              <span>Отправить</span>
-              {/* Используем Image для иконки кнопки */}
-              <Image
-                src={nextIcon}
-                alt="Submit icon"
-                width={20}
-                height={20}
-                loading="lazy"
-              />
-            </button>
+            <Button arrow variant="outline" disabled={isSubmitting}>
+              Отправить
+            </Button>
           </div>
         </form>
       </div>

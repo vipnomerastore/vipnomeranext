@@ -1,5 +1,24 @@
 @use "../../../../../styles/variables.scss" as *;
 
+// .phoneInputWrapper {
+//   position: relative;
+//   display: flex;
+//   align-items: center;
+// }
+
+// .phonePrefix {
+//   position: absolute;
+//   left: 16px;
+//   color: #fff;
+//   font-size: 1.1em;
+//   pointer-events: none;
+//   z-index: 2;
+// }
+
+// .inputField {
+//   padding-left: 38px !important;
+// }
+
 .modalOverlay {
   position: fixed;
   inset: 0;

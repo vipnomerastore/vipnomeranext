@@ -89,15 +89,11 @@ const NumberList: React.FC<NumberListProps> = memo((props) => {
     order,
   } = props;
 
-  const { addItem, clearLastAddedItem } = useCartStore();
+  const { addItem } = useCartStore();
   const { user } = useAuthStore();
   const router = useRouter();
   const searchParams = useSearchParams();
   const isPartner = user?.role?.name === "Партнёр";
-  const isHydrated = useHydration();
-  // Всегда вызываем useMediaQuery, но используем результат только после гидрации
-  const mediaQueryResult = useMediaQuery("(max-width: 600px)");
-  const isMobile = isHydrated ? mediaQueryResult : false;
 
   const [openAddToCartModal, setOpenAddToCartModal] = useState(false);
   const [phone, setPhone] = useState<NumberItem | null>(null);
@@ -250,11 +246,6 @@ const NumberList: React.FC<NumberListProps> = memo((props) => {
     [addItem, isPartner, router, setShowDescriptionModal, showDescriptionModal]
   );
 
-  const handleCloseModal = useCallback(() => {
-    clearLastAddedItem();
-    onCloseDescription();
-  }, [clearLastAddedItem, onCloseDescription]);
-
   const getOperatorIcon = useCallback(
     (op: string) => operatorIcons[op] || "/assets/home/operators/megafon.svg",
     []
@@ -269,6 +260,7 @@ const NumberList: React.FC<NumberListProps> = memo((props) => {
       requestAnimationFrame(() => {
         onTierSelect(tier);
         const queryParam = tier !== "all" ? `?${tier.toLowerCase()}` : "";
+
         router.replace(queryParam, { scroll: false });
       });
     },
@@ -403,6 +395,18 @@ const NumberList: React.FC<NumberListProps> = memo((props) => {
     );
   };
 
+  const numberListLoader = (
+    <div className={styles.loaderContainer}>
+      <div className={styles.loader} />
+    </div>
+  );
+
+  const noResultsMessage = (
+    <p className={styles.noResults}>По вашему запросу номеров не найдено.</p>
+  );
+
+  const errorMessage = <p className={styles.error}>{error}</p>;
+
   return (
     <div className={styles.list}>
       <Script
@@ -452,19 +456,13 @@ const NumberList: React.FC<NumberListProps> = memo((props) => {
       </div>
 
       <div className={styles.numberList}>
-        {loading ? (
-          <div className={styles.loaderContainer}>
-            <div className={styles.loader} />
-          </div>
-        ) : error ? (
-          <p className={styles.error}>{error}</p>
-        ) : displayedNumbers.length === 0 ? (
-          <p className={styles.noResults}>
-            По вашему запросу номеров не найдено.
-          </p>
-        ) : (
-          displayedNumbers.map(renderNumberItem)
-        )}
+        {loading
+          ? numberListLoader
+          : error
+          ? errorMessage
+          : displayedNumbers.length === 0
+          ? noResultsMessage
+          : displayedNumbers.map(renderNumberItem)}
       </div>
 
       {sortedNumbers.length > 0 && (
@@ -477,23 +475,22 @@ const NumberList: React.FC<NumberListProps> = memo((props) => {
             hidePrevButton
             hideNextButton
             sx={paginationStyle}
-            siblingCount={isMobile ? 0 : 1}
-            boundaryCount={isMobile ? 1 : 2}
+            siblingCount={1}
+            boundaryCount={1}
           />
         </div>
       )}
 
-      {/* TODO: Implement PhoneDescriptionModal */}
-      {showDescriptionModal && selectedNumber && (
+      {/* {showDescriptionModal && selectedNumber && (
         <div>
-          {/* <PhoneDescriptionModal
+           <PhoneDescriptionModal
             number={selectedNumber}
             isPartner={isPartner}
             onClose={handleCloseModal}
             onAddToCart={handleAddToCart}
-          /> */}
+          /> 
         </div>
-      )}
+      )} */}
 
       <AddToCartModal
         isOpen={openAddToCartModal}

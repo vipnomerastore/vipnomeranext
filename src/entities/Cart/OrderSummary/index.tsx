@@ -1,6 +1,7 @@
 import { NumberItem } from "@/store/cartStore";
 
 import styles from "./OrderSummary.module.scss";
+import Button from "@/shared/ui/Button";
 
 interface OrderSummaryProps {
   items: NumberItem[];
@@ -131,14 +132,13 @@ const OrderSummary = (props: OrderSummaryProps) => {
         </div>
       </div>
 
-      <button
-        className={styles.checkoutButton}
+      <Button
+        fullWidth
         disabled={items.length === 0 || isSubmitting}
         onClick={onSubmit}
-        aria-label="Оформить заказ"
       >
         {isSubmitting ? "Отправка..." : "Оформить заказ"}
-      </button>
+      </Button>
     </div>
   );
 };

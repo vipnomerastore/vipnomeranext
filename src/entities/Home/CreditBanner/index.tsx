@@ -14,6 +14,7 @@ import { CACHE_TIMES } from "@/shared/utils/cachedFetch";
 
 import styles from "./CreditBanner.module.scss";
 import { phoneMask } from "@/shared/const";
+import Button from "@/shared/ui/Button";
 
 interface PhoneNumber {
   phone: string;
@@ -75,7 +76,7 @@ const DropdownArrowIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
 const HomeCreditBanner: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState("+7 ");
   const [agreed, setAgreed] = useState(true);
   const [errors, setErrors] = useState<{
     name?: string;
@@ -376,10 +377,7 @@ const HomeCreditBanner: React.FC = () => {
                 />
               )}
 
-              <button className={styles.submitButton} onClick={openModal}>
-                <span>Выбрать номер в рассрочку</span>
-                <SubmitArrowIcon />
-              </button>
+              <Button onClick={openModal}>Выбрать номер в рассрочку</Button>
             </div>
           </div>
         </div>

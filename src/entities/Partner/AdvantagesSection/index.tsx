@@ -49,7 +49,7 @@ const AdvantagesSection: React.FC = memo(() => (
           >
             <Image
               loading="lazy"
-              width={64} // Укажи реальную ширину и высоту иконки
+              width={64}
               height={64}
               src={advantage.icon}
               alt="advantage"
