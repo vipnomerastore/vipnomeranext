@@ -11,6 +11,7 @@ import { SERVER_URL } from "@/shared/api";
 import { phoneMask } from "@/shared/const";
 
 import styles from "./FormSection.module.scss";
+import Button from "@/shared/ui/Button";
 
 const errorStyle = {
   color: "#ff6b6b",
@@ -34,6 +35,7 @@ interface FormData {
   city: string;
   phoneNumber: string;
 }
+
 interface FormErrors {
   fullName?: string;
   city?: string;
@@ -57,7 +59,7 @@ const FormSection = forwardRef<HTMLElement>((_, ref) => {
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     city: "",
-    phoneNumber: "",
+    phoneNumber: "+7 ",
   });
   const [agreedToTerms, setAgreedToTerms] = useState(true);
   const [errors, setErrors] = useState<FormErrors>({});
@@ -264,15 +266,9 @@ const FormSection = forwardRef<HTMLElement>((_, ref) => {
               </p>
             )}
 
-            <button type="submit" className={styles.submitButton}>
-              <span>Отправить</span>
-              <Image
-                src="/assets/home/question/next.svg"
-                alt="Submit icon"
-                width={16}
-                height={16}
-              />
-            </button>
+            <Button variant="outline" arrow>
+              Отправить
+            </Button>
           </div>
         </form>
       </div>

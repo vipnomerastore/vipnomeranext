@@ -1,6 +1,7 @@
 import { memo } from "react";
 
 import styles from "./HeroSection.module.scss";
+import Button from "@/shared/ui/Button";
 
 interface HeroSectionProps {
   onScrollToForm: () => void;
@@ -22,9 +23,7 @@ const HeroSection: React.FC<HeroSectionProps> = memo(({ onScrollToForm }) => (
           сегодня
         </p>
 
-        <button onClick={onScrollToForm} className={styles.button}>
-          Стать партнером
-        </button>
+        <Button onClick={onScrollToForm}>Стать партнером</Button>
       </div>
     </div>
   </section>

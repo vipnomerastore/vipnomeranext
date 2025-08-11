@@ -11,6 +11,7 @@ import { SERVER_URL } from "@/shared/api";
 import { phoneMask } from "@/shared/const";
 
 import styles from "./SellFormSection.module.scss";
+import Button from "@/shared/ui/Button";
 
 interface SellNumberItem {
   number: string;
@@ -70,7 +71,7 @@ const errorStyle = {
 const SellFormSection: React.FC = memo(() => {
   const [formData, setFormData] = useState<FormData>({
     name: "",
-    contactPhone: "",
+    contactPhone: "+7 ",
     operator: "",
     sellNumbers: [{ number: "", price: "" }],
     email: "",
@@ -504,20 +505,9 @@ const SellFormSection: React.FC = memo(() => {
             </span>
           )}
 
-          <button
-            type="submit"
-            className={styles.submitButton}
-            aria-label="Отправить форму"
-          >
-            <span>Получить предложение</span>
-            <Image
-              loading="lazy"
-              src="/assets/home/question/next.svg"
-              alt="Next button icon"
-              width={20}
-              height={20}
-            />
-          </button>
+          <Button arrow variant="outline">
+            Получить предложение
+          </Button>
         </div>
       </form>
     </section>

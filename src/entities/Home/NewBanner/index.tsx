@@ -19,6 +19,7 @@ import { SERVER_URL } from "@/shared/api";
 import { CACHE_TIMES } from "@/shared/utils/cachedFetch";
 import styles from "./NewBanner.module.scss";
 import { phoneMask } from "@/shared/const";
+import Button from "@/shared/ui/Button";
 
 interface NumberData {
   id: string;
@@ -85,7 +86,7 @@ const HomeNewBanner = () => {
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalName, setModalName] = useState("");
-  const [modalPhone, setModalPhone] = useState("");
+  const [modalPhone, setModalPhone] = useState("+7 ");
   const [modalAgreed, setModalAgreed] = useState(true);
   const [modalErrors, setModalErrors] = useState<{ [key: string]: string }>({});
 
@@ -481,13 +482,9 @@ const HomeNewBanner = () => {
                 </p>
               </div>
             </div>
-            <button
-              className={styles.submitButton}
-              onClick={() => setIsModalOpen(true)}
-            >
+            <Button onClick={() => setIsModalOpen(true)}>
               <span>Забрать со скидкой</span>
-              {/* SVG кнопки */}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -647,12 +644,9 @@ const HomeNewBanner = () => {
                 </p>
               </div>
             </div>
-            <button
-              className={styles.submitButton}
-              onClick={() => setIsModalOpen(true)}
-            >
-              <span>Забрать со скидкой</span>
-            </button>
+            <Button onClick={() => setIsModalOpen(true)}>
+              Забрать со скидкой
+            </Button>
           </div>
         </div>
       </div>
@@ -726,13 +720,10 @@ const HomeNewBanner = () => {
                 <p>Нет данных</p>
               )}
             </div>
-            <button
-              className={styles.submitButton}
-              onClick={handleCombinationScroll}
-            >
-              <span>Выбрать как у 1000+ клиентов</span>
-              {/* SVG кнопки */}
-            </button>
+
+            <Button onClick={handleCombinationScroll}>
+              Выбрать как у 1000+ клиентов
+            </Button>
           </div>
         </div>
       </div>
@@ -839,12 +830,9 @@ const HomeNewBanner = () => {
                 <span className={styles.fifthActionTitleSpan}>15%</span>!
               </p>
 
-              <button
-                className={styles.submitButton}
-                onClick={() => setIsModalOpen(true)}
-              >
-                <span>Хочу больше вариантов</span>
-              </button>
+              <Button onClick={() => setIsModalOpen(true)}>
+                Хочу больше вариантов
+              </Button>
             </div>
           </div>
         </div>

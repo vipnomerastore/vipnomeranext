@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 import styles from "../Question.module.scss";
+import Button from "@/shared/ui/Button";
 
 interface FormSubmitProps {
   agreed: boolean;
@@ -52,16 +53,9 @@ const FormSubmit = ({ agreed, setAgreed, error, errorId }: FormSubmitProps) => {
         </p>
       )}
 
-      <button type="submit" className={styles.button}>
-        <span>Отправить</span>
-        <Image
-          loading="lazy"
-          src="/assets/home/question/next.svg"
-          alt="следующий шаг"
-          width={20}
-          height={20}
-        />
-      </button>
+      <Button type="submit" variant="outline" arrow>
+        Отправить
+      </Button>
     </div>
   );
 };

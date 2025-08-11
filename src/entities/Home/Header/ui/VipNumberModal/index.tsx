@@ -37,7 +37,7 @@ const SELECT_FIELDS = [
 
 const VipNumberModal = ({ isOpen, onClose }: VipNumberModalProps) => {
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState("+7 ");
   const [purpose, setPurpose] = useState("");
   const [agreed, setAgreed] = useState(true);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});

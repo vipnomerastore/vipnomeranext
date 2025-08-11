@@ -61,6 +61,14 @@ const NavMenu = ({ setMenuOpen }: { setMenuOpen: (open: boolean) => void }) => {
       <ScrollNavLink href="#contacts" setMenuOpen={setMenuOpen}>
         Контакты
       </ScrollNavLink>
+
+      <Link
+        href="/blog"
+        className={getNavLinkClass("/redemption")}
+        onClick={() => setMenuOpen(false)}
+      >
+        Блог
+      </Link>
     </div>
   );
 };

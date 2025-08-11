@@ -141,9 +141,7 @@ const CartPage = () => {
         price: totalPrice,
         payment: activePaymentTab,
         delivery: activeDeliveryTab,
-        numbers: {
-          connect: items.map((item) => ({ documentId: item.id })),
-        },
+        numbers: { connect: items.map((item) => ({ documentId: item.id })) },
       },
     };
 

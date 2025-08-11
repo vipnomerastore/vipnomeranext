@@ -34,6 +34,7 @@ const SparkleEffect: React.FC<SparkleEffectProps> = ({
   useEffect(() => {
     if (!isClient || !isVisible) {
       setSparkles([]);
+
       return;
     }
 

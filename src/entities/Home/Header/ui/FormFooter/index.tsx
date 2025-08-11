@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 import styles from "../../Header.module.scss";
+import Button from "@/shared/ui/Button";
 
 interface FormFooterProps {
   agreed: boolean;
@@ -49,15 +50,9 @@ const FormFooter = ({ agreed, setAgreed, error, errorId }: FormFooterProps) => {
         </p>
       </div>
 
-      <button type="submit" className={styles.button}>
-        <span>Отправить</span>
-        <Image
-          src="/assets/home/question/next.svg"
-          alt="next"
-          width={16}
-          height={16}
-        />
-      </button>
+      <Button type="submit" variant="outline" arrow>
+        Отправить
+      </Button>
     </div>
   );
 };

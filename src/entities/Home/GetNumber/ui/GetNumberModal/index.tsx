@@ -11,6 +11,7 @@ import { SERVER_URL } from "@/shared/api";
 import { phoneMask } from "@/shared/const";
 
 import styles from "./GetNumberModal.module.scss";
+import Button from "@/shared/ui/Button";
 
 interface GetNumberModalProps {
   isOpen: boolean;
@@ -42,7 +43,7 @@ const checkboxStyle = {
 
 const GetNumberModal = ({ isOpen, onClose }: GetNumberModalProps) => {
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState("+7 ");
   const [agreed, setAgreed] = useState(true);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const router = useRouter();
@@ -213,9 +214,9 @@ const GetNumberModal = ({ isOpen, onClose }: GetNumberModalProps) => {
             </p>
           )}
 
-          <button type="submit" className={styles.submitButton}>
+          <Button type="submit" variant="outline" fullWidth>
             Сохранить
-          </button>
+          </Button>
         </form>
       </div>
     </div>
