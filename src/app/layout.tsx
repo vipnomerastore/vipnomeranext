@@ -6,7 +6,6 @@ import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import EmotionProvider from "@/app/EmotionProvider";
 import ClientThemeProvider from "@/app/ClientThemeProvider";
 import ClientLayout from "@/app/clientLayout";
-import Analytics from "@/components/Analytics";
 import OrganizationSchema from "@/components/schemas/OrganizationSchema";
 import WebSiteSchema from "@/components/schemas/WebSiteSchema";
 
@@ -93,7 +92,37 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru">
+      <head>
+        <meta name="yandex-verification" content="6d21e35d75423577" />
+
+        {/* Yandex Metrica */}
+        <Script id="yandex-metrica" strategy="beforeInteractive">
+          {`
+            (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+            (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+            ym(99635255, "init", {
+                 clickmap:true,
+                 trackLinks:true,
+                 accurateTrackBounce:true,
+                 webvisor:true
+            });
+          `}
+        </Script>
+      </head>
       <body suppressHydrationWarning>
+        {/* Yandex Metrica noscript */}
+        <noscript>
+          <div>
+            <img
+              src="https://mc.yandex.ru/watch/99635255"
+              style={{ position: "absolute", left: "-9999px" }}
+              alt=""
+            />
+          </div>
+        </noscript>
+
         <Script id="dg-social-widget-data" strategy="afterInteractive">
           {`
     if (!window.dgSocialWidgetData) {
@@ -105,15 +134,15 @@ export default function RootLayout({
     });
   `}
         </Script>
+
         <Script
           src="https://app.daily-grow.com/social-widget/init.js"
           strategy="afterInteractive"
           defer
         />
 
-        <meta name="yandex-verification" content="6d21e35d75423577" />
-
         <div id="modal-root"></div>
+
         <EmotionProvider>
           <ClientThemeProvider>
             <ClientLayout>{children}</ClientLayout>
@@ -129,8 +158,6 @@ export default function RootLayout({
         />
 
         <WebSiteSchema />
-
-        <Analytics />
 
         <SpeedInsights />
 
