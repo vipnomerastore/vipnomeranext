@@ -74,8 +74,6 @@ export const metadata = {
 export default async function BlogPage() {
   const articles = await fetchArticles();
 
-  console.log(articles[0].media);
-
   return (
     <main className={styles.container}>
       <div className={styles.header}>
