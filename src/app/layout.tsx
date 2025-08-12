@@ -97,31 +97,27 @@ export default function RootLayout({
         <meta name="referrer" content="origin-when-cross-origin" />
 
         {/* Yandex Metrica - размещаем в head согласно рекомендациям */}
-        <Script id="yandex-metrica" strategy="afterInteractive">
+        <Script
+          id="yandex-metrica"
+          strategy="beforeInteractive"
+          crossOrigin="anonymous"
+        >
           {`
-            // Простой и надежный код Yandex Metrica
-            (function(m,e,t,r,i,k,a){
-              m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-              m[i].l=1*new Date();
-              k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-            })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+      (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0];
+        k.async=1; k.src=r; k.crossOrigin="anonymous";
+        a.parentNode.insertBefore(k,a)
+      })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
-            // Отложенная инициализация для предотвращения canceled запросов
-            setTimeout(function() {
-              if (typeof ym === 'function') {
-                try {
-                  ym(99635255, "init", {
-                    clickmap: true,
-                    trackLinks: true,
-                    accurateTrackBounce: true,
-                    webvisor: true
-                  });
-                } catch (e) {
-                  console.warn('Yandex Metrica init error:', e);
-                }
-              }
-            }, 100);
-          `}
+      ym(99635255, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true
+      });
+    `}
         </Script>
 
         {/* Yandex Metrica noscript - тоже в head */}
