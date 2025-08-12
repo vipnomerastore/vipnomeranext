@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRegionFromRequest } from "@/shared/utils/server-region";
-import { cspHeader } from "@/lib/csp";
+// import { cspHeader } from "@/lib/csp";
 
 export function middleware(request: NextRequest) {
   const host = request.headers.get("host") || "";
@@ -29,8 +29,8 @@ export function middleware(request: NextRequest) {
     response.headers.set("x-current-region", detectedRegion);
   }
 
-  // Добавляем CSP заголовки для безопасности
-  response.headers.set("Content-Security-Policy", cspHeader.replace(/\n/g, ""));
+  // Временно отключаем CSP для отладки всех сервисов
+  // response.headers.set("Content-Security-Policy", cspHeader.replace(/\n/g, ""));
 
   // Добавляем заголовки для корректной работы аналитики
   response.headers.set("Referrer-Policy", "origin-when-cross-origin");
