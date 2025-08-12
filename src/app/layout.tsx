@@ -94,9 +94,10 @@ export default function RootLayout({
     <html lang="ru">
       <head>
         <meta name="yandex-verification" content="6d21e35d75423577" />
+        <meta name="referrer" content="origin-when-cross-origin" />
 
-        {/* Yandex Metrica */}
-        <Script id="yandex-metrica" strategy="beforeInteractive">
+        {/* Yandex Metrica - размещаем в head согласно рекомендациям */}
+        <Script id="yandex-metrica" strategy="afterInteractive">
           {`
             (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
             m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
@@ -110,9 +111,8 @@ export default function RootLayout({
             });
           `}
         </Script>
-      </head>
-      <body suppressHydrationWarning>
-        {/* Yandex Metrica noscript */}
+
+        {/* Yandex Metrica noscript - тоже в head */}
         <noscript>
           <div>
             <img
@@ -122,7 +122,8 @@ export default function RootLayout({
             />
           </div>
         </noscript>
-
+      </head>
+      <body suppressHydrationWarning>
         <Script id="dg-social-widget-data" strategy="afterInteractive">
           {`
     if (!window.dgSocialWidgetData) {
