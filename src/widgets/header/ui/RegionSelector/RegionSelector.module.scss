@@ -5,31 +5,20 @@
   align-items: center;
   gap: 6px;
   background: transparent;
-  border: 1px solid rgba(253, 252, 164, 0.3);
-  border-radius: 8px;
-  padding: 8px 12px;
   color: #ffffff;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
   position: absolute;
-  top: 80px;
+  top: 75px;
   right: 0;
-
-  &:hover {
-    background: rgba(253, 252, 164, 0.1);
-    border-color: rgba(253, 252, 164, 0.5);
-  }
-
-  &:active {
-    transform: translateY(1px);
-  }
+  box-shadow: none;
 
   @media (max-width: 768px) {
     padding: 6px 10px;
     font-size: 13px;
+    top: 16px;
+    right: 15%;
   }
 }
 
