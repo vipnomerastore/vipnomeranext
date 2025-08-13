@@ -2,9 +2,9 @@ import { Metadata } from "next";
 import RedemptionPageClient from "./RedemptionPageClient";
 import { regionName, regionDisplay } from "@/shared/utils";
 import { getServerRegion } from "@/hooks/useServerRegion";
-import OrganizationSchema from "@/components/schemas/OrganizationSchema";
-import ProductSchema from "@/components/schemas/ProductSchema";
-import LocalBusinessSchema from "@/components/schemas/LocalBusinessSchema";
+import OrganizationSchema from "@/schemas/OrganizationSchema";
+import ProductSchema from "@/schemas/ProductSchema";
+import LocalBusinessSchema from "@/schemas/LocalBusinessSchema";
 
 // Динамическая генерация для региональных metadata
 export const dynamic = "force-dynamic";

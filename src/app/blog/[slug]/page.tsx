@@ -2,7 +2,10 @@ import styles from "./BlogArticle.module.scss";
 import ReactMarkdown from "react-markdown";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import Head from "next/head";
+import Image from "next/image";
+import Breadcrumbs from "@/entities/Blog/Breadcrumbs";
+import RelatedArticles from "@/entities/Blog/RelatedArticles";
+import ShareButtons from "@/entities/Blog/ShareButtons";
 
 function getPlainTextFromContent(content: string | any[]): string {
   if (typeof content === "string") return content;
@@ -32,8 +35,13 @@ type Article = {
   slug: string;
   title: string;
   excerpt: string;
-  content: string; // Markdown
-  media: string | null;
+  content: string;
+  media: {
+    url: string;
+    alt?: string | null;
+    width?: number | null;
+    height?: number | null;
+  } | null;
   createdAt: string | null;
   updatedAt: string | null;
   publishedAt: string | null;
@@ -41,7 +49,7 @@ type Article = {
 
 async function fetchArticles(): Promise<Article[]> {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/statis?populate=*`,
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/statyas?populate=*`,
     {
       next: { revalidate: 60 },
     }
@@ -51,26 +59,34 @@ async function fetchArticles(): Promise<Article[]> {
 
   const data = await res.json();
 
-  return (data.data || []).map(
-    (item: any): Article => ({
+  return (data.data || []).map((item: any): Article => {
+    const mediaData = item.media?.data?.[0]?.attributes;
+    return {
       slug: item.slug,
       title: item.title,
       excerpt: item.excerpt || "",
       content: item.content || "",
-      media: item.media?.data?.[0]?.attributes?.url || null,
+      media: mediaData
+        ? {
+            url: mediaData.url,
+            alt: mediaData.alternativeText || null,
+            width: mediaData.width || null,
+            height: mediaData.height || null,
+          }
+        : null,
       id: item.id || null,
       createdAt: item.createdAt || null,
       updatedAt: item.updatedAt || null,
       publishedAt: item.publishedAt || null,
-    })
-  );
+    };
+  });
 }
 
 async function fetchArticleBySlug(slug: string): Promise<Article | null> {
   const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
   const res = await fetch(
-    `${baseUrl}/statis?filters[slug][$eq]=${slug}&populate=media`,
+    `${baseUrl}/statyas?filters[slug][$eq]=${slug}&populate=media`,
     { next: { revalidate: 60 } }
   );
 
@@ -79,13 +95,25 @@ async function fetchArticleBySlug(slug: string): Promise<Article | null> {
   const data = await res.json();
 
   const item = data.data?.[0];
+
   if (!item) return null;
+
+  const mediaObj = Array.isArray(item.media) ? item.media[0] : item.media;
+
   return {
     slug: item.slug,
     title: item.title,
     excerpt: item.excerpt || "",
     content: item.content || "",
-    media: item.media?.data?.[0]?.attributes?.url || null,
+    media:
+      mediaObj && mediaObj.url
+        ? {
+            url: mediaObj.url,
+            alt: mediaObj.alternativeText || null,
+            width: mediaObj.width || null,
+            height: mediaObj.height || null,
+          }
+        : null,
     id: item.id || null,
     createdAt: item.createdAt || null,
     updatedAt: item.updatedAt || null,
@@ -105,35 +133,46 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const article = await fetchArticleBySlug(slug);
+
   if (!article) return {};
 
   const plain = getPlainTextFromContent(article.content);
 
-  // Используем excerpt если есть, иначе первые 160 символов из контента
   const description = article.excerpt
     ? article.excerpt.slice(0, 160)
     : plain.slice(0, 160);
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://example.com";
+  const baseUrl = "https://vipnomerastore.ru";
+
   const canonicalUrl = `${baseUrl}/blog/${slug}`;
 
-  const imageUrl =
-    article.media &&
-    (article.media.startsWith("http")
-      ? article.media
-      : `${baseUrl}${article.media}`);
+  const imageUrl = article.media?.url
+    ? article.media.url.startsWith("http")
+      ? article.media.url
+      : `${baseUrl}${article.media.url}`
+    : null;
 
   return {
-    title: article.title,
+    title: `${article.title} | vipnomerastore`,
     description,
-    alternates: {
-      canonical: canonicalUrl,
-    },
+    alternates: { canonical: canonicalUrl },
+    keywords: [
+      ...article.title.split(" ").slice(0, 3), // Первые 3 слова заголовка
+      "номера",
+      "виртуальные номера",
+      "мтс билайн йота теле 2 мегафон",
+      "купить номер телефона",
+      "временные номера",
+      "онлайн номера",
+      "купить номера телефонов",
+      "whatsapp номер телефона",
+      "номер телефона",
+    ].join(", "),
     openGraph: {
       title: article.title,
       description,
       url: canonicalUrl,
-      siteName: "Название сайта",
+      siteName: "vipnomerastore",
       type: "article",
       publishedTime: article.publishedAt || undefined,
       modifiedTime: article.updatedAt || undefined,
@@ -159,60 +198,110 @@ export default async function ArticlePage({
 
   if (!article) notFound();
 
+  // Получаем связанные статьи
+  const relatedArticles = await fetchArticles();
+
   const plain = getPlainTextFromContent(article.content);
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://example.com";
+  const baseUrl = "https://vipnomerastore.ru";
   const canonicalUrl = `${baseUrl}/blog/${slug}`;
+
+  const imageUrl = article.media?.url
+    ? article.media.url.startsWith("http")
+      ? article.media.url
+      : `${baseUrl}${article.media.url}`
+    : null;
 
   // JSON-LD schema.org Article для SEO
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: article.title,
-    description: article.excerpt ? article.excerpt : plain,
-    image:
-      article.media &&
-      (article.media.startsWith("http")
-        ? article.media
-        : `${baseUrl}${article.media}`),
+    description: article.excerpt || plain.slice(0, 160),
+    image: imageUrl,
     datePublished: article.publishedAt,
     dateModified: article.updatedAt || article.publishedAt,
     author: {
-      "@type": "Person",
-      name: "Автор статьи", // можно сделать динамическим
+      "@type": "Organization",
+      name: "vipnomerastore",
+      url: baseUrl,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "vipnomerastore",
+      logo: {
+        "@type": "ImageObject",
+        url: `${baseUrl}/assets/logo/logo.svg`,
+        width: 300,
+        height: 100,
+      },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": canonicalUrl,
     },
+    wordCount: plain.split(" ").length,
+    inLanguage: "ru-RU",
+    isPartOf: {
+      "@type": "WebSite",
+      name: "vipnomerastore",
+      url: baseUrl,
+    },
   };
+
+  const breadcrumbItems = [
+    { label: "Главная", href: "/" },
+    { label: "Блог", href: "/blog" },
+    { label: article.title },
+  ];
 
   return (
     <>
-      <Head>
-        <link rel="canonical" href={canonicalUrl} />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(jsonLd, (k, v) =>
-              v === undefined ? null : v
-            ),
-          }}
-        />
-      </Head>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd, (k, v) =>
+            v === undefined ? null : v
+          ),
+        }}
+      />
 
       <div className={styles.container}>
+        <Breadcrumbs items={breadcrumbItems} />
+
+        <div className={styles.articleMeta}>
+          <div className={styles.articleTitleMeta}>Статья</div>{" "}
+          <div className={styles.ellipsis}></div>{" "}
+          {article.publishedAt && (
+            <time dateTime={article.publishedAt}>
+              {new Date(article.publishedAt).toLocaleDateString()}
+            </time>
+          )}
+        </div>
+
         <h1 className={styles.title}>{article.title}</h1>
 
         {article.media && (
-          <img
-            src={
-              article.media.startsWith("http")
-                ? article.media
-                : `${baseUrl}${article.media}`
-            }
-            alt={article.title}
-            style={{ maxWidth: 600, width: "100%", marginBottom: 24 }}
-          />
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              minHeight: 300,
+              marginBottom: 24,
+            }}
+          >
+            <Image
+              src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${article.media.url}`}
+              alt={article.media.alt || article.title}
+              fill
+              style={{
+                objectFit: "contain",
+                borderRadius: 15,
+                background: "#fff",
+              }}
+              sizes="100vw"
+              priority
+            />
+          </div>
         )}
 
         {article.excerpt && (
@@ -224,6 +313,18 @@ export default async function ArticlePage({
         <article className={styles.articleContent}>
           <ReactMarkdown>{article.content}</ReactMarkdown>
         </article>
+
+        <ShareButtons
+          url={canonicalUrl}
+          title={article.title}
+          description={article.excerpt || plain.slice(0, 160)}
+        />
+
+        <RelatedArticles
+          currentSlug={article.slug}
+          articles={relatedArticles}
+          maxArticles={3}
+        />
       </div>
     </>
   );

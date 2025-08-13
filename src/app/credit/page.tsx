@@ -3,9 +3,9 @@ import { Metadata } from "next";
 import CreditPageClient from "./CreditPageClient";
 import { regionName, regionDisplay } from "@/shared/utils";
 import { getServerRegion } from "@/hooks/useServerRegion";
-import OrganizationSchema from "@/components/schemas/OrganizationSchema";
-import ProductSchema from "@/components/schemas/ProductSchema";
-import LocalBusinessSchema from "@/components/schemas/LocalBusinessSchema";
+import OrganizationSchema from "@/schemas/OrganizationSchema";
+import ProductSchema from "@/schemas/ProductSchema";
+import LocalBusinessSchema from "@/schemas/LocalBusinessSchema";
 
 // Dynamic - лучший SEO с региональными meta для каждого пользователя
 export const dynamic = "force-dynamic";

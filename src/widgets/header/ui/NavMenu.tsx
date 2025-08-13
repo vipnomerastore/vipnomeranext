@@ -64,7 +64,7 @@ const NavMenu = ({ setMenuOpen }: { setMenuOpen: (open: boolean) => void }) => {
 
       <Link
         href="/blog"
-        className={getNavLinkClass("/redemption")}
+        className={getNavLinkClass("/blog")}
         onClick={() => setMenuOpen(false)}
       >
         Блог
