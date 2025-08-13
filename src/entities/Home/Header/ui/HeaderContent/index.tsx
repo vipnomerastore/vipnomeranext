@@ -19,17 +19,20 @@ const HeaderContent = ({ openModal }: HeaderContentProps) => {
         />
         <span className={styles.eliteText}>Элитные</span>
       </div>
-
       <h1 className={styles.mainTitle}>
         НОМЕРА <br /> ТЕЛЕФОНОВ
+        <br />
+        <span className={styles.subtitleMain}>
+          Большой выбор Красивых, Запоминающихся, Выгодных номеров
+        </span>
       </h1>
 
       <p className={styles.description}>
-        Большой выбор VIP предложений по лучшим ценам <br /> Номера с
-        официальным оформлением
+        Предложения по лучшим ценам <br /> Красивые Номера с официальным
+        оформлением
       </p>
 
-      <Button onClick={openModal}>Получить VIP номер от 2 499 р.</Button>
+      <Button onClick={openModal}>Получить Красивый номер от 2 499 р.</Button>
     </div>
   );
 };

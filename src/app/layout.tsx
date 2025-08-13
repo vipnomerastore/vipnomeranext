@@ -12,7 +12,7 @@ import WebSiteSchema from "@/schemas/WebSiteSchema";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "VIP nomera store – Купить красивые VIP номера",
+  title: "VIP nomera store – Купить красивые номера телефонов",
   description:
     "Купить красивые номера телефонов с быстрой доставкой по всей России. Эксклюзивные номера от МТС, Билайн, Мегафон, Теле2, Йота. Лучшие цены и гарантия качества.",
   keywords: [
@@ -79,8 +79,8 @@ export const metadata: Metadata = {
       noimageindex: false,
     },
   },
-  authors: [{ name: "vip nomera store", url: "https://vipnomerastore.ru" }],
-  applicationName: "vip nomera store",
+  authors: [{ name: "vipnomerastore", url: "https://vipnomerastore.ru" }],
+  applicationName: "vipnomerastore",
   generator: "Next.js",
   category: "shop",
 };
