@@ -31,7 +31,7 @@ async function fetchArticles(
 
   const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/statyas?populate=media&pagination[start]=${start}&pagination[limit]=${pageSize}&sort=publishedAt:desc`;
 
-  const res = await fetch(url, { next: { revalidate: 60 } });
+  const res = await fetch(url, { next: { revalidate: 60 }, cache: "no-store" });
 
   if (!res.ok) return { articles: [], total: 0 };
 
