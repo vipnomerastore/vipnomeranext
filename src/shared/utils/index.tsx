@@ -229,8 +229,8 @@ export function regionName(region: string): string {
     hasavyurt: "Хасавюрт",
     kaspiysk: "Каспийск",
     kizlyar: "Кизляр",
-    default: "",
+    default: "Вся Россия",
   };
 
-  return map[region] || map["default"];
+  return map[region] || "Выбрать регион";
 }
