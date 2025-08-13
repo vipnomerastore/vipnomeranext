@@ -4,8 +4,31 @@ import { getRegionFromRequest } from "@/shared/utils/server-region";
 
 export function middleware(request: NextRequest) {
   const host = request.headers.get("host") || "";
+  const pathname = request.nextUrl.pathname;
   const regionFromNginx = request.headers.get("x-region"); // Получаем регион из nginx
   const currentRegionCookie = request.cookies.get("region")?.value;
+
+  // Обработка sitemap.xml для поддоменов
+  if (pathname === "/sitemap.xml" && host !== "vipnomerastore.ru") {
+    const subdomain = host.split(".")[0];
+    if (subdomain && subdomain !== "vipnomerastore") {
+      // Перенаправляем на специальный sitemap для поддомена
+      return NextResponse.rewrite(
+        new URL("/subdomain-sitemap.xml", request.url)
+      );
+    }
+  }
+
+  // Обработка robots.txt для поддоменов
+  if (pathname === "/robots.txt" && host !== "vipnomerastore.ru") {
+    const subdomain = host.split(".")[0];
+    if (subdomain && subdomain !== "vipnomerastore") {
+      // Перенаправляем на специальный robots для поддомена
+      return NextResponse.rewrite(
+        new URL("/subdomain-robots.txt", request.url)
+      );
+    }
+  }
 
   const response = NextResponse.next();
 

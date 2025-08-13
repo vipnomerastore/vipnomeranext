@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useHydration } from "../../hooks/useHydration";
 import Logo from "./ui/Logo";
 import NavMenu from "./ui/NavMenu";
+import RegionSelector from "./ui/RegionSelector";
 import MobileMenu from "./ui/MobileMenu";
 import Actions from "./ui/Actions";
 import ToasterConfig from "./ui/ToasterConfig";
@@ -72,6 +73,8 @@ const Header = ({ hasBanner = true }: { hasBanner?: boolean }) => {
         <Logo />
 
         <NavMenu setMenuOpen={setMenuOpen} />
+
+        <RegionSelector />
 
         <Actions openLoginModal={openLoginModal} toggleMenu={toggleMenu} />
 
