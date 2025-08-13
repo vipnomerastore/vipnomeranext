@@ -3,6 +3,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useCartStore } from "../../../store/cartStore";
 import { useAuthStore } from "../../../store/authStore";
+import RegionSelector from "./RegionSelector";
 
 import ScrollNavLink from "./ScrollNavLink";
 
@@ -121,6 +122,11 @@ const MobileMenu = (props: MobileMenuProps) => {
           Блог
         </Link>
       </nav>
+
+      {/* Выбор региона в мобильном меню */}
+      <div className={styles.mobileRegionWrapper}>
+        <RegionSelector />
+      </div>
 
       <div className={styles.mobileActions}>
         <div className={styles.leftButtons}>

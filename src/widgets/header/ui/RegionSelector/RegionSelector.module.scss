@@ -1,0 +1,55 @@
+@use "sass:color";
+
+.regionButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid rgba(253, 252, 164, 0.3);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  position: absolute;
+  top: 80px;
+  right: 0;
+
+  &:hover {
+    background: rgba(253, 252, 164, 0.1);
+    border-color: rgba(253, 252, 164, 0.5);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  @media (max-width: 768px) {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+}
+
+.regionText {
+  color: #ffffff;
+  font-weight: 500;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @media (max-width: 480px) {
+    max-width: 80px;
+  }
+}
+
+.arrow {
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+
+  .regionButton:hover & {
+    transform: translateY(1px);
+  }
+}
