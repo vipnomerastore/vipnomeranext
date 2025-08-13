@@ -125,6 +125,7 @@ const RegionSelector = () => {
         const regionSlug = subdomainToSlug[subdomain] || "default";
         setCurrentRegion(regionSlug);
       } else {
+        // Если это основной сайт без поддомена, показываем "Вся Россия"
         setCurrentRegion("default");
       }
     }
@@ -133,8 +134,19 @@ const RegionSelector = () => {
   const currentRegionName = regionName(currentRegion);
 
   const handleRegionSelect = (slug: string) => {
+    // Специальная обработка для "Вся Россия"
+    if (slug === "all-russia") {
+      const newUrl = `https://vipnomerastore.ru${window.location.pathname}`;
+      window.location.href = newUrl;
+      setIsModalOpen(false);
+      return;
+    }
+
     // Полный маппинг slug'ов из RegionModal на поддомены
     const slugToSubdomain: Record<string, string | null> = {
+      // Специальная опция для основного сайта
+      "all-russia": null,
+
       // Основные регионы с поддоменами
       moskva: "msk",
       spb: "spb",

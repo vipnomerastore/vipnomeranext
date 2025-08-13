@@ -2,6 +2,7 @@ import { useState } from "react";
 import styles from "./RegionModal.module.scss";
 
 const regions: { slug: string; name: string }[] = [
+  { slug: "all-russia", name: "Вся Россия" },
   { slug: "moskva", name: "Москва" },
   { slug: "spb", name: "Санкт-Петербург" },
   { slug: "rostov", name: "Ростов-на-Дону" },
