@@ -77,7 +77,9 @@ const HomeFeature = () => {
     <section className={styles.wrapper}>
       <div className={styles.container}>
         <div className={styles.textBlock}>
-          <h2 className={styles.title}>Лучше условия для покупки VIP номера</h2>
+          <h2 className={styles.title}>
+            Лучше условия для покупки красивого номера
+          </h2>
         </div>
 
         <div className={styles.grid}>

@@ -21,7 +21,7 @@ const HomeCredit = () => {
     <div id="credit" className={styles.wrapper}>
       <div className={styles.container}>
         <div className={styles.textBlock}>
-          <h2 className={styles.title}>VIP номер в рассрочку</h2>
+          <h2 className={styles.title}>Красивый номер в рассрочку</h2>
         </div>
 
         <div className={styles.items}>

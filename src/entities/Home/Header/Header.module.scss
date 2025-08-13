@@ -111,6 +111,7 @@ $bp-mobile: 608px;
 
 .eliteText {
   font-size: 20px;
+  font-weight: 500;
   background: linear-gradient($secondary-color, $primary-color);
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -118,6 +119,8 @@ $bp-mobile: 608px;
 
 .mainTitle {
   text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
   background: linear-gradient(
     90deg,
     #c7c7c7 0,
@@ -136,10 +139,15 @@ $bp-mobile: 608px;
 }
 
 .description {
-  font-size: 14px;
-  font-weight: 300;
+  font-size: 15px;
+  font-weight: 500;
   color: $gray-light;
   margin: 0;
+  text-transform: lowercase;
+
+  &::first-letter {
+    text-transform: capitalize;
+  }
 
   @media (max-width: $bp-mobile) {
     font-size: 0.875rem;
@@ -243,6 +251,22 @@ $bp-mobile: 608px;
   color: $gray-medium;
   margin: 0;
   padding-bottom: 0;
+
+  @media (max-width: 767px) {
+    font-size: 0.9rem;
+  }
+}
+
+.subtitleMain {
+  font: 300 0.9rem/1.2 sans-serif;
+  color: $gray-medium;
+  margin: 0;
+  padding-bottom: 0;
+  text-transform: lowercase;
+
+  &::first-letter {
+    text-transform: capitalize;
+  }
 
   @media (max-width: 767px) {
     font-size: 0.9rem;
