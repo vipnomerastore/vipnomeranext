@@ -116,7 +116,7 @@ const MobileMenu = (props: MobileMenuProps) => {
         <Link
           href="/blog"
           onClick={toggleMenu}
-          className={getLinkClass("/redemption")}
+          className={getLinkClass("/blog")}
         >
           Блог
         </Link>

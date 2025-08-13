@@ -1,7 +1,8 @@
-import Link from "next/link";
+import { redirect } from "next/navigation";
+
+import BlogListClient from "@/entities/Blog/BlogListClient";
 
 import styles from "./Blog.module.scss";
-import Image from "next/image";
 
 type Article = {
   id: number | null;
@@ -20,20 +21,27 @@ type Article = {
   publishedAt: string | null;
 };
 
-async function fetchArticles(): Promise<Article[]> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/statis?populate=media`,
-    {
-      next: { revalidate: 60 },
-    }
-  );
+const PAGE_SIZE = 8;
 
-  if (!res.ok) return [];
+async function fetchArticles(
+  page: number,
+  pageSize: number
+): Promise<{ articles: Article[]; total: number }> {
+  const start = (page - 1) * pageSize;
+
+  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/statyas?populate=media&pagination[start]=${start}&pagination[limit]=${pageSize}&sort=publishedAt:desc`;
+
+  const res = await fetch(url, { next: { revalidate: 60 } });
+
+  if (!res.ok) return { articles: [], total: 0 };
 
   const data = await res.json();
 
-  return data.data.map((item: any) => {
+  const total = data.meta?.pagination?.total || 0;
+
+  const articles = (data.data || []).map((item: any) => {
     const mediaObj = Array.isArray(item.media) ? item.media[0] : item.media;
+
     return {
       id: item.id,
       slug: item.slug,
@@ -54,6 +62,8 @@ async function fetchArticles(): Promise<Article[]> {
       publishedAt: item.publishedAt,
     };
   });
+
+  return { articles, total };
 }
 
 function getContentPreviewMarkdown(content: string, maxLen = 120) {
@@ -66,75 +76,115 @@ function getContentPreviewMarkdown(content: string, maxLen = 120) {
 
 // SEO метаданные страницы блога
 export const metadata = {
-  title: "Блог — vipnomerastore",
-  description: "Читайте наши последние статьи и новости в блоге.",
-  alternates: { canonical: "/blog" },
+  title: "Блог о виртуальных номерах | vipnomerastore",
+  description:
+    "Последние статьи и новости о виртуальных номерах, SMS активации и регистрации аккаунтов. Полезные советы и инструкции.",
+  keywords: [
+    "блог",
+    "виртуальные номера",
+    "мтс теле 2",
+    "мегафон йота",
+    "билайн",
+    "номера телефона",
+    "красивые номера телефона",
+    "купить номера телефона",
+  ],
+  alternates: { canonical: "https://vipnomerastore.ru/blog" },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  openGraph: {
+    title: "Блог о виртуальных номерах | vipnomerastore",
+    description:
+      "Последние статьи и новости о виртуальных номерах, SMS активации и регистрации аккаунтов.",
+    url: "https://vipnomerastore.ru/blog",
+    type: "website",
+    siteName: "vipnomerastore",
+    locale: "ru_RU",
+    images: [
+      {
+        url: "https://vipnomerastore.ru/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "vipnomerastore блог о виртуальных номерах",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Блог о виртуальных номерах | vipnomerastore",
+    description:
+      "Последние статьи и новости о виртуальных номерах, SMS активации и регистрации аккаунтов.",
+    images: ["https://vipnomerastore.ru/og-image.jpg"],
+  },
 };
 
-export default async function BlogPage() {
-  const articles = await fetchArticles();
+export default async function BlogPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ page?: string }>;
+}) {
+  // Ожидаем searchParams в Next.js 15
+  const resolvedSearchParams = await searchParams;
+  const page =
+    Number(resolvedSearchParams?.page) > 0
+      ? Number(resolvedSearchParams?.page)
+      : 1;
+
+  const { articles, total } = await fetchArticles(page, PAGE_SIZE);
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+
+  // Если пользователь ввёл несуществующую страницу — редирект на первую
+  if (totalPages > 0 && page > totalPages) {
+    redirect("/blog");
+  }
+
+  // JSON-LD для списка статей
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": "https://vipnomerastore.ru/blog",
+    name: "Блог vipnomerastore",
+    description: "Последние статьи о номерах телефона и виртуальных номерах",
+    url: "https://vipnomerastore.ru/blog",
+    publisher: {
+      "@type": "Organization",
+      name: "vipnomerastore",
+      logo: "https://vipnomerastore.ru/logo.svg",
+    },
+    blogPost: articles.map((article) => ({
+      "@type": "BlogPosting",
+      "@id": `https://vipnomerastore.ru/blog/${article.slug}`,
+      headline: article.title,
+      description: article.excerpt || "",
+      datePublished: article.publishedAt,
+      dateModified: article.updatedAt || article.publishedAt,
+      url: `https://vipnomerastore.ru/blog/${article.slug}`,
+    })),
+  };
 
   return (
     <main className={styles.container}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd),
+        }}
+      />
+
       <div className={styles.header}>
         <h1 className={styles.mainTitle}>Статьи</h1>
-
-        <search></search>
       </div>
 
-      <div className={styles.articles}>
-        {articles.map((article) => (
-          <article key={article.slug} className={styles.article}>
-            <div className={styles.articleMeta}>
-              <div className={styles.articleTitleMeta}>Статьи</div>{" "}
-              <div className={styles.ellipsis}></div>{" "}
-              {article.publishedAt && (
-                <time dateTime={article.publishedAt}>
-                  {new Date(article.publishedAt).toLocaleDateString()}
-                </time>
-              )}
-            </div>
-
-            <Link
-              href={`/blog/${article.slug}`}
-              style={{
-                textDecoration: "none",
-                color: "inherit",
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
-              }}
-              aria-label={`Перейти к статье ${article.title}`}
-            >
-              <h2 className={styles.articleTitle}>{article.title}</h2>
-
-              <p className={styles.articleExcerpt}>
-                {getContentPreviewMarkdown(article.excerpt)}
-              </p>
-
-              {article.media && (
-                <Image
-                  src={
-                    article.media.url.startsWith("http")
-                      ? article.media.url
-                      : `${process.env.NEXT_PUBLIC_MEDIA_URL}${article.media.url}`
-                  }
-                  alt={article.media.alt || article.title}
-                  width={article.media.width || undefined}
-                  height={article.media.height || undefined}
-                  style={{
-                    maxWidth: 360,
-                    width: "100%",
-                    marginBottom: 16,
-                    maxHeight: 240,
-                    borderRadius: 15,
-                  }}
-                />
-              )}
-            </Link>
-          </article>
-        ))}
-      </div>
+      <BlogListClient articles={articles} page={page} totalPages={totalPages} />
     </main>
   );
 }
