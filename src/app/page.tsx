@@ -1,9 +1,9 @@
 import { Metadata } from "next";
 import HomePageClient from "./HomePageClient";
-import ProductSchema from "@/components/schemas/ProductSchema";
-import LocalBusinessSchema from "@/components/schemas/LocalBusinessSchema";
-import OrganizationSchema from "@/components/schemas/OrganizationSchema";
-import WebSiteSchema from "@/components/schemas/WebSiteSchema";
+import ProductSchema from "@/schemas/ProductSchema";
+import LocalBusinessSchema from "@/schemas/LocalBusinessSchema";
+import OrganizationSchema from "@/schemas/OrganizationSchema";
+import WebSiteSchema from "@/schemas/WebSiteSchema";
 import { regionName } from "@/shared/utils";
 import { getServerRegion } from "@/hooks/useServerRegion";
 

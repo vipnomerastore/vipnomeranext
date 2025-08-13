@@ -6,8 +6,8 @@ import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import EmotionProvider from "@/app/EmotionProvider";
 import ClientThemeProvider from "@/app/ClientThemeProvider";
 import ClientLayout from "@/app/clientLayout";
-import OrganizationSchema from "@/components/schemas/OrganizationSchema";
-import WebSiteSchema from "@/components/schemas/WebSiteSchema";
+import OrganizationSchema from "@/schemas/OrganizationSchema";
+import WebSiteSchema from "@/schemas/WebSiteSchema";
 
 import "./globals.css";
 
