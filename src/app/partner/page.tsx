@@ -76,7 +76,7 @@ export default async function PartnerPage() {
         name="VIP nomera store"
         url={siteUrl}
         logo="https://vipnomerastore.ru/assets/header/logo.svg"
-        description={`Партнёрская программа по продаже VIP номеров ${
+        description={`Партнёрская программа по продаже номеров телефона ${
           region !== "default" ? cityIn : "по всей России"
         }`}
         phone="+7 (933) 333-33-11"

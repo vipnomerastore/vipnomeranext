@@ -66,7 +66,7 @@ export default async function RedemptionPage() {
         name="VIP nomera store"
         url={siteUrl}
         logo="https://vipnomerastore.ru/assets/header/logo.svg"
-        description={`Выкуп VIP номеров телефона ${
+        description={`Выкуп номеров телефона ${
           region !== "default" ? cityIn : "по всей России"
         } по выгодным ценам`}
         phone="+7 (933) 333-33-11"

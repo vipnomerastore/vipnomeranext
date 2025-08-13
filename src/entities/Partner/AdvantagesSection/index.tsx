@@ -34,9 +34,9 @@ const AdvantagesSection: React.FC = memo(() => (
   <section className={styles.section} aria-labelledby="advantages-title">
     <div className={styles.sectionContent}>
       <div className={styles.textBlock}>
-        <h2 className={styles.title} id="advantages-title">
-          Ваши преимущества
-        </h2>
+        <h1 className={styles.title} id="advantages-title">
+          Преимущества партнёров — программа сотрудничества по красивым номерам
+        </h1>
       </div>
 
       <div className={styles.advantagesGrid}>

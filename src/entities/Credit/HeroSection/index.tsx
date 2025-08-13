@@ -12,9 +12,9 @@ const HeroSection = memo(({ onScrollToForm }: HeroSectionProps) => (
   <section className={styles.section}>
     <div className={styles.sectionContent}>
       <div className={styles.textBlock}>
-        <h2 className={styles.title}>
-          У нас вы можете купить <br /> VIP-номер в рассрочку!
-        </h2>
+        <h1 className={styles.title}>
+          У нас вы можете купить <br /> красивый номер в рассрочку без банка!
+        </h1>
 
         <p className={styles.subtitle}>
           Необязательно платить все сразу — разделите стоимость <br />
