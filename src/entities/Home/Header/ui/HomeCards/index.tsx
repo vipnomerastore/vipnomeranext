@@ -1,35 +1,7 @@
 import React from "react";
-import styles from "./HomeCards.module.scss";
-import Image from "next/image";
-
-const cards = [
-  {
-    title: "Лучшие VIP номера недели",
-    description: "Подборка лучших VIP номеров за эту неделю.",
-  },
-  {
-    title: "Номера с золотыми комбинациями",
-    description: "Редкие и запоминающиеся номера с комбинациями 777, 888, 999.",
-  },
-  {
-    title: "Номера для бизнеса",
-    description: "Престижные номера, которые легко запомнят ваши клиенты.",
-  },
-  {
-    title: "Доступные красивые номера",
-    description: "Красивые комбинации по доступной цене от 2 499 ₽.",
-  },
-  {
-    title: "Эксклюзивные предложения",
-    description: "Уникальные VIP номера в единственном экземпляре.",
-  },
-  {
-    title: "Региональные номера",
-    description: "Красивые номера с кодом вашего города или региона.",
-  },
-];
-
 import { useRef, useEffect } from "react";
+
+import styles from "./HomeCards.module.scss";
 
 const HomeCards = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -78,12 +50,37 @@ const HomeCards = () => {
 
   return (
     <div className={styles.cardsContainer} ref={containerRef}>
-      {cards.map((card, idx) => (
-        <div className={styles.card} key={idx}>
-          <h3 className={styles.cardTitle}>{card.title}</h3>
-          <p className={styles.cardDescription}>{card.description}</p>
-        </div>
-      ))}
+      <div className={styles.card}>
+        <h3 className={styles.cardTitle}>РЕГИОНАЛЬНЫЕ</h3>
+        <p className={styles.cardDescription}>НОМЕРА</p>
+      </div>
+
+      <div className={styles.card}>
+        <h3 className={styles.cardTitle}>ЭКСКЛЮЗИВНЫЕ</h3>
+        <p className={styles.cardDescription}>ПРЕДЛОЖЕНИЯ</p>
+      </div>
+
+      <div className={styles.card}>
+        <p className={styles.cardDescription}>ДОСТУПНЫЕ</p>
+        <h3 className={styles.cardTitle}>КРАСИВЫЕ НОМЕРА</h3>
+      </div>
+
+      <div className={styles.card}>
+        <p className={styles.cardDescription}>НОМЕРА</p>
+        <h3 className={styles.cardTitle}>ДЛЯ БИЗНЕСА</h3>
+      </div>
+
+      <div className={styles.card}>
+        <p className={styles.cardDescription}>НОМЕРА</p>
+        <p className={styles.cardTitle}>С ЗОЛОТЫМИ</p>
+        <p className={styles.cardDescription}>КОМБИНАЦИЯМИ</p>
+      </div>
+
+      <div className={styles.card}>
+        <p className={styles.cardDescription}>ЛУЧШИЕ</p>
+        <h3 className={styles.cardTitle}>VIP НОМЕРА</h3>
+        <p className={styles.cardDescription}>НЕДЕЛИ</p>
+      </div>
     </div>
   );
 };

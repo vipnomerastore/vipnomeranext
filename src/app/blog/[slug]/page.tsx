@@ -294,7 +294,7 @@ export default async function ArticlePage({
               alt={article.media.alt || article.title}
               fill
               style={{
-                objectFit: "contain",
+                objectFit: "fill",
                 borderRadius: 15,
                 background: "#fff",
               }}
