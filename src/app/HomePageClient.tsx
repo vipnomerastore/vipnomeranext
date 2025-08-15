@@ -43,8 +43,6 @@ const HomePageClient = () => {
 
       <HomeReview />
 
-      <HomeFeature />
-
       <HomePromotion />
 
       {/* <HomeGallery /> */}
@@ -53,9 +51,11 @@ const HomePageClient = () => {
 
       <HomeCreditBanner />
 
-      <HomeEsim />
+      <HomeFeature />
 
-      <HomeCredit />
+      {/* <HomeEsim /> */}
+
+      {/* <HomeCredit /> */}
 
       <HomeQuestion />
 

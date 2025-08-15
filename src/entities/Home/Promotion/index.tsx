@@ -121,6 +121,17 @@ const HomePromotion = () => {
     return () => clearInterval(timer);
   }, [isHydrated]);
 
+  useEffect(() => {
+    const handler = () => {
+      const el = document.getElementById("promotion");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    };
+    window.addEventListener("scrollToPromotion", handler);
+    return () => window.removeEventListener("scrollToPromotion", handler);
+  }, []);
+
   function calculateTimeLeft() {
     const now = new Date();
     const endOfDay = new Date(
@@ -180,7 +191,7 @@ const HomePromotion = () => {
   };
 
   return (
-    <div className={styles.PromotionWrapper}>
+    <div id="promotion" className={styles.PromotionWrapper}>
       <div className={styles.Promotion}>
         <div className={styles.header}>
           <div className={styles.PromotionTimer}>

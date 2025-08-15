@@ -17,10 +17,9 @@ const HomeHeader = () => {
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <div>
+    <div className={styles.wrapper}>
       <HomeCards />
-
-      <div className={styles.wrapper}>
+      <div>
         <div className={styles.fogBackground}>
           <Image
             src="/assets/home/numbers/fog.webp"
