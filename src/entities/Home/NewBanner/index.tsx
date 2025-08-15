@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { FreeMode, Autoplay } from "swiper/modules";
+import { FreeMode } from "swiper/modules";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import MaskedInput from "react-text-mask";
@@ -91,6 +91,23 @@ const HomeNewBanner = () => {
   const [modalErrors, setModalErrors] = useState<{ [key: string]: string }>({});
 
   const swiperRef = useRef<any>(null);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const slideIdx = customEvent.detail ?? 0;
+      const el = document.getElementById("action");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      if (swiperRef.current && swiperRef.current.slideTo) {
+        swiperRef.current.slideTo(slideIdx, 500);
+      }
+    };
+    window.addEventListener("scrollToNewBanner", handler as EventListener);
+    return () =>
+      window.removeEventListener("scrollToNewBanner", handler as EventListener);
+  }, []);
 
   const addItem = useCartStore((state) => state.addItem);
   const router = useRouter();
@@ -863,13 +880,11 @@ const HomeNewBanner = () => {
       <div className={styles.actionWrapper}>
         <div className={styles.actionContent}>
           <Swiper
-            modules={[FreeMode, Autoplay]}
+            modules={[FreeMode]}
             className={styles.mainSwiper}
-            loop={true}
             autoHeight={true}
             onSwiper={(swiper) => (swiperRef.current = swiper)}
             slidesPerView={1}
-            autoplay={{ delay: 7000 }}
           >
             {[0, 1, 2, 3, 4].map((idx) => (
               <SwiperSlide key={idx}>{renderSlide(idx)}</SwiperSlide>

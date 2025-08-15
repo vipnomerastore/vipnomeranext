@@ -65,8 +65,8 @@ const MobileMenu = (props: MobileMenuProps) => {
           <Image
             src="/assets/header/menu.svg"
             alt="Меню"
-            width={24}
-            height={24}
+            width={32}
+            height={32}
           />
         </button>
       </div>
@@ -122,11 +122,6 @@ const MobileMenu = (props: MobileMenuProps) => {
           Блог
         </Link>
       </nav>
-
-      {/* Выбор региона в мобильном меню */}
-      <div className={styles.mobileRegionWrapper}>
-        <RegionSelector />
-      </div>
 
       <div className={styles.mobileActions}>
         <div className={styles.leftButtons}>

@@ -203,6 +203,10 @@
     padding: 15px;
     border-radius: 12px;
     align-items: center;
+
+    .img {
+      display: none;
+    }
   }
 
   .info {
@@ -212,13 +216,6 @@
 
     .pretitle {
       font-size: 14px;
-    }
-  }
-
-  .img {
-    img {
-      max-width: 70%;
-      display: none;
     }
   }
 

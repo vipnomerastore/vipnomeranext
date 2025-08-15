@@ -239,6 +239,17 @@ const HomeCreditBanner: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handler = () => {
+      const el = document.getElementById("credit-banner");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    };
+    window.addEventListener("scrollToCreditBanner", handler);
+    return () => window.removeEventListener("scrollToCreditBanner", handler);
+  }, []);
+
   const modalContent = (
     <div className={styles.modalOverlay} onClick={closeModal}>
       <Toaster toastOptions={TOASTER_STYLE} />
@@ -329,7 +340,7 @@ const HomeCreditBanner: React.FC = () => {
       : null;
 
   return (
-    <div className={styles.wrapper}>
+    <div id="credit-banner" className={styles.wrapper}>
       <div className={styles.content}>
         <div className={styles.sixthAction}>
           <div className={styles.sixthActionContent}>
