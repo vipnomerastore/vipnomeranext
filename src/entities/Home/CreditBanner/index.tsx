@@ -1,20 +1,21 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import Link from "next/link";
 import axios from "axios";
-import { Toaster, toast } from "react-hot-toast";
-import MaskedInput from "react-text-mask";
-import Checkbox from "@mui/material/Checkbox";
 import Image from "next/image";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
-import { CalendarIcon, CartIcon, SubmitArrowIcon } from "./const";
+import { CalendarIcon, CartIcon } from "./const";
 import PriceList from "./ui/PriceList";
 import { SERVER_URL } from "@/shared/api";
 import { CACHE_TIMES } from "@/shared/utils/cachedFetch";
-
-import styles from "./CreditBanner.module.scss";
-import { phoneMask } from "@/shared/const";
 import Button from "@/shared/ui/Button";
+import Input from "@/shared/ui/Input";
+import MaskedInput from "@/shared/ui/MaskedInput";
+import Checkbox from "@/shared/ui/Checkbox";
+import styles from "./CreditBanner.module.scss";
 
 interface PhoneNumber {
   phone: string;
@@ -26,35 +27,6 @@ interface PriceData {
     [duration: string]: number;
   };
 }
-
-const checkboxStyle = {
-  color: "#a0a0a0",
-  padding: "4px",
-  "&.Mui-checked": {
-    color: "#fdfca4",
-  },
-  "& .MuiTouchRipple-root": {
-    color: "#fdfca4",
-  },
-};
-
-const TOASTER_STYLE = {
-  style: {
-    background: "#242423",
-    color: "#fff",
-    border: "1px solid #2b2b2b",
-    borderRadius: "12px",
-    padding: "12px 16px",
-  },
-  success: { style: { borderLeft: "4px solid #d9ad49" } },
-  error: { style: { borderLeft: "4px solid #ff6b6b" } },
-};
-
-const validatePhone = (phone: string) => {
-  const cleaned = phone.replace(/\D/g, "");
-
-  return /^\+?7\d{10}$/.test(cleaned);
-};
 
 const DropdownArrowIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg
@@ -73,94 +45,59 @@ const DropdownArrowIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   </svg>
 );
 
+interface FormData {
+  name: string;
+  phone: string;
+  agreement: boolean;
+}
+
+const defaultValues: FormData = {
+  name: "",
+  phone: "",
+  agreement: true,
+};
+
 const HomeCreditBanner: React.FC = () => {
+  const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("+7 ");
-  const [agreed, setAgreed] = useState(true);
-  const [errors, setErrors] = useState<{
-    name?: string;
-    phone?: string;
-    agreed?: string;
-  }>({});
   const [phoneNumbers, setPhoneNumbers] = useState<PhoneNumber[]>([]);
   const [priceData, setPriceData] = useState<PriceData>({});
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [bannerTitle, setBannerTitle] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const router = useRouter();
 
   const openModal = () => setIsModalOpen(true);
 
+  const { control, handleSubmit, reset } = useForm({ defaultValues });
+
   const closeModal = () => {
     setIsModalOpen(false);
-    setName("");
-    setPhone("");
-    setAgreed(true);
-    setErrors({});
+    reset();
   };
 
-  const validateForm = () => {
-    const newErrors: typeof errors = {};
-
-    if (!name.trim()) newErrors.name = "Имя обязательно для заполнения";
-
-    if (!phone.trim()) {
-      newErrors.phone = "Номер телефона обязателен";
-    } else if (!validatePhone(phone)) {
-      newErrors.phone = "Введите 10 цифр после +7";
-    }
-
-    if (!agreed) {
-      newErrors.agreed =
-        "Необходимо согласиться с политикой конфиденциальности и пользовательским соглашением";
-    }
-
-    setErrors(newErrors);
-
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!validateForm()) {
-      toast.error("Пожалуйста, исправьте ошибки в форме", {
-        duration: 4000,
-        position: "top-right",
-      });
-
-      return;
-    }
+  const onSubmitHandler = async (data: { name: string; phone: string }) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
     try {
-      const formData = {
+      const payload = {
         data: {
-          name,
-          phone: phone.replace(/[^\d+]/g, ""),
+          name: data.name,
+          phone: data.phone.replace(/[^\d+]/g, ""),
         },
       };
 
-      await axios.post(`${SERVER_URL}/forma-s-banneras`, formData, {
-        headers: { "Content-Type": "application/json" },
-      });
-
-      toast.success("Заявка отправлена!", {
-        duration: 3000,
-        position: "top-right",
-      });
+      await axios.post(`${SERVER_URL}/forma-s-banneras`, payload);
 
       closeModal();
-    } catch (err: any) {
-      console.error("Ошибка при отправке формы:", err);
-      toast.error(
-        err.response?.data?.error?.message || "Ошибка при отправке формы",
-        { duration: 4000, position: "top-right" }
-      );
+      router.push("/thank-you");
+    } catch (error: unknown) {
+      console.error("Ошибка:", error);
+    } finally {
+      setIsSubmitting(false);
     }
-  };
-
-  const handleContentClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.stopPropagation();
   };
 
   useEffect(() => {
@@ -223,10 +160,6 @@ const HomeCreditBanner: React.FC = () => {
         if (!isMounted) return;
 
         setError("Не удалось загрузить данные. Попробуйте позже.");
-        toast.error("Ошибка при загрузке данных баннера", {
-          duration: 4000,
-          position: "top-right",
-        });
       } finally {
         if (isMounted) setIsLoading(false);
       }
@@ -242,19 +175,20 @@ const HomeCreditBanner: React.FC = () => {
   useEffect(() => {
     const handler = () => {
       const el = document.getElementById("credit-banner");
+
       if (el) {
         el.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     };
+
     window.addEventListener("scrollToCreditBanner", handler);
+
     return () => window.removeEventListener("scrollToCreditBanner", handler);
   }, []);
 
   const modalContent = (
     <div className={styles.modalOverlay} onClick={closeModal}>
-      <Toaster toastOptions={TOASTER_STYLE} />
-
-      <div className={styles.modalContent} onClick={handleContentClick}>
+      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <button
           className={styles.closeButton}
           onClick={closeModal}
@@ -265,70 +199,26 @@ const HomeCreditBanner: React.FC = () => {
 
         <h2 className={styles.title}>Заполните форму</h2>
 
-        <form onSubmit={handleSubmit} className={styles.form} noValidate>
-          <div className={styles.inputField}>
-            <input
-              type="text"
-              placeholder="Введите ваше имя"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              aria-invalid={!!errors.name}
-              aria-describedby={errors.name ? "name-error" : undefined}
-            />
+        <form onSubmit={handleSubmit(onSubmitHandler)} className={styles.form}>
+          <Input
+            name="fio"
+            control={control}
+            placeholder="Введите ваше имя"
+            fullWidth
+          />
 
-            {errors.name && (
-              <p id="name-error" className={styles.errorMessage}>
-                {errors.name}
-              </p>
-            )}
-          </div>
+          <MaskedInput name="phone" control={control} fullWidth />
 
-          <div className={styles.inputField}>
-            <MaskedInput
-              mask={phoneMask}
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              type="tel"
-              placeholder="Номер телефона"
-              aria-invalid={!!errors.phone}
-              aria-describedby={errors.phone ? "phone-error" : undefined}
-            />
+          <Checkbox name="agreement" control={control} />
 
-            {errors.phone && (
-              <p id="phone-error" className={styles.errorMessage}>
-                {errors.phone}
-              </p>
-            )}
-          </div>
-
-          <div className={styles.checkboxWrapper}>
-            <Checkbox
-              checked={agreed}
-              onChange={(e) => setAgreed(e.target.checked)}
-              sx={checkboxStyle}
-            />
-
-            <p className={styles.checkboxText}>
-              Отправляя форму я соглашаюсь с{" "}
-              <Link href="/privacy-policy" className={styles.link}>
-                Политикой конфиденциальности
-              </Link>{" "}
-              и{" "}
-              <Link href="/terms-of-use" className={styles.link}>
-                Пользовательским соглашением
-              </Link>
-            </p>
-          </div>
-
-          {errors.agreed && (
-            <p id="agreed-error" className={styles.errorMessage}>
-              {errors.agreed}
-            </p>
-          )}
-
-          <button type="submit" className={styles.submitButton}>
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            fullWidth
+            variant="outline"
+          >
             Сохранить
-          </button>
+          </Button>
         </form>
       </div>
     </div>

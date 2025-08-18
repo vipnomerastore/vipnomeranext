@@ -33,16 +33,18 @@ export default function PaginationClient({
   page,
   count,
 }: PaginationClientProps) {
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    if (value === 1) {
+      window.location.href = "/blog";
+    } else {
+      window.location.href = `/blog?page=${value}`;
+    }
+  };
+
   return (
     <Pagination
       page={page}
-      onChange={(_e, value) => {
-        if (value === 1) {
-          window.location.href = "/blog";
-        } else {
-          window.location.href = `/blog?page=${value}`;
-        }
-      }}
+      onChange={handleChange}
       count={count}
       shape="rounded"
       sx={paginationStyle}

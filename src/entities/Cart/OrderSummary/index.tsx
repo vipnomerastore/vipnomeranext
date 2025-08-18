@@ -5,7 +5,6 @@ import Button from "@/shared/ui/Button";
 
 interface OrderSummaryProps {
   items: NumberItem[];
-
   activeDeliveryTab: string;
   activePaymentTab: string;
   activeInstallmentPeriod: string;
@@ -17,7 +16,9 @@ const formatMonths = (months: string): string => {
   const num = parseInt(months, 10);
 
   if (num === 1) return "месяц";
+
   if (num >= 2 && num <= 4) return "месяца";
+
   return "месяцев";
 };
 
@@ -26,6 +27,7 @@ const calculateTotalDiscount = (items: NumberItem[]) =>
     if (item.old_price && item.old_price > item.price!) {
       return sum + (item.old_price! - item.price!) * (item.quantity || 1);
     }
+
     return sum;
   }, 0);
 
@@ -49,9 +51,7 @@ const formatPrice = (value: number) =>
 
 const DELIVERY_LABELS: Record<string, string> = {
   sdek: "бесплатно",
-
   esim: "бесплатно",
-
   "Забрать в салоне связи своего города": "бесплатно",
 };
 
@@ -72,6 +72,7 @@ const OrderSummary = (props: OrderSummaryProps) => {
 
   const totalAmount = getTotalAmount(items, Boolean(isInstallment));
   const months = parseInt(activeInstallmentPeriod, 10);
+
   const monthlyPaymentWithNoCredit = items.reduce((sum, item) => {
     if (item.part_price! > 0) {
       return sum;

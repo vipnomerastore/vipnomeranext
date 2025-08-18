@@ -19,6 +19,7 @@ const HomeHeader = () => {
   return (
     <div className={styles.wrapper}>
       <HomeCards />
+
       <div>
         <div className={styles.fogBackground}>
           <Image
@@ -35,8 +36,6 @@ const HomeHeader = () => {
 
         <div className={styles.container}>
           <HeaderContent openModal={openModal} />
-
-          {/* <ScrollIndicator /> */}
 
           <VipNumberModal isOpen={isModalOpen} onClose={closeModal} />
         </div>

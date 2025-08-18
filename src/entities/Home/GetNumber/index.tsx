@@ -2,9 +2,9 @@ import { useState } from "react";
 import Image from "next/image";
 
 import GetNumberModal from "./ui/GetNumberModal";
+import Button from "@/shared/ui/Button";
 
 import styles from "./GetNumber.module.scss";
-import Button from "@/shared/ui/Button";
 
 const HomeGetNumber = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

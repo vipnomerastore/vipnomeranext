@@ -2,26 +2,36 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { toast } from "react-hot-toast";
 import Image from "next/image";
+import { useForm } from "react-hook-form";
 
 import { useAuthStore } from "@/store/authStore";
-
 import styles from "./RegisterModal.module.scss";
 import Button from "@/shared/ui/Button";
+import Input from "@/shared/ui/Input";
 
 interface RegisterModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+interface FormData {
+  username: string;
+  email: string;
+  password: string;
+}
+
+const defaultValues: FormData = {
+  username: "",
+  email: "",
+  password: "",
+};
+
 const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { register } = useAuthStore();
+  const { control, handleSubmit, reset } = useForm({ defaultValues });
 
   useEffect(() => {
     if (isOpen) {
@@ -36,43 +46,12 @@ const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
 
   if (!isOpen) return null;
 
-  const validateForm = () => {
-    const newErrors: { [key: string]: string } = {};
-
-    if (!username.trim()) {
-      newErrors.username = "Имя пользователя обязательно";
-    }
-
-    if (!email.trim()) {
-      newErrors.email = "Email обязателен";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = "Неверный формат email";
-    }
-
-    if (!password.trim()) {
-      newErrors.password = "Пароль обязателен";
-    } else if (password.length < 6) {
-      newErrors.password = "Пароль должен быть не менее 6 символов";
-    }
-
-    setErrors(newErrors);
-
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-
-    if (!validateForm()) {
-      console.log("Form validation failed:", errors);
-
-      return;
-    }
-
+  const onSubmitHandler = async (data: FormData) => {
     try {
+      if (isSubmitting) return;
       setIsSubmitting(true);
 
-      await register(username, email, password);
+      await register(data.username, data.email, data.password);
 
       toast.success("Регистрация успешна! Вы вошли в аккаунт.", {
         duration: 3000,
@@ -80,57 +59,27 @@ const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
       });
 
       onClose();
-      setUsername("");
-      setEmail("");
-      setPassword("");
+      reset();
       setShowPassword(false);
-      setErrors({});
     } catch (err: unknown) {
-      if (
-        typeof err === "object" &&
-        err !== null &&
-        "message" in err &&
-        typeof (err as any).message === "string"
-      ) {
-        toast.error((err as any).message, {
-          duration: 4000,
-          position: "top-right",
-        });
-      } else {
-        toast.error("Ошибка регистрации", {
-          duration: 4000,
-          position: "top-right",
-        });
-      }
-      console.error("Registration Error:", err);
+      console.error("Ошибка:", err);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleContentClick = (event: React.MouseEvent) => {
-    event.stopPropagation();
-  };
-
   const modalContent = (
-    <div
-      className={styles.modalOverlay}
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="register-modal-title"
-    >
-      <div className={styles.modalContent} onClick={handleContentClick}>
+    <div className={styles.modalOverlay} onClick={onClose} role="dialog">
+      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <button
           className={styles.closeButton}
           onClick={onClose}
           aria-label="Закрыть"
-          type="button"
         >
           ×
         </button>
 
-        <h2 id="register-modal-title" className={styles.title}>
+        <h2 className={styles.title}>
           Регистрация <span>партнера</span>
         </h2>
 
@@ -138,55 +87,36 @@ const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
           Создайте аккаунт для доступа к партнерским ресурсам
         </p>
 
-        <form onSubmit={handleSubmit} className={styles.form} noValidate>
-          <div className={styles.inputField}>
-            <input
-              type="text"
-              placeholder="Введите имя пользователя"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              aria-invalid={!!errors.username}
-              aria-describedby={errors.username ? "username-error" : undefined}
-              disabled={isSubmitting}
-              required
-            />
-            {errors.username && (
-              <p id="username-error" className={styles.errorMessage}>
-                {errors.username}
-              </p>
-            )}
-          </div>
+        <form onSubmit={handleSubmit(onSubmitHandler)} className={styles.form}>
+          <Input
+            name="email"
+            control={control}
+            type="text"
+            placeholder="Введите имя пользователя"
+            fullWidth
+            required
+          />
+
+          <Input
+            name="email"
+            control={control}
+            type="email"
+            placeholder="Введите ваш email"
+            fullWidth
+            required
+          />
 
           <div className={styles.inputField}>
-            <input
-              type="email"
-              placeholder="Введите ваш email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              aria-invalid={!!errors.email}
-              aria-describedby={errors.email ? "email-error" : undefined}
-              disabled={isSubmitting}
-              required
-            />
-            {errors.email && (
-              <p id="email-error" className={styles.errorMessage}>
-                {errors.email}
-              </p>
-            )}
-          </div>
-
-          <div className={styles.inputField}>
-            <input
+            <Input
               type={showPassword ? "text" : "password"}
+              control={control}
+              name="password"
               placeholder="Введите ваш пароль"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              aria-invalid={!!errors.password}
-              aria-describedby={errors.password ? "password-error" : undefined}
-              disabled={isSubmitting}
               required
+              fullWidth
               minLength={6}
             />
+
             <button
               type="button"
               className={styles.passwordToggle}
@@ -207,15 +137,10 @@ const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
                 alt={showPassword ? "Скрыть пароль" : "Показать пароль"}
               />
             </button>
-            {errors.password && (
-              <p id="password-error" className={styles.errorMessage}>
-                {errors.password}
-              </p>
-            )}
           </div>
 
           <Button disabled={isSubmitting} fullWidth variant="outline">
-            {isSubmitting ? "Регистрация..." : "Зарегистрироваться"}
+            Зарегистрироваться
           </Button>
         </form>
       </div>

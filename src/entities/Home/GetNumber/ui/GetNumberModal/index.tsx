@@ -1,52 +1,42 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { Toaster, toast } from "react-hot-toast";
-import MaskedInput from "react-text-mask";
-import { Checkbox } from "@mui/material";
+import { useForm } from "react-hook-form";
 
 import { SERVER_URL } from "@/shared/api";
-import { phoneMask } from "@/shared/const";
 
 import styles from "./GetNumberModal.module.scss";
 import Button from "@/shared/ui/Button";
+import Input from "@/shared/ui/Input";
+import MaskedInput from "@/shared/ui/MaskedInput";
+import Checkbox from "@/shared/ui/Checkbox";
 
 interface GetNumberModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const TOASTER_STYLE = {
-  style: {
-    background: "#242423",
-    color: "#fff",
-    border: "1px solid #2b2b2b",
-    borderRadius: "12px",
-    padding: "12px 16px",
-  },
-  success: { style: { borderLeft: "4px solid #d9ad49" } },
-  error: { style: { borderLeft: "4px solid #ff6b6b" } },
-};
+interface FormData {
+  fio: string;
+  phone: string;
+  agreement: boolean;
+}
 
-const checkboxStyle = {
-  color: "#a0a0a0",
-  padding: "4px",
-  "&.Mui-checked": {
-    color: "#fdfca4",
-  },
-  "& .MuiTouchRipple-root": {
-    color: "#fdfca4",
-  },
+const defaultValues: FormData = {
+  fio: "",
+  phone: "+7 ",
+  agreement: true,
 };
 
 const GetNumberModal = ({ isOpen, onClose }: GetNumberModalProps) => {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("+7 ");
-  const [agreed, setAgreed] = useState(true);
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const router = useRouter();
+
+  const { control, handleSubmit, reset } = useForm({ defaultValues });
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
@@ -58,73 +48,29 @@ const GetNumberModal = ({ isOpen, onClose }: GetNumberModalProps) => {
 
   if (!isOpen) return null;
 
-  const validateForm = () => {
-    const newErrors: { [key: string]: string } = {};
-
-    if (!name.trim()) newErrors.name = "Имя обязательно для заполнения";
-
-    if (!phone.trim()) {
-      newErrors.phone = "Номер телефона обязателен";
-    } else {
-      const cleanedPhone = phone.replace(/\D/g, "");
-
-      if (!/^7\d{10}$/.test(cleanedPhone)) {
-        newErrors.phone = "Введите 10 цифр после +7";
-      }
-    }
-
-    if (!agreed) {
-      newErrors.agreed =
-        "Необходимо согласиться с политикой конфиденциальности и пользовательским соглашением";
-    }
-
-    setErrors(newErrors);
-
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!validateForm()) {
-      toast.error("Пожалуйста, исправьте ошибки в форме", {
-        duration: 4000,
-        position: "top-right",
-      });
-
-      return;
-    }
-
+  const onSubmitHandler = async (data: { fio: string; phone: string }) => {
     try {
-      await axios.post(
-        `${SERVER_URL}/forma-s-banneras`,
-        { data: { name, phone } },
-        { headers: { "Content-Type": "application/json" } }
-      );
+      if (isSubmitting) return;
+      setIsSubmitting(true);
 
-      toast.success("Заявка отправлена!", {
-        duration: 3000,
-        position: "top-right",
-      });
+      const payload = {
+        data: {
+          name: data.fio,
+          phone: data.phone,
+        },
+      };
 
-      setName("");
-      setPhone("");
-      setAgreed(true);
-      setErrors({});
+      await axios.post(`${SERVER_URL}/forma-s-banneras`, payload);
+
+      reset();
       onClose();
       router.push("/thank-you");
     } catch (error: any) {
       console.error("Ошибка при отправке формы:", error);
-
-      toast.error(
-        error.response?.data?.error?.message || "Ошибка при отправке формы",
-        { duration: 4000, position: "top-right" }
-      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
-
-  const handleContentClick = (e: React.MouseEvent<HTMLDivElement>) =>
-    e.stopPropagation();
 
   const modalContent = (
     <div
@@ -134,13 +80,7 @@ const GetNumberModal = ({ isOpen, onClose }: GetNumberModalProps) => {
       aria-modal="true"
       aria-labelledby="get-number-modal-title"
     >
-      <Toaster toastOptions={TOASTER_STYLE} />
-
-      <div
-        className={styles.modalContent}
-        onClick={handleContentClick}
-        tabIndex={-1}
-      >
+      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <button
           className={styles.closeButton}
           onClick={onClose}
@@ -149,73 +89,27 @@ const GetNumberModal = ({ isOpen, onClose }: GetNumberModalProps) => {
           ×
         </button>
 
-        <h2 id="get-number-modal-title" className={styles.title}>
-          Заполните форму
-        </h2>
+        <h2 className={styles.title}>Заполните форму</h2>
 
-        <form onSubmit={handleSubmit} className={styles.form} noValidate>
-          <div className={styles.inputField}>
-            <input
-              type="text"
-              placeholder="Введите ваше имя"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              aria-invalid={!!errors.name}
-              aria-describedby={errors.name ? "name-error" : undefined}
-            />
+        <form onSubmit={handleSubmit(onSubmitHandler)} className={styles.form}>
+          <Input
+            name="fio"
+            control={control}
+            placeholder="Введите ваше имя"
+            fullWidth
+          />
 
-            {errors.name && (
-              <p id="name-error" className={styles.errorMessage}>
-                {errors.name}
-              </p>
-            )}
-          </div>
+          <MaskedInput fullWidth name="phone" control={control} />
 
-          <div className={styles.inputField}>
-            <MaskedInput
-              mask={phoneMask}
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className={styles.inputField}
-              type="tel"
-              placeholder="Номер телефона"
-              aria-invalid={!!errors.phone}
-              aria-describedby={errors.phone ? "phone-error" : undefined}
-            />
+          <Checkbox name="agreement" control={control} />
 
-            {errors.phone && (
-              <p id="phone-error" className={styles.errorMessage}>
-                {errors.phone}
-              </p>
-            )}
-          </div>
-          <div className={styles.checkboxWrapper}>
-            <Checkbox
-              checked={agreed}
-              onChange={(e) => setAgreed(e.target.checked)}
-              sx={checkboxStyle}
-            />
-
-            <p className={styles.checkboxText}>
-              Отправляя форму я соглашаюсь с{" "}
-              <Link href="/privacy-policy" className={styles.link}>
-                Политикой конфиденциальности
-              </Link>{" "}
-              и{" "}
-              <Link href="/terms-of-use" className={styles.link}>
-                Пользовательским соглашением
-              </Link>
-            </p>
-          </div>
-
-          {errors.agreed && (
-            <p id="agreed-error" className={styles.errorMessage}>
-              {errors.agreed}
-            </p>
-          )}
-
-          <Button type="submit" variant="outline" fullWidth>
-            Сохранить
+          <Button
+            type="submit"
+            variant="outline"
+            fullWidth
+            disabled={isSubmitting}
+          >
+            Отправить
           </Button>
         </form>
       </div>
