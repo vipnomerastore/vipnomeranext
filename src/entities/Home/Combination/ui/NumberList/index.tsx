@@ -24,6 +24,7 @@ import CustomizedMenus from "@/shared/ui/Menu";
 
 import styles from "./NumberList.module.scss";
 import AddToCartModal from "../AddToCartModal";
+import { useForm } from "react-hook-form";
 
 const operatorIcons: Record<string, string> = {
   МТС: "/assets/home/operators/mts.svg",
@@ -494,7 +495,9 @@ const NumberList: React.FC<NumberListProps> = memo((props) => {
 
       <AddToCartModal
         isOpen={openAddToCartModal}
-        onClose={() => setOpenAddToCartModal(false)}
+        onClose={() => {
+          setOpenAddToCartModal(false);
+        }}
         item={phone}
       />
     </div>

@@ -1,26 +1,17 @@
+"use client";
+
 import { useEffect, useState, useRef } from "react";
-import MaskedInput from "react-text-mask";
 import axios from "axios";
-import { Toaster, toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import Image from "next/image";
 
 import { SERVER_URL } from "@/shared/api";
-import { phoneMask } from "@/shared/const";
+import Input from "@/shared/ui/Input";
+import Button from "@/shared/ui/Button";
+import MaskedInput from "@/shared/ui/MaskedInput";
 
 import styles from "./mainpopUp.module.scss";
-
-const TOASTER_STYLE = {
-  style: {
-    background: "#242423",
-    color: "#fff",
-    border: "1px solid #2b2b2b",
-    borderRadius: "12px",
-    padding: "12px 16px",
-  },
-  success: { style: { borderLeft: "4px solid #d9ad49" } },
-  error: { style: { borderLeft: "4px solid #ff6b6b" } },
-};
 
 const CLOSE_SVG = (
   <svg
@@ -37,98 +28,45 @@ const CLOSE_SVG = (
 );
 
 const Popup = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [formData, setFormData] = useState({ name: "", phone: "+7 " });
-  const [errors, setErrors] = useState({ name: "", phone: "" });
+  const [isOpen, setIsOpen] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const popupRef = useRef<HTMLDivElement>(null);
   const showCount = useRef(0);
+
   const router = useRouter();
+
+  const { control, reset, handleSubmit } = useForm({
+    defaultValues: { name: "", phone: "+7 " },
+  });
 
   const closePopup = () => {
     setIsOpen(false);
-    setFormData({ name: "", phone: "" });
-    setErrors({ name: "", phone: "" });
+    reset();
 
     showCount.current = 1;
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: "" }));
-  };
-
-  const validateForm = () => {
-    const newErrors = { name: "", phone: "" };
-
-    let isValid = true;
-
-    if (!formData.name.trim()) {
-      newErrors.name = "Имя обязательно";
-      isValid = false;
-    }
-
-    const cleanedPhone = formData.phone.replace(/\D/g, "");
-
-    if (!cleanedPhone) {
-      newErrors.phone = "Телефон обязателен";
-      isValid = false;
-    } else if (!/^7\d{10}$/.test(cleanedPhone)) {
-      newErrors.phone = "Введите 10 цифр после +7";
-      isValid = false;
-    }
-
-    setErrors(newErrors);
-
-    return isValid;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      toast.error("Пожалуйста, исправьте ошибки в форме", {
-        duration: 4000,
-        position: "top-right",
-      });
-
-      return;
-    }
-
+  const onSubmitHandler = async (data: { name: string; phone: string }) => {
     try {
-      await axios.post(`${SERVER_URL}/forma-modalkas`, {
+      if (isSubmitting) return;
+      setIsSubmitting(true);
+
+      const payload = {
         data: {
-          name: formData.name,
-          phone: formData.phone.replace(/[^\d+]/g, ""),
+          name: data.name,
+          phone: data.phone.replace(/[^\d+]/g, ""),
         },
-      });
+      };
 
-      setFormData({ name: "", phone: "" });
-
-      toast.success("Ваш запрос успешно отправлен!", {
-        duration: 3000,
-        position: "top-right",
-      });
+      await axios.post(`${SERVER_URL}/forma-modalkas`, payload);
 
       closePopup();
-
       router.push("/thank-you");
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        toast.error(
-          error.response?.data?.error?.message || "Ошибка при отправке формы",
-          { duration: 4000, position: "top-right" }
-        );
-      } else if (error instanceof Error) {
-        toast.error(error.message, { duration: 4000, position: "top-right" });
-      } else {
-        toast.error("Неизвестная ошибка", {
-          duration: 4000,
-          position: "top-right",
-        });
-      }
+      console.log(error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -157,8 +95,6 @@ const Popup = () => {
 
   return (
     <div className={styles.popup} role="dialog" aria-modal="true">
-      <Toaster toastOptions={TOASTER_STYLE} />
-
       <div className={styles.popupWrapper}>
         <div className={styles.popupContent} ref={popupRef}>
           <button
@@ -188,54 +124,21 @@ const Popup = () => {
 
           <p className={styles.text}>Отправим предложение в WhatsApp</p>
 
-          <form className={styles.form} onSubmit={handleSubmit}>
+          <form
+            className={styles.form}
+            onSubmit={handleSubmit(onSubmitHandler)}
+          >
             <div className={styles.inputGroup}>
-              <div className={styles.inputField}>
-                <input
-                  type="text"
-                  className={styles.input}
-                  placeholder="Ваше имя"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  aria-invalid={!!errors.name}
-                  aria-describedby={errors.name ? "name-error" : undefined}
-                />
+              <Input control={control} name="name" placeholder="Ваше имя" />
 
-                {errors.name && (
-                  <p className={styles.errorMessage} id="name-error">
-                    {errors.name}
-                  </p>
-                )}
-              </div>
-
-              <div className={styles.inputField}>
-                <MaskedInput
-                  mask={phoneMask}
-                  className={styles.input}
-                  placeholder="Введите ваш номер"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  type="tel"
-                  aria-invalid={!!errors.phone}
-                  aria-describedby={errors.phone ? "phone-error" : undefined}
-                  required
-                />
-
-                {errors.phone && (
-                  <p className={styles.errorMessage} id="phone-error">
-                    {errors.phone}
-                  </p>
-                )}
-              </div>
+              <MaskedInput name="phone" control={control} />
             </div>
 
             <p className={styles.smallText}>*Скидка действует 24 часа</p>
 
-            <button type="submit" className={styles.submitButton}>
+            <Button type="submit" disabled={isSubmitting} variant="outline">
               Отправить
-            </button>
+            </Button>
           </form>
 
           <div className={styles.popupimg}>

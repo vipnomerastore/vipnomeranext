@@ -82,7 +82,7 @@ const MobileMenu = (props: MobileMenuProps) => {
           Выбрать номер
         </Link>
 
-        <ScrollNavLink href="/#action" setMenuOpen={toggleMenu}>
+        {/* <ScrollNavLink href="/#action" setMenuOpen={toggleMenu}>
           Акции
         </ScrollNavLink>
 
@@ -92,7 +92,7 @@ const MobileMenu = (props: MobileMenuProps) => {
           className={getLinkClass("/credit")}
         >
           Рассрочка без банка
-        </Link>
+        </Link> */}
 
         <Link
           href="/partner"

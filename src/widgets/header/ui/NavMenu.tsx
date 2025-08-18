@@ -30,17 +30,17 @@ const NavMenu = ({ setMenuOpen }: { setMenuOpen: (open: boolean) => void }) => {
         Выбрать номер
       </Link>
 
-      <ScrollNavLink href="#action" setMenuOpen={setMenuOpen}>
+      {/* <ScrollNavLink href="#action" setMenuOpen={setMenuOpen}>
         Акции
-      </ScrollNavLink>
+      </ScrollNavLink> */}
 
-      <Link
+      {/* <Link
         href="/credit"
         className={getNavLinkClass("/credit")}
         onClick={() => setMenuOpen(false)}
       >
         Рассрочка без банка
-      </Link>
+      </Link> */}
 
       <Link
         href="/partner"

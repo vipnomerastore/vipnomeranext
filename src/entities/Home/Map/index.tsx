@@ -1,148 +1,73 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
-import { Checkbox } from "@mui/material";
-import MaskedInput from "react-text-mask";
-import { Toaster, toast } from "react-hot-toast";
 import Image from "next/image";
+import { useForm } from "react-hook-form";
+import axios from "axios";
 
 import { SERVER_URL } from "@/shared/api";
-import { phoneMask } from "@/shared/const";
-import styles from "./Map.module.scss";
 import Button from "@/shared/ui/Button";
+import Input from "@/shared/ui/Input";
+import MaskedInput from "@/shared/ui/MaskedInput";
+import TextArea from "@/shared/ui/TextArea";
+import Checkbox from "@/shared/ui/Checkbox";
+import styles from "./Map.module.scss";
+import { useState } from "react";
 
 const YANDEX_MAPS_API_KEY = "11bca4c6-71bc-4e20-85ae-39d33f81d802";
 
-const checkboxStyle = {
-  color: "#a0a0a0",
-  padding: "4px",
+interface FormData {
+  fio: string;
+  email: string;
+  phone: string;
+  info: string;
+  agreement: boolean;
+}
 
-  "&.Mui-checked": {
-    color: "#fdfca4",
-  },
-
-  "& .MuiTouchRipple-root": {
-    color: "#fdfca4",
-  },
-};
-
-const TOASTER_STYLE = {
-  style: {
-    background: "#242423",
-    color: "#fff",
-    border: "1px solid #2b2b2b",
-    borderRadius: "12px",
-    padding: "12px 16px",
-  },
-  success: {
-    style: {
-      borderLeft: "4px solid #d9ad49",
-    },
-  },
-  error: {
-    style: {
-      borderLeft: "4px solid #ff6b6b",
-    },
-  },
+const defaultValues: FormData = {
+  fio: "",
+  email: "",
+  phone: "",
+  info: "",
+  agreement: true,
 };
 
 const HomeMap = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    info: "",
-  });
-  const [agreed, setAgreed] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const router = useRouter();
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const { control, reset, handleSubmit } = useForm({ defaultValues });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!formData.name.trim()) {
-      toast.error("Пожалуйста, введите ваше имя.");
-
-      return;
-    }
-
-    if (
-      !formData.email.trim() ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
-    ) {
-      toast.error("Пожалуйста, введите корректный email.");
-
-      return;
-    }
-
-    const cleanedPhone = formData.phone.replace(/\D/g, "");
-
-    if (!cleanedPhone.match(/^\+?7\d{10}$/)) {
-      toast.error(
-        "Пожалуйста, введите полный номер телефона (10 цифр после +7)."
-      );
-
-      return;
-    }
-
-    if (!formData.info.trim()) {
-      toast.error("Пожалуйста, введите дополнительную информацию.");
-
-      return;
-    }
-
-    if (!agreed) {
-      toast.error(
-        "Необходимо согласиться с Политикой конфиденциальности и Пользовательским соглашением."
-      );
-
-      return;
-    }
-
+  const onSubmitHandler = async (data: FormData) => {
     try {
-      const response = await fetch(`${SERVER_URL}/forma-svyazatsya-s-namis`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data: formData }),
-      });
+      if (isSubmitting) return;
+      setIsSubmitting(true);
 
-      if (response.ok) {
-        await response.json();
+      const payload = {
+        data: {
+          name: data.fio,
+          email: data.email,
+          phone: data.phone,
+          question: data.info,
+        },
+      };
 
-        toast.success("Ваш вопрос успешно отправлен!", {
-          duration: 3000,
-          position: "top-right",
-        });
-        setFormData({ name: "", email: "", phone: "", info: "" });
-        setAgreed(true);
-        router.push("/thank-you");
-      } else {
-        const errorData = await response.json();
+      await axios.post(`${SERVER_URL}/forma-svyazatsya-s-namis`, payload);
 
-        console.error("Ошибка при отправке формы:", errorData);
-        toast.error(
-          `Ошибка при отправке: ${errorData.message || response.statusText}`
-        );
-      }
+      reset();
+      router.push("/thank-you");
     } catch (error) {
       console.error("Ошибка:", error);
-      toast.error("Ошибка при отправке. Попробуйте позже.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div id="contacts" className={styles.mapWrapper}>
-      <Toaster toastOptions={TOASTER_STYLE} />
-
       <div className={styles.content}>
         <h2 className={styles.title}>Контакты</h2>
 
@@ -172,65 +97,44 @@ const HomeMap = () => {
           <div className={styles.formContainer}>
             <h2>Связаться с нами</h2>
 
-            <form onSubmit={handleSubmit} className={styles.formBody}>
-              <input
+            <form
+              onSubmit={handleSubmit(onSubmitHandler)}
+              className={styles.formBody}
+            >
+              <Input
+                control={control}
                 type="text"
                 placeholder="Введите ваше имя"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                className={styles.formField}
+                name="fio"
+                fullWidth
               />
 
-              <input
+              <Input
+                control={control}
                 type="email"
                 placeholder="Введите ваш e-mail"
                 name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className={styles.formField}
+                fullWidth
               />
 
-              <MaskedInput
-                mask={phoneMask}
-                className={styles.formField}
-                type="tel"
-                placeholder="Номер телефона"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-              />
+              <MaskedInput fullWidth name="phone" control={control} />
 
-              <textarea
-                placeholder="Дополнительная информация"
+              <TextArea
+                control={control}
                 name="info"
-                value={formData.info}
-                onChange={handleInputChange}
-                className={`${styles.formField} ${styles.formFieldMultiline}`}
-                rows={4}
+                placeholder="Дополнительная информация"
+                fullWidth
               />
 
               <div className={styles.formFooter}>
-                <div className={styles.checkboxWrapper}>
-                  <Checkbox
-                    checked={agreed}
-                    onChange={(e) => setAgreed(e.target.checked)}
-                    sx={checkboxStyle}
-                  />
+                <Checkbox name="agreement" control={control} />
 
-                  <p className={styles.checkboxText}>
-                    Отправляя форму я соглашаюсь с{" "}
-                    <Link href="/privacy-policy" className={styles.link}>
-                      Политикой конфиденциальности
-                    </Link>{" "}
-                    и{" "}
-                    <Link href="/terms-of-use" className={styles.link}>
-                      Пользовательским соглашением
-                    </Link>
-                  </p>
-                </div>
-
-                <Button type="submit" variant="outline" arrow>
+                <Button
+                  type="submit"
+                  variant="outline"
+                  arrow
+                  disabled={isSubmitting}
+                >
                   Отправить
                 </Button>
               </div>

@@ -1,5 +1,4 @@
 import { memo, useEffect, useState, useCallback } from "react";
-import axios from "axios";
 import Image from "next/image";
 
 import { NumberItem } from "@/store/cartStore";
@@ -14,6 +13,7 @@ const OPERATOR_ICONS: Record<string, string> = {
   Мегафон: "/assets/home/operators/megafon.svg",
   "Теле 2": "/assets/home/promotion/tele2.svg",
 };
+
 const RECOMMENDED_LIMIT = 5;
 
 const getOperatorIcon = (opState: string): string =>

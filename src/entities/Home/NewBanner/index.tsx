@@ -1,15 +1,14 @@
+"use client";
+
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper/modules";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import MaskedInput from "react-text-mask";
 import axios from "axios";
-import { Toaster, toast } from "react-hot-toast";
-import { Checkbox } from "@mui/material";
 import { useCartStore } from "@/store/cartStore";
 import Image from "next/image";
+import { useForm } from "react-hook-form";
 import "swiper/css";
 import "swiper/css/scrollbar";
 import "swiper/css/free-mode";
@@ -17,9 +16,11 @@ import "swiper/css/navigation";
 
 import { SERVER_URL } from "@/shared/api";
 import { CACHE_TIMES } from "@/shared/utils/cachedFetch";
-import styles from "./NewBanner.module.scss";
-import { phoneMask } from "@/shared/const";
 import Button from "@/shared/ui/Button";
+import Input from "@/shared/ui/Input";
+import MaskedInput from "@/shared/ui/MaskedInput";
+import Checkbox from "@/shared/ui/Checkbox";
+import styles from "./NewBanner.module.scss";
 
 interface NumberData {
   id: string;
@@ -60,16 +61,20 @@ const CartIcon = (
   </svg>
 );
 
-const TOASTER_STYLE = {
-  style: {
-    background: "#242423",
-    color: "#fff",
-    border: "1px solid #2b2b2b",
-    borderRadius: "12px",
-    padding: "12px 16px",
-  },
-  success: { style: { borderLeft: "4px solid #d9ad49" } },
-  error: { style: { borderLeft: "4px solid #ff6b6b" } },
+interface FormData {
+  fio: string;
+  email: string;
+  phone: string;
+  info: string;
+  agreement: boolean;
+}
+
+const defaultValues: FormData = {
+  fio: "",
+  email: "",
+  phone: "",
+  info: "",
+  agreement: true,
 };
 
 const HomeNewBanner = () => {
@@ -85,12 +90,13 @@ const HomeNewBanner = () => {
     Array(6).fill({ hours: 0, minutes: 0, seconds: 0 })
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalName, setModalName] = useState("");
-  const [modalPhone, setModalPhone] = useState("+7 ");
-  const [modalAgreed, setModalAgreed] = useState(true);
-  const [modalErrors, setModalErrors] = useState<{ [key: string]: string }>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const swiperRef = useRef<any>(null);
+
+  const { control, reset, handleSubmit } = useForm({ defaultValues });
+
+  const router = useRouter();
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -110,7 +116,6 @@ const HomeNewBanner = () => {
   }, []);
 
   const addItem = useCartStore((state) => state.addItem);
-  const router = useRouter();
 
   const fetchSlideData = useCallback(
     async (index: number, endpoint: string, count: number) => {
@@ -154,13 +159,7 @@ const HomeNewBanner = () => {
           return newArr;
         });
       } catch (error) {
-        setSlidesData((prev) => {
-          const newArr = [...prev];
-          newArr[index] = null;
-          return newArr;
-        });
-
-        toast.error(`Ошибка загрузки данных слайда ${index + 1}`);
+        console.log(error);
       }
     },
     []
@@ -218,68 +217,30 @@ const HomeNewBanner = () => {
     )} мин ${String(t.seconds).padStart(2, "0")} сек`;
   };
 
-  // Валидация модального окна
-  const validateModalForm = () => {
-    const newErrors: { [key: string]: string } = {};
+  const onModalClose = () => {
+    reset();
+    setIsModalOpen(false);
+    setIsSubmitting(false);
+  };
 
-    if (!modalName.trim()) {
-      newErrors.name = "Имя обязательно для заполнения";
-    }
-
-    if (!modalPhone.trim()) {
-      newErrors.phone = "Номер телефона обязателен";
-    } else {
-      const cleanedPhone = modalPhone.replace(/\D/g, "");
-
-      if (!/^\+?7\d{10}$/.test(cleanedPhone)) {
-        newErrors.phone = "Введите 10 цифр после +7";
-      }
-    }
-    if (!modalAgreed) {
-      newErrors.agreed =
-        "Необходимо согласиться с политикой конфиденциальности и пользовательским соглашением";
-    }
-    setModalErrors(newErrors);
-
-    return Object.keys(newErrors).length === 0;
+  const onModalOpen = () => {
+    setIsModalOpen(false);
   };
 
   // Отправка формы модального окна
-  const handleModalSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateModalForm()) {
-      toast.error("Пожалуйста, исправьте ошибки в форме", {
-        duration: 4000,
-        position: "top-right",
-      });
-
-      return;
-    }
+  const onSubmitHandler = async (data: { fio: string; phone: string }) => {
     try {
-      const formData = { data: { name: modalName, phone: modalPhone } };
+      if (isSubmitting) return;
+      setIsSubmitting(true);
 
-      await axios.post(`${SERVER_URL}/forma-s-banneras`, formData, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const payload = { data: { fio: data.fio, phone: data.phone } };
 
-      toast.success("Заявка отправлена!", {
-        duration: 3000,
-        position: "top-right",
-      });
-      setModalName("");
-      setModalPhone("");
-      setModalAgreed(true);
-      setModalErrors({});
-      setIsModalOpen(false);
+      await axios.post(`${SERVER_URL}/forma-s-banneras`, payload);
+
+      onModalClose();
       router.push("/thank-you");
     } catch (error: any) {
-      toast.error(
-        error.response?.data?.error?.message || "Ошибка при отправке формы",
-        {
-          duration: 4000,
-          position: "top-right",
-        }
-      );
+      console.log(error);
     }
   };
 
@@ -290,20 +251,12 @@ const HomeNewBanner = () => {
         .items.some((i) => i.phone === item.phone);
 
       if (isAlreadyInCart) {
-        toast.error(`Номер ${item.phone} уже в корзине!`, {
-          duration: 6000,
-          position: "top-right",
-        });
+        return;
       } else {
         addItem({
           ...item,
           quantity: 1,
           old_price: item.old_price || undefined, // Ensure compatibility with NumberItem type
-        });
-
-        toast.success(`Номер ${item.phone} добавлен в корзину!`, {
-          duration: 3000,
-          position: "top-right",
         });
       }
     });
@@ -321,7 +274,7 @@ const HomeNewBanner = () => {
   };
 
   const modalContent = isModalOpen ? (
-    <div className={styles.modalOverlay} onClick={() => setIsModalOpen(false)}>
+    <div className={styles.modalOverlay} onClick={onModalOpen}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <button
           className={styles.closeButton}
@@ -334,77 +287,28 @@ const HomeNewBanner = () => {
         <h2 className={styles.modalTitle}>Заполните форму</h2>
 
         <form
-          onSubmit={handleModalSubmit}
+          onSubmit={handleSubmit(onSubmitHandler)}
           className={styles.modalForm}
-          noValidate
         >
-          <div className={styles.modalInputField}>
-            <input
-              type="text"
-              placeholder="Введите ваше имя"
-              value={modalName}
-              onChange={(e) => setModalName(e.target.value)}
-              aria-invalid={!!modalErrors.name}
-              aria-describedby={modalErrors.name ? "name-error" : undefined}
-            />
+          <Input
+            control={control}
+            name="fio"
+            placeholder="Введите ваше имя"
+            fullWidth
+          />
 
-            {modalErrors.name && (
-              <p id="name-error" className={styles.modalErrorMessage}>
-                {modalErrors.name}
-              </p>
-            )}
-          </div>
+          <MaskedInput fullWidth name="phone" control={control} />
 
-          <div className={styles.modalInputField}>
-            <MaskedInput
-              mask={phoneMask}
-              value={modalPhone}
-              onChange={(e) => setModalPhone(e.target.value)}
-              type="tel"
-              placeholder="Номер телефона"
-              aria-invalid={!!modalErrors.phone}
-              aria-describedby={modalErrors.phone ? "phone-error" : undefined}
-            />
+          <Checkbox name="agreement" control={control} />
 
-            {modalErrors.phone && (
-              <p id="phone-error" className={styles.modalErrorMessage}>
-                {modalErrors.phone}
-              </p>
-            )}
-          </div>
-          <div className={styles.modalCheckboxWrapper}>
-            <Checkbox
-              checked={modalAgreed}
-              onChange={(e) => setModalAgreed(e.target.checked)}
-              sx={{
-                color: "#a0a0a0",
-                padding: "4px",
-                "&.Mui-checked": { color: "#fdfca4" },
-                "& .MuiTouchRipple-root": { color: "#fdfca4" },
-              }}
-            />
-
-            <p className={styles.modalCheckboxText}>
-              Отправляя форму я соглашаюсь с{" "}
-              <Link href="/privacy-policy" className={styles.modalLink}>
-                Политикой конфиденциальности
-              </Link>{" "}
-              и{" "}
-              <Link href="/terms-of-use" className={styles.modalLink}>
-                Пользовательским соглашением
-              </Link>
-            </p>
-          </div>
-
-          {modalErrors.agreed && (
-            <p id="agreed-error" className={styles.modalErrorMessage}>
-              {modalErrors.agreed}
-            </p>
-          )}
-
-          <button type="submit" className={styles.modalSubmitButton}>
-            Сохранить
-          </button>
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            fullWidth
+            variant="outline"
+          >
+            Отправить
+          </Button>
         </form>
       </div>
     </div>
@@ -874,7 +778,6 @@ const HomeNewBanner = () => {
 
   return (
     <div id="action" className={styles.actionGalleryWrapper}>
-      <Toaster toastOptions={TOASTER_STYLE} />
       {modalRoot && createPortal(modalContent, modalRoot)}
 
       <div className={styles.actionWrapper}>
