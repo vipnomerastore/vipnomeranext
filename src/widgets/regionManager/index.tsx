@@ -249,6 +249,7 @@ const RegionManager = () => {
 
   const handleChangeRegion = () => {
     setShowPrompt(false);
+    setDetectedRegion(null);
     setShowModal(true);
   };
 
