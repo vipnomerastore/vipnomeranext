@@ -66,7 +66,7 @@ const SellFormSection: React.FC = memo(() => {
           data: {
             name: data.name,
             phone: data.contactPhone,
-            operator: data.operator,
+            operator: operator,
             sell_number: sellNumberString,
             email: data.email,
             comment: data.comment,
@@ -83,7 +83,7 @@ const SellFormSection: React.FC = memo(() => {
         setIsSubmitting(false);
       }
     },
-    [router]
+    [router, operator, setOperator]
   );
 
   return (
@@ -94,13 +94,7 @@ const SellFormSection: React.FC = memo(() => {
         className={styles.redemptionForm}
         onSubmit={handleSubmit(onSubmitHandler)}
       >
-        <Input
-          control={control}
-          type="text"
-          name="fio"
-          placeholder="Ваше имя"
-          fullWidth
-        />
+        <Input control={control} name="name" placeholder="Ваше имя" fullWidth />
 
         <MaskedInput fullWidth control={control} name="contactPhone" />
 
@@ -225,4 +219,5 @@ const SellFormSection: React.FC = memo(() => {
   );
 });
 
+SellFormSection.displayName = "SellFormSection";
 export default SellFormSection;

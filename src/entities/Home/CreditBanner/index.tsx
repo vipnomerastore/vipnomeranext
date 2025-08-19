@@ -84,7 +84,7 @@ const HomeCreditBanner: React.FC = () => {
     try {
       const payload = {
         data: {
-          name: data.name,
+          fio: data.name,
           phone: data.phone.replace(/[^\d+]/g, ""),
         },
       };

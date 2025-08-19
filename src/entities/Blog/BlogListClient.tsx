@@ -74,7 +74,7 @@ export default function BlogListClient(props: BlogListClientProps) {
                     style={{
                       width: "100%",
                       height: "100%",
-                      objectFit: "cover",
+                      objectFit: "fill",
                     }}
                   />
                 </div>

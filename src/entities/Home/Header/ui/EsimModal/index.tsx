@@ -57,7 +57,7 @@ const EsimModal = ({ isOpen, onClose }: EsimModalProps) => {
         },
       };
 
-      await axios.post(`${SERVER_URL}/forma-esim`, payload);
+      await axios.post(`${SERVER_URL}/esims`, payload);
 
       onClose();
       reset();

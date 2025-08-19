@@ -28,7 +28,7 @@ const CLOSE_SVG = (
 );
 
 const Popup = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const popupRef = useRef<HTMLDivElement>(null);

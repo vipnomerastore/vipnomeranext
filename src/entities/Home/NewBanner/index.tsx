@@ -233,7 +233,7 @@ const HomeNewBanner = () => {
       if (isSubmitting) return;
       setIsSubmitting(true);
 
-      const payload = { data: { fio: data.fio, phone: data.phone } };
+      const payload = { data: { name: data.fio, phone: data.phone } };
 
       await axios.post(`${SERVER_URL}/forma-s-banneras`, payload);
 
