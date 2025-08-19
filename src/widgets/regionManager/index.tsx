@@ -188,45 +188,48 @@ const RegionManager = () => {
   useEffect(() => {
     if (!isHydrated) return;
 
-    // Сначала читаем cookie, установленную middleware
-    const cookieRegion = getCookie("region");
+    // Не показываем промт, если он уже скрыт или открыт модал
+    if (!showPrompt && !showModal) {
+      // Сначала читаем cookie, установленную middleware
+      const cookieRegion = getCookie("region");
 
-    if (cookieRegion && cookieRegion !== region) {
-      // Синхронизируем store с cookie
-      setRegion(cookieRegion);
-      return;
-    }
+      if (cookieRegion && cookieRegion !== region) {
+        // Синхронизируем store с cookie
+        setRegion(cookieRegion);
+        return;
+      }
 
-    // Если cookie нет, но есть поддомен
-    const subdomain = getSubdomain();
-    if (subdomain && subdomain !== "www" && regionName(subdomain)) {
-      setRegion(subdomain);
-      setCookie("region", subdomain);
-      return;
-    }
+      // Если cookie нет, но есть поддомен
+      const subdomain = getSubdomain();
+      if (subdomain && subdomain !== "www" && regionName(subdomain)) {
+        setRegion(subdomain);
+        setCookie("region", subdomain);
+        return;
+      }
 
-    // Если нет ни cookie, ни поддомена - используем геолокацию
-    const hasSubdomain = Boolean(subdomain);
-    const isLocalhost = window.location.hostname === "localhost";
+      // Если нет ни cookie, ни поддомена - используем геолокацию
+      const hasSubdomain = Boolean(subdomain);
+      const isLocalhost = window.location.hostname === "localhost";
 
-    if (!hasSubdomain && !dismissed && !isLocalhost && !cookieRegion) {
-      fetch("https://ipinfo.io/json")
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.city) {
-            const slug = mapCityToSlug(data.city);
+      if (!hasSubdomain && !dismissed && !isLocalhost && !cookieRegion) {
+        fetch("https://ipinfo.io/json")
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.city) {
+              const slug = mapCityToSlug(data.city);
 
-            if (slug) {
-              setDetectedRegion(slug);
-              setShowPrompt(true);
+              if (slug) {
+                setDetectedRegion(slug);
+                setShowPrompt(true);
+              }
             }
-          }
-        })
-        .catch((err) => {
-          console.error("Geo API failed", err);
-        });
+          })
+          .catch((err) => {
+            console.error("Geo API failed", err);
+          });
+      }
     }
-  }, [isHydrated, region, dismissed, setRegion]);
+  }, [isHydrated, region, dismissed, setRegion, showPrompt, showModal]);
 
   const handleAccept = () => {
     if (!detectedRegion) return;
