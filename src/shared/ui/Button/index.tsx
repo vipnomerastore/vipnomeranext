@@ -1,12 +1,18 @@
+"use client";
+
 import React from "react";
 import clsx from "clsx";
 
 import styles from "./Button.module.scss";
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps {
   variant?: "default" | "outline";
   arrow?: boolean;
   fullWidth?: boolean;
+  children: React.ReactNode;
+  disabled?: boolean;
+  onClick?: () => void;
+  type?: "button" | "submit";
 }
 
 const arrowIcon = (
@@ -28,19 +34,29 @@ const arrowIcon = (
 
 const Button: React.FC<ButtonProps> = ({
   variant = "default",
+
   arrow = false,
+
+  disabled = false,
+
   children,
+
   fullWidth = false,
-  ...props
+
+  onClick,
+
+  type = "button",
 }) => {
   return (
     <button
+      type={type}
+      disabled={disabled}
+      onClick={onClick!}
       className={clsx(styles.button, {
         [styles.outline]: variant === "outline",
         [styles.arrow]: arrow,
         [styles.fullWidth]: fullWidth,
       })}
-      {...props}
     >
       {children}
 

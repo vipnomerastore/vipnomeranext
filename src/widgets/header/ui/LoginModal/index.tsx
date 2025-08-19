@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { toast } from "react-hot-toast";
 import Image from "next/image";
+import { useForm } from "react-hook-form";
 
 import { useAuthStore } from "@/store/authStore";
-
-import styles from "./LoginModal.module.scss";
 import Button from "@/shared/ui/Button";
+import Input from "@/shared/ui/Input";
+import styles from "./LoginModal.module.scss";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -14,14 +15,20 @@ interface LoginModalProps {
   onOpenRegister: () => void;
 }
 
+interface FormData {
+  email: string;
+  password: string;
+}
+
+const defaultValues: FormData = {
+  email: "",
+  password: "",
+};
+
 const LoginModal = ({ isOpen, onClose, onOpenRegister }: LoginModalProps) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
-    {}
-  );
   const { login } = useAuthStore();
+  const { control, reset, handleSubmit } = useForm<FormData>({ defaultValues });
 
   useEffect(() => {
     if (isOpen) {
@@ -37,73 +44,21 @@ const LoginModal = ({ isOpen, onClose, onOpenRegister }: LoginModalProps) => {
 
   if (!isOpen) return null;
 
-  const validateForm = () => {
-    const newErrors: { email?: string; password?: string } = {};
-
-    if (!email.trim()) {
-      newErrors.email = "Email обязателен для заполнения";
-    }
-
-    if (!password.trim()) {
-      newErrors.password = "Пароль обязателен";
-    } else if (password.length < 6) {
-      newErrors.password = "Пароль должен быть не менее 6 символов";
-    }
-
-    setErrors(newErrors);
-
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-
-    if (!validateForm()) {
-      console.log("Form validation failed:", errors);
-      return;
-    }
-
+  const onSubmitHandler = async (data: FormData) => {
     try {
-      await login(email, password);
-
-      toast.success("Вход выполнен!", {
-        duration: 3000,
-        position: "top-right",
-      });
+      await login(data.email, data.password);
 
       onClose();
-      setEmail("");
-      setPassword("");
+      reset();
       setShowPassword(false);
-      setErrors({});
     } catch (err: unknown) {
-      if (
-        typeof err === "object" &&
-        err !== null &&
-        "message" in err &&
-        typeof (err as any).message === "string"
-      ) {
-        toast.error((err as any).message, {
-          duration: 4000,
-          position: "top-right",
-        });
-      } else {
-        toast.error("Не верный Email или Пароль", {
-          duration: 4000,
-          position: "top-right",
-        });
-      }
-      console.error("Login Error:", err);
+      console.error("Ошибка:", err);
     }
-  };
-
-  const handleContentClick = (event: React.MouseEvent) => {
-    event.stopPropagation();
   };
 
   const modalContent = (
     <div className={styles.modalOverlay} onClick={onClose}>
-      <div className={styles.modalContent} onClick={handleContentClick}>
+      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <button
           className={styles.closeButton}
           onClick={onClose}
@@ -120,32 +75,30 @@ const LoginModal = ({ isOpen, onClose, onOpenRegister }: LoginModalProps) => {
           Доступ к эксклюзивным ресурсам для партнеров
         </p>
 
-        <form onSubmit={handleSubmit} className={styles.form} noValidate>
-          <div className={styles.inputField}>
-            <input
-              type="email"
-              placeholder="Введите ваш email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              aria-invalid={!!errors.email}
-              aria-describedby={errors.email ? "email-error" : undefined}
-            />
-          </div>
+        <form onSubmit={handleSubmit(onSubmitHandler)} className={styles.form}>
+          <Input
+            name="email"
+            control={control}
+            type="email"
+            placeholder="Введите ваш email"
+            required
+            fullWidth
+          />
 
           <div className={styles.inputField}>
-            <input
+            <Input
+              name="password"
+              control={control}
               type={showPassword ? "text" : "password"}
               placeholder="Введите ваш пароль"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              aria-invalid={!!errors.password}
-              aria-describedby={errors.password ? "password-error" : undefined}
+              required
+              fullWidth
             />
+
             <button
               type="button"
               className={styles.passwordToggle}
               onClick={() => setShowPassword(!showPassword)}
-              aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
             >
               <Image
                 loading="lazy"
@@ -160,11 +113,6 @@ const LoginModal = ({ isOpen, onClose, onOpenRegister }: LoginModalProps) => {
               />
             </button>
           </div>
-          {errors.password && (
-            <p id="password-error" className={styles.errorMessage}>
-              {errors.password}
-            </p>
-          )}
 
           <Button fullWidth variant="outline">
             Войти

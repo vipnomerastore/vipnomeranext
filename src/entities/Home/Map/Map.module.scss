@@ -152,40 +152,8 @@
 .formBody {
   display: flex;
   flex-direction: column;
+  width: 100%;
   gap: 15px;
-
-  input,
-  textarea {
-    width: 100%;
-    height: 40px;
-    padding: 4px 24px;
-    border-radius: 10px;
-    border: 1px solid $border-color;
-    background-color: $input-background;
-    color: $text-color-light;
-    font-size: 14px;
-    transition: border-color 0.3s linear;
-    box-sizing: border-box;
-
-    &:hover:not(:focus) {
-      border-color: $border-color-hover-focus;
-    }
-
-    &:focus {
-      outline: none;
-      border-color: $border-color-hover-focus;
-    }
-
-    &::placeholder {
-      color: rgba($text-color-light, 0.5);
-    }
-  }
-
-  textarea {
-    height: auto;
-    min-height: 100px;
-    padding: 12px 24px;
-  }
 
   @media (max-width: ($breakpoint-tablet - 1px)) {
     gap: 10px;

@@ -55,9 +55,7 @@ const Mask = memo((props: MaskProps) => {
   return (
     <div className={styles.mask}>
       <div className={styles.textBlock}>
-        <h2 className={styles.maskTitle}>
-          Выберите свою уникальную комбинацию
-        </h2>
+        <h2 className={styles.maskTitle}>Выберите свой уникальный номер</h2>
       </div>
 
       <div className={styles.maskContent}>

@@ -7,14 +7,13 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 import { SERVER_URL } from "@/shared/api";
-import styles from "../../Header.module.scss";
 import Input from "@/shared/ui/Input";
 import MaskedInput from "@/shared/ui/MaskedInput";
-import Select from "@/shared/ui/Select";
 import Button from "@/shared/ui/Button";
 import Checkbox from "@/shared/ui/Checkbox";
+import styles from "../../Header.module.scss";
 
-interface VipNumberModalProps {
+interface EsimModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
@@ -31,8 +30,7 @@ const defaultValues: FormData = {
   agreement: true,
 };
 
-const VipNumberModal = ({ isOpen, onClose }: VipNumberModalProps) => {
-  const [purpose, setPurpose] = useState("Личное пользование");
+const EsimModal = ({ isOpen, onClose }: EsimModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
@@ -48,25 +46,24 @@ const VipNumberModal = ({ isOpen, onClose }: VipNumberModalProps) => {
   }, [isOpen]);
 
   const onSubmitHandler = async (data: FormData) => {
-    if (isSubmitting) return;
-    setIsSubmitting(true);
-
     try {
+      if (isSubmitting) return;
+      setIsSubmitting(true);
+
       const payload = {
         data: {
           name: data.fio,
           phone: data.phone,
-          goal: purpose,
         },
       };
 
-      await axios.post(`${SERVER_URL}/forma-vip-nomers`, payload);
+      await axios.post(`${SERVER_URL}/esims`, payload);
 
-      reset();
       onClose();
+      reset();
       router.push("/thank-you");
     } catch (error: unknown) {
-      console.error("Ошибка:", error);
+      console.log(error);
     } finally {
       setIsSubmitting(false);
     }
@@ -85,9 +82,9 @@ const VipNumberModal = ({ isOpen, onClose }: VipNumberModalProps) => {
           ×
         </button>
 
-        <h2 className={styles.title}>ПОЛУЧИТЬ VIP НОМЕР</h2>
+        <h2 className={styles.title}>ПОЛУЧИТЬ ESIM НОМЕР</h2>
 
-        <p className={styles.subtitle}>Оставь заявку прямо сейчас</p>
+        <p className={styles.subtitle}>Оставь заявку на ESIM</p>
 
         <form onSubmit={handleSubmit(onSubmitHandler)} className={styles.form}>
           <Input
@@ -97,22 +94,15 @@ const VipNumberModal = ({ isOpen, onClose }: VipNumberModalProps) => {
             fullWidth
           />
 
-          <MaskedInput name="phone" fullWidth control={control} />
+          <MaskedInput control={control} name="phone" fullWidth />
 
-          <Select
-            fullWidth
-            value={purpose}
-            onChange={(e) => setPurpose(e.target.value)}
-            options={["Личное пользование", "Для бизнеса", "В подарок"]}
-          />
-
-          <Checkbox name="agreement" control={control} />
+          <Checkbox control={control} name="agreement" />
 
           <Button
             type="submit"
             variant="outline"
-            fullWidth
             disabled={isSubmitting}
+            fullWidth
           >
             Отправить
           </Button>
@@ -129,4 +119,4 @@ const VipNumberModal = ({ isOpen, onClose }: VipNumberModalProps) => {
   return modalRoot ? createPortal(modalContent, modalRoot) : null;
 };
 
-export default VipNumberModal;
+export default EsimModal;

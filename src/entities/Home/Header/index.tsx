@@ -8,6 +8,7 @@ import HeaderContent from "./ui/HeaderContent";
 import VipNumberModal from "./ui/VipNumberModal";
 
 import styles from "./Header.module.scss";
+import HomeCards from "./ui/HomeCards";
 
 const HomeHeader = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,25 +18,27 @@ const HomeHeader = () => {
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.fogBackground}>
-        <Image
-          src="/assets/home/numbers/fog.webp"
-          alt="fog"
-          className={styles.fogImage}
-          aria-hidden="true"
-          priority
-          fill
-          sizes="100vw"
-          style={{ objectFit: "cover" }}
-        />
-      </div>
+      <HomeCards />
 
-      <div className={styles.container}>
-        <HeaderContent openModal={openModal} />
+      <div>
+        <div className={styles.fogBackground}>
+          <Image
+            src="/assets/home/numbers/fog.webp"
+            alt="fog"
+            className={styles.fogImage}
+            aria-hidden="true"
+            priority
+            fill
+            sizes="100vw"
+            style={{ objectFit: "cover" }}
+          />
+        </div>
 
-        {/* <ScrollIndicator /> */}
+        <div className={styles.container}>
+          <HeaderContent openModal={openModal} />
 
-        <VipNumberModal isOpen={isModalOpen} onClose={closeModal} />
+          <VipNumberModal isOpen={isModalOpen} onClose={closeModal} />
+        </div>
       </div>
     </div>
   );

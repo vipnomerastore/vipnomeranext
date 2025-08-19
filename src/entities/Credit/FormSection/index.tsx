@@ -1,34 +1,16 @@
 import { forwardRef, memo, useState, useCallback } from "react";
-import { Checkbox } from "@mui/material";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import MaskedInput from "react-text-mask";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 import Image from "next/image";
 
 import { SERVER_URL } from "@/shared/api";
-import { phoneMask } from "@/shared/const";
 
-import styles from "./FormSection.module.scss";
 import Button from "@/shared/ui/Button";
-
-const errorStyle = {
-  color: "#ff6b6b",
-  fontSize: "12px",
-  marginTop: "4px",
-  marginBottom: "0",
-  textAlign: "left" as const,
-  width: "100%",
-  minHeight: "1.2em",
-};
-
-const checkboxStyle = {
-  color: "#fdfca4",
-  "&.Mui-checked": { color: "#fdfca4" },
-  width: 24,
-  height: 24,
-};
+import Input from "@/shared/ui/Input";
+import MaskedInput from "@/shared/ui/MaskedInput";
+import Checkbox from "@/shared/ui/Checkbox";
+import styles from "./FormSection.module.scss";
 
 interface FormData {
   fullName: string;
@@ -63,6 +45,7 @@ const FormSection = forwardRef<HTMLElement>((_, ref) => {
   });
   const [agreedToTerms, setAgreedToTerms] = useState(true);
   const [errors, setErrors] = useState<FormErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
 
@@ -100,6 +83,9 @@ const FormSection = forwardRef<HTMLElement>((_, ref) => {
     async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
 
+      if (isSubmitting) return;
+      setIsSubmitting(true);
+
       if (!validateForm()) {
         toast.error("Пожалуйста, исправьте ошибки в форме", {
           duration: 4000,
@@ -125,6 +111,7 @@ const FormSection = forwardRef<HTMLElement>((_, ref) => {
         setFormData({ fullName: "", city: "", phoneNumber: "" });
         setAgreedToTerms(false);
         setErrors({});
+        setIsSubmitting(false);
 
         toast.success("Ваша заявка успешно отправлена!", {
           duration: 3000,
@@ -176,101 +163,49 @@ const FormSection = forwardRef<HTMLElement>((_, ref) => {
           </p>
         </div>
 
-        <form className={styles.form} onSubmit={handleSubmit} noValidate>
-          <div className={styles.inputField}>
-            <input
-              type="text"
-              placeholder="Ваше ФИО"
-              aria-label="Full name"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleInputChange}
-              aria-invalid={!!errors.fullName}
-              aria-describedby={errors.fullName ? "fullName-error" : undefined}
-              autoComplete="off"
-            />
+        {/* <form className={styles.form} onSubmit={handleSubmit} noValidate>
+          <Input
+            type="text"
+            placeholder="Ваше ФИО"
+            fullWidth
+            aria-label="Full name"
+            name="fullName"
+            value={formData.fullName}
+            onChange={handleInputChange}
+            autoComplete="off"
+            error={errors.fullName}
+          />
 
-            {errors.fullName && (
-              <p id="fullName-error" style={errorStyle}>
-                {errors.fullName}
-              </p>
-            )}
-          </div>
+          <Input
+            type="text"
+            placeholder="Город"
+            aria-label="City"
+            name="city"
+            fullWidth
+            value={formData.city}
+            onChange={handleInputChange}
+            autoComplete="off"
+            error={errors.city}
+          />
 
-          <div className={styles.inputField}>
-            <input
-              type="text"
-              placeholder="Город"
-              aria-label="City"
-              name="city"
-              value={formData.city}
-              onChange={handleInputChange}
-              aria-invalid={!!errors.city}
-              aria-describedby={errors.city ? "city-error" : undefined}
-              autoComplete="off"
-            />
-
-            {errors.city && (
-              <p id="city-error" style={errorStyle}>
-                {errors.city}
-              </p>
-            )}
-          </div>
-
-          <div className={styles.inputField}>
-            <MaskedInput
-              mask={phoneMask}
-              type="tel"
-              placeholder="Номер телефона"
-              aria-label="Phone number"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleInputChange}
-              aria-invalid={!!errors.phoneNumber}
-              aria-describedby={
-                errors.phoneNumber ? "phoneNumber-error" : undefined
-              }
-            />
-
-            {errors.phoneNumber && (
-              <p id="phoneNumber-error" style={errorStyle}>
-                {errors.phoneNumber}
-              </p>
-            )}
-          </div>
+          <MaskedInput
+            fullWidth
+            value={formData.phoneNumber}
+            onChange={handleInputChange}
+            error={errors.phoneNumber}
+          />
 
           <div className={styles.formFooter}>
-            <div className={styles.checkboxWrapper}>
-              <Checkbox
-                checked={agreedToTerms}
-                onChange={(e) => setAgreedToTerms(e.target.checked)}
-                sx={checkboxStyle}
-                aria-label="Agree to privacy policy"
-              />
+            <Checkbox
+              checked={agreedToTerms}
+              onChange={(e) => setAgreedToTerms(e.target.checked)}
+            />
 
-              <p className={styles.checkboxText}>
-                Отправляю форму, соглашаюсь с{" "}
-                <Link href="/privacy-policy" className={styles.link}>
-                  Политикой конфиденциальности
-                </Link>
-                и{" "}
-                <Link href="/terms-of-use" className={styles.link}>
-                  Пользовательским соглашением
-                </Link>
-              </p>
-            </div>
-
-            {errors.agreedToTerms && (
-              <p id="agreedToTerms-error" style={errorStyle}>
-                {errors.agreedToTerms}
-              </p>
-            )}
-
-            <Button variant="outline" arrow>
+            <Button variant="outline" arrow disabled={isSubmitting}>
               Отправить
             </Button>
           </div>
-        </form>
+        </form> */}
       </div>
     </section>
   );

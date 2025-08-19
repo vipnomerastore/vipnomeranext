@@ -119,7 +119,8 @@ export default function RootLayout({
       });
     `}
         </Script>
-
+      </head>
+      <body suppressHydrationWarning>
         {/* Yandex Metrica noscript - тоже в head */}
         <noscript>
           <div>
@@ -130,8 +131,7 @@ export default function RootLayout({
             />
           </div>
         </noscript>
-      </head>
-      <body suppressHydrationWarning>
+
         <Script id="dg-social-widget-data" strategy="afterInteractive">
           {`
     if (!window.dgSocialWidgetData) {

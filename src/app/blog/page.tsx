@@ -76,9 +76,9 @@ function getContentPreviewMarkdown(content: string, maxLen = 120) {
 
 // SEO метаданные страницы блога
 export const metadata = {
-  title: "Блог о виртуальных номерах | vipnomerastore",
+  title: "Блог о номерах | vipnomerastore",
   description:
-    "Последние статьи и новости о виртуальных номерах, SMS активации и регистрации аккаунтов. Полезные советы и инструкции.",
+    "Последние статьи и новости о номерах, виртуальных номерах, мтс, мегафон, йота, теле 2, билайн. Полезные советы и инструкции.",
   keywords: [
     "блог",
     "виртуальные номера",
@@ -102,9 +102,9 @@ export const metadata = {
     },
   },
   openGraph: {
-    title: "Блог о виртуальных номерах | vipnomerastore",
+    title: "Блог о номерах телефона | vipnomerastore",
     description:
-      "Последние статьи и новости о виртуальных номерах, SMS активации и регистрации аккаунтов.",
+      "Последние статьи и новости о номерах телефона, виртуальных номерах, мтс, мегафон, билайн, теле 2, йота.",
     url: "https://vipnomerastore.ru/blog",
     type: "website",
     siteName: "vipnomerastore",
@@ -114,15 +114,15 @@ export const metadata = {
         url: "https://vipnomerastore.ru/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "vipnomerastore блог о виртуальных номерах",
+        alt: "vipnomerastore блог о номерах телефона",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Блог о виртуальных номерах | vipnomerastore",
+    title: "Блог о номерах телефона | vipnomerastore",
     description:
-      "Последние статьи и новости о виртуальных номерах, SMS активации и регистрации аккаунтов.",
+      "Последние статьи и новости о номерах телефона, виртуальных номерах, мтс, мегафон, билайн, теле 2, йота.",
     images: ["https://vipnomerastore.ru/og-image.jpg"],
   },
 };
