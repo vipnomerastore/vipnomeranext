@@ -209,7 +209,7 @@ const RegionManager = () => {
     const hasSubdomain = Boolean(subdomain);
     const isLocalhost = window.location.hostname === "localhost";
 
-    if (!hasSubdomain && !dismissed && isLocalhost && !cookieRegion) {
+    if (!hasSubdomain && !dismissed && !isLocalhost && !cookieRegion) {
       fetch("https://ipinfo.io/json")
         .then((res) => res.json())
         .then((data) => {
