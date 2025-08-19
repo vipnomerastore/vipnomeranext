@@ -210,10 +210,10 @@ const RegionManager = () => {
     const isLocalhost = window.location.hostname === "localhost";
 
     if (!hasSubdomain && !dismissed && !isLocalhost && !cookieRegion) {
-      fetch("http://ip-api.com/json/")
+      fetch("https://ipinfo.io/json")
         .then((res) => res.json())
         .then((data) => {
-          if (data.status === "success") {
+          if (data.city) {
             const slug = mapCityToSlug(data.city);
 
             if (slug) {
