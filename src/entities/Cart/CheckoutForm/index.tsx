@@ -64,7 +64,7 @@ const CheckoutForm = memo(function CheckoutForm(props: CheckoutFormProps) {
           aria-label="Ваше имя"
         />
 
-        <MaskedInput name="phone" required fullWidth control={control} />
+        <MaskedInput name="phone" fullWidth control={control} />
 
         <Checkbox name="agreement" control={control} />
       </form>
