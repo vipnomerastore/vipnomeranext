@@ -107,7 +107,7 @@ export default function LocalBusinessSchema({
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     name: `VIP nomera store ${city}`,
-    description: `Продажа красивых номеров телефона в ${city}. Быстрая доставка, лучшие цены.`,
+    description: `Продажа красивых номеров телефона ${city}. Быстрая доставка, лучшие цены.`,
     url,
     address: {
       "@type": "PostalAddress",
