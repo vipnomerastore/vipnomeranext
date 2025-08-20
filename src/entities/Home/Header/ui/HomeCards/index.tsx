@@ -64,19 +64,20 @@ const HomeCards = () => {
         <div
           className={styles.card}
           onClick={() => {
-            window.dispatchEvent(new CustomEvent("scrollToPromotion"));
+            window.dispatchEvent(new CustomEvent("scrollToCreditBanner"));
           }}
           style={{ cursor: "pointer" }}
         >
           <Image
-            src="/assets/home/newBanner/icon-2.webp"
-            alt="Hot offer"
+            src="/assets/home/newBanner/icon-1.webp"
+            alt="Credit offer"
             width={50}
             height={50}
-            className={styles.cardIcon1}
+            className={styles.cardIcon}
           />
-          <h3 className={styles.cardTitle}>АКЦИИ</h3>
-          <p className={styles.cardDescription}>НА НОМЕРА</p>
+          <p className={styles.cardDescription}>НОМЕРА В РАССРОЧКУ</p>
+          <h3 className={styles.cardTitle}>БЕЗ БАНКА</h3>
+          <p className={styles.cardTitle}>0%</p>
         </div>
 
         <div
@@ -98,42 +99,17 @@ const HomeCards = () => {
           <h3 className={styles.cardTitle}>50%</h3>
         </div>
 
-        <div
-          onClick={() => {
-            window.dispatchEvent(
-              new CustomEvent("scrollToNewBanner", { detail: 1 })
-            );
-          }}
-          className={styles.card}
-        >
+        <div onClick={() => setOpenEsimModal(true)} className={styles.card}>
           <Image
-            src="/assets/home/promotion/hot.svg"
-            alt="VIP discount"
+            src="/assets/home/esim/offer-card.svg"
+            alt="eSIM"
             width={50}
             height={50}
             className={styles.cardIcon}
           />
-          <p className={styles.cardDescription}>VIP НОМЕРА СО СКИДКОЙ</p>
-          <h3 className={styles.cardTitle}>30%</h3>
-        </div>
-
-        <div
-          onClick={() => {
-            window.dispatchEvent(
-              new CustomEvent("scrollToNewBanner", { detail: 3 })
-            );
-          }}
-          className={styles.card}
-        >
-          <Image
-            src="/assets/home/newBanner/icon-4.webp"
-            alt="Business hit"
-            width={50}
-            height={50}
-            className={styles.cardIcon}
-          />
-          <p className={styles.cardDescription}>ХИТ 2025</p>
-          <h3 className={styles.cardTitle}>ДЛЯ БИЗНЕСА</h3>
+          <p className={styles.cardDescription}>ОФОРМИТЕ</p>
+          <h3 className={styles.cardTitle}>ESIM</h3>
+          <p className={styles.cardTitle}>ЗА 5 МИНУТ</p>
         </div>
 
         <div
@@ -159,33 +135,38 @@ const HomeCards = () => {
         <div
           className={styles.card}
           onClick={() => {
-            window.dispatchEvent(new CustomEvent("scrollToCreditBanner"));
+            window.dispatchEvent(new CustomEvent("scrollToPromotion"));
           }}
           style={{ cursor: "pointer" }}
         >
           <Image
-            src="/assets/home/newBanner/icon-1.webp"
-            alt="Credit offer"
+            src="/assets/home/newBanner/icon-2.webp"
+            alt="Hot offer"
             width={50}
             height={50}
-            className={styles.cardIcon}
+            className={styles.cardIcon1}
           />
-          <p className={styles.cardDescription}>НОМЕРА В РАССРОЧКУ</p>
-          <h3 className={styles.cardTitle}>БЕЗ БАНКА</h3>
-          <p className={styles.cardTitle}>0%</p>
+          <h3 className={styles.cardTitle}>АКЦИИ</h3>
+          <p className={styles.cardDescription}>НА НОМЕРА</p>
         </div>
 
-        <div onClick={() => setOpenEsimModal(true)} className={styles.card}>
+        <div
+          onClick={() => {
+            window.dispatchEvent(
+              new CustomEvent("scrollToNewBanner", { detail: 3 })
+            );
+          }}
+          className={styles.card}
+        >
           <Image
-            src="/assets/home/esim/offer-card.svg"
-            alt="eSIM"
+            src="/assets/home/newBanner/icon-4.webp"
+            alt="Business hit"
             width={50}
             height={50}
             className={styles.cardIcon}
           />
-          <p className={styles.cardDescription}>ОФОРМИТЕ</p>
-          <h3 className={styles.cardTitle}>ESIM</h3>
-          <p className={styles.cardTitle}>ЗА 5 МИНУТ</p>
+          <p className={styles.cardDescription}>ХИТ 2025</p>
+          <h3 className={styles.cardTitle}>ДЛЯ БИЗНЕСА</h3>
         </div>
       </div>
 

@@ -12,10 +12,6 @@ const HeaderBanner = ({ onClose, visible }: HeaderBannerProps) => {
 
   if (!visible) return null;
 
-  const handleBannerClick = () => {
-    router.push("/credit");
-  };
-
   const handleCloseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
 
@@ -25,15 +21,8 @@ const HeaderBanner = ({ onClose, visible }: HeaderBannerProps) => {
   return (
     <div
       className={styles.bannerTop}
-      onClick={handleBannerClick}
       role="banner"
       tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          handleBannerClick();
-        }
-      }}
-      style={{ cursor: "pointer" }}
       aria-label="Выгодная рассрочка до 12 месяцев без банка и без переплат. Нажмите для подробностей."
     >
       <button
