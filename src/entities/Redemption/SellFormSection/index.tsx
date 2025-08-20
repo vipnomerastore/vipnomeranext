@@ -94,7 +94,13 @@ const SellFormSection: React.FC = memo(() => {
         className={styles.redemptionForm}
         onSubmit={handleSubmit(onSubmitHandler)}
       >
-        <Input control={control} name="name" placeholder="Ваше имя" fullWidth />
+        <Input
+          control={control}
+          name="name"
+          placeholder="Ваше имя"
+          fullWidth
+          required
+        />
 
         <MaskedInput fullWidth control={control} name="contactPhone" />
 

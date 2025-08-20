@@ -90,6 +90,7 @@ const EsimModal = ({ isOpen, onClose }: EsimModalProps) => {
           <Input
             control={control}
             name="fio"
+            required
             placeholder="Введите ваше имя"
             fullWidth
           />

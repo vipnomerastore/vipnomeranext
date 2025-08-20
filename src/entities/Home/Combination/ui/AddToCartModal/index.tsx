@@ -102,6 +102,7 @@ const AddToCartModal = ({ isOpen, onClose, item }: GetNumberModalProps) => {
         <form onSubmit={handleSubmit(onSubmitHandler)} className={styles.form}>
           <Input
             control={control}
+            required
             name="fio"
             placeholder="Введите ваше имя"
             fullWidth

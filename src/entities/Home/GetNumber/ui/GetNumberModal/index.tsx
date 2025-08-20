@@ -94,6 +94,7 @@ const GetNumberModal = ({ isOpen, onClose }: GetNumberModalProps) => {
         <form onSubmit={handleSubmit(onSubmitHandler)} className={styles.form}>
           <Input
             name="fio"
+            required
             control={control}
             placeholder="Введите ваше имя"
             fullWidth

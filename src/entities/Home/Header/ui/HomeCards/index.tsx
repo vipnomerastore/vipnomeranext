@@ -75,14 +75,14 @@ const HomeCards = () => {
             height={50}
             className={styles.cardIcon1}
           />
-          <h3 className={styles.cardTitle}>АКЦИИ 50%</h3>
+          <h3 className={styles.cardTitle}>АКЦИИ</h3>
           <p className={styles.cardDescription}>НА НОМЕРА</p>
         </div>
 
         <div
           onClick={() => {
             window.dispatchEvent(
-              new CustomEvent("scrollToNewBanner", { detail: 2 })
+              new CustomEvent("scrollToNewBanner", { detail: 1 })
             );
           }}
           className={styles.card}
@@ -94,8 +94,8 @@ const HomeCards = () => {
             height={50}
             className={styles.cardIcon2}
           />
-          <h3 className={styles.cardTitle}>УНИКАЛЬНЫЙ</h3>
-          <p className={styles.cardDescription}>НОМЕР ДНЯ</p>
+          <h3 className={styles.cardTitle}>VIP НОМЕРА СО СКИДКОЙ</h3>
+          <p className={styles.cardDescription}>50%</p>
         </div>
 
         <div
@@ -120,7 +120,7 @@ const HomeCards = () => {
         <div
           onClick={() => {
             window.dispatchEvent(
-              new CustomEvent("scrollToNewBanner", { detail: 4 })
+              new CustomEvent("scrollToNewBanner", { detail: 3 })
             );
           }}
           className={styles.card}
@@ -139,7 +139,7 @@ const HomeCards = () => {
         <div
           onClick={() => {
             window.dispatchEvent(
-              new CustomEvent("scrollToNewBanner", { detail: 5 })
+              new CustomEvent("scrollToNewBanner", { detail: 4 })
             );
           }}
           className={styles.card}
@@ -188,6 +188,7 @@ const HomeCards = () => {
           <p className={styles.cardTitle}>ЗА 5 МИНУТ</p>
         </div>
       </div>
+
       {openEsimModal && (
         <EsimModal
           isOpen={openEsimModal}
