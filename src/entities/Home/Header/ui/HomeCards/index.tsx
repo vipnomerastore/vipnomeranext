@@ -94,8 +94,8 @@ const HomeCards = () => {
             height={50}
             className={styles.cardIcon2}
           />
-          <h3 className={styles.cardTitle}>VIP НОМЕРА СО СКИДКОЙ</h3>
-          <p className={styles.cardDescription}>50%</p>
+          <p className={styles.cardDescription}>VIP НОМЕРА СО СКИДКОЙ</p>
+          <h3 className={styles.cardTitle}>50%</h3>
         </div>
 
         <div
