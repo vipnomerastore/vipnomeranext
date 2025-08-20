@@ -14,11 +14,10 @@ $secondary-color: #d9ad49;
 
 .popupWrapper {
   max-width: 1166px;
-  border-radius: 20px;
+  border-radius: 40px;
   padding: 40px;
   background: rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(15px);
-  position: relative;
 
   &:after {
     content: "";
@@ -45,28 +44,38 @@ $secondary-color: #d9ad49;
 .popupContent {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
   border: 2px solid #f5ea8f;
-  border-radius: 20px;
+  border-radius: 40px;
   padding: 40px;
-  background: inherit;
   animation: scaleIn 400ms ease-in-out forwards 100ms;
+  width: 100%;
 
   @media (max-width: 767px) {
     padding: 20px;
     gap: 15px;
   }
+}
 
-  .closeButton {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    z-index: 10;
-    transition: filter 0.2s;
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  background: transparent;
+  border: 1px solid #d9ad49;
+  padding: 16px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  color: #d9ad49;
+  transition: filter 0.2s;
+
+  @media (max-width: 767px) {
+    top: -20px;
+    right: -17px;
   }
 }
 
@@ -94,6 +103,7 @@ $secondary-color: #d9ad49;
   @media (max-width: 767px) {
     gap: 10px;
     padding: 6px 12px;
+
     .discountText {
       font-size: 14px;
     }
@@ -103,13 +113,9 @@ $secondary-color: #d9ad49;
 .title {
   font-size: 28px;
   font-weight: 700;
-  color: #ffffff;
-
-  .spantitle {
-    background: linear-gradient($secondary-color, $primary-color);
-    background-clip: text;
-    color: transparent;
-  }
+  background: linear-gradient($secondary-color, $primary-color);
+  background-clip: text;
+  color: transparent;
 
   @media (max-width: 767px) {
     font-size: 20px;
@@ -122,7 +128,7 @@ $secondary-color: #d9ad49;
 }
 
 .text {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 600;
   color: #ffffff;
 
@@ -131,74 +137,44 @@ $secondary-color: #d9ad49;
   }
 }
 
-.form {
+.buttons {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+  gap: 30px;
+  width: 100%;
+  align-items: center;
 
-.inputGroup {
-  display: flex;
-  gap: 10px;
+  .button {
+    max-width: 300px;
+    text-align: center;
+    padding: 20px;
+    background: rgba(51, 165, 235, 1);
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 8px;
+
+    @media (max-width: 767px) {
+      font-size: 12px;
+      flex-direction: column;
+    }
+  }
 
   @media (max-width: 767px) {
+    font-size: 12px;
     flex-direction: column;
-    gap: 15px;
-  }
-}
-
-.errorMessage {
-  color: #ff6b6b;
-  font-size: 12px;
-  margin-top: 4px;
-}
-
-.smallText {
-  font-size: 10px;
-  color: #bababa;
-
-  @media (max-width: 767px) {
-    font-size: 9px;
-  }
-}
-
-.submitButton {
-  width: 150px;
-  height: 44px;
-  border-radius: 10px;
-  font-weight: 700;
-  background: linear-gradient($secondary-color, $primary-color);
-  border: 2px solid $primary-color;
-  color: #000000;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: box-shadow 0.3s;
-
-  &:hover {
-    box-shadow: -1px 6px 22px 2px rgba(219, 203, 0, 0.2);
-  }
-
-  @media (max-width: 767px) {
-    width: 100%;
-    max-width: 250px;
-    height: 40px;
-    font-size: 14px;
-  }
-
-  @media (min-width: 768px) and (max-width: 1024px) {
-    width: 130px;
-    height: 42px;
   }
 }
 
 .popupimg {
   position: absolute;
-  right: -50px;
-  bottom: -50px;
+  right: -100px;
+  bottom: -140px;
   z-index: 3;
 
   img {
-    width: 200px;
+    width: 160px;
     object-fit: contain;
 
     @media (max-width: 767px) {

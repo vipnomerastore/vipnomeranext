@@ -27,6 +27,8 @@ const defaultValues: FormData = {
 
 const LoginModal = ({ isOpen, onClose, onOpenRegister }: LoginModalProps) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const { login } = useAuthStore();
   const { control, reset, handleSubmit } = useForm<FormData>({ defaultValues });
 
@@ -46,6 +48,9 @@ const LoginModal = ({ isOpen, onClose, onOpenRegister }: LoginModalProps) => {
 
   const onSubmitHandler = async (data: FormData) => {
     try {
+      if (isSubmitting) return;
+      setIsSubmitting(true);
+
       await login(data.email, data.password);
 
       onClose();
@@ -53,6 +58,8 @@ const LoginModal = ({ isOpen, onClose, onOpenRegister }: LoginModalProps) => {
       setShowPassword(false);
     } catch (err: unknown) {
       console.error("Ошибка:", err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -114,7 +121,12 @@ const LoginModal = ({ isOpen, onClose, onOpenRegister }: LoginModalProps) => {
             </button>
           </div>
 
-          <Button fullWidth variant="outline">
+          <Button
+            type="submit"
+            fullWidth
+            variant="outline"
+            disabled={isSubmitting}
+          >
             Войти
           </Button>
 
