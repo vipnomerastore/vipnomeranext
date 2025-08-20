@@ -37,7 +37,7 @@ export async function generateMetadata(): Promise<Metadata> {
     keywords:
       region !== "default"
         ? `продать номер ${city}, выкуп номеров ${city}, оценка номера ${city}`
-        : `продать номер, выкуп номеров, оценка номера`,
+        : `продать номер, выкуп номеров, оценка номера, мобильные номера,`,
     openGraph: {
       title: `Продать номер ${cityIn} | vipnomerastore.ru`,
       description: `Выгодно продайте свой красивый номер телефона ${cityIn}.`,

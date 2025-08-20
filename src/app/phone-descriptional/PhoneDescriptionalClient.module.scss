@@ -1,0 +1,370 @@
+@use "../../styles/variables.scss" as *;
+
+// Стили для модального окна
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(5px);
+  padding: 10px; // добавил отступы, чтобы не прилегала к краям экрана на мобиле
+}
+
+// Стили для обычной страницы
+.pageContainer {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+}
+
+.modalDescriptionContent {
+  background: linear-gradient(0deg, #1e1e1e, #1e1e1e),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.01)),
+    radial-gradient(
+      100% 100% at 50% 100%,
+      rgba(217, 173, 73, 0.12) 0%,
+      rgba(253, 252, 164, 0) 100%
+    );
+  overflow: hidden;
+  padding: 50px;
+  border-radius: 40px;
+  max-width: 700px;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+  gap: 40px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  color: #fff;
+
+  @media (max-width: 480px) {
+    padding: 20px;
+    border-radius: 20px;
+    max-width: 100%;
+    width: 100%;
+    gap: 20px;
+  }
+}
+
+.modalDescriptionContent.bronze {
+  color: #cd7f32;
+  border: 2px solid #cd7f32;
+  box-shadow: 0 0 20px 0 #cd7f3244;
+}
+.modalDescriptionContent.silver {
+  color: #c0c0c0;
+  border: 2px solid #c0c0c0;
+  box-shadow: 0 0 24px 0 #c0c0c044;
+}
+.modalDescriptionContent.gold {
+  color: #ffd700;
+  border: 2px solid #ffd700;
+  box-shadow: 0 0 32px 0 #ffd70066;
+}
+
+.modalDescriptionContent.platinum {
+  color: #b9f2ff;
+  border: 2px solid #b9f2ff;
+  box-shadow: 0 0 32px 0 #b9f2ff88;
+}
+
+.modalDescriptionContent.vip {
+  color: #a259ff;
+  border: 2px solid #a259ff;
+  box-shadow: 0 0 32px 0 #a259ff55;
+}
+
+// Усиливаю цвет цены и номера
+.modalDescriptionContent .price span {
+  color: #ffd700;
+  font-weight: 900;
+  font-size: 2.2em;
+  text-shadow: 0 2px 12px #ffd700, 0 0 8px #fff;
+  border-bottom: 3px solid #ffd700;
+  text-decoration: none;
+  padding-bottom: 2px;
+}
+
+.modalText {
+  font-size: 50px;
+  font-weight: 600;
+  line-height: 28px;
+  color: #ffffff;
+  margin: 0;
+
+  @media (max-width: 480px) {
+    font-size: 28px;
+    line-height: 32px;
+  }
+}
+
+.modalSubText {
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 28px;
+  color: #ffffff;
+  margin: 0;
+
+  span {
+    font-size: 20px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    text-shadow: none;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+    line-height: 20px;
+    span {
+      font-size: 16px;
+    }
+  }
+}
+
+.modalDescriptionContent .modalSubText,
+.modalDescriptionContent .descriptionText,
+.modalDescriptionContent .price,
+.modalDescriptionContent .credit {
+  color: #f3f3f3;
+  text-shadow: 0 1px 4px #000, 0 0 2px #fff;
+}
+
+.modalDescriptionContent .modalSubText span,
+.modalDescriptionContent .descriptionText {
+  color: #ffd700;
+  text-shadow: 0 1px 4px #000, 0 0 2px #fff;
+}
+
+.modalDescriptionContent .oformleniyeDescription {
+  color: #fffbe6;
+  text-shadow: 0 1px 4px #000;
+}
+
+.priceWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .price {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 28px;
+    color: #ffffff;
+    margin: 0;
+
+    span {
+      font-size: 28px;
+      font-weight: 600;
+      background: linear-gradient($secondary-color, $primary-color);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      border-bottom: 1px solid;
+      border-image: linear-gradient($secondary-color, $primary-color) 1;
+      width: max-content;
+      display: inline-block;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 18px;
+
+      span {
+        font-size: 20px;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+.credit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 28px;
+  color: #ffffff;
+  margin: 0;
+
+  span {
+    font-size: 16px;
+    font-weight: 600;
+    background: linear-gradient($secondary-color, $primary-color);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-decoration: line-through;
+    padding-top: 5px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+
+    span {
+      font-size: 14px;
+    }
+  }
+}
+
+// Убрать подсветку и градиенты у цены и рассрочки
+.priceWrapper .price span,
+.priceWrapper .credit span,
+.modalDescriptionContent .price span,
+.modalDescriptionContent .credit span {
+  font-weight: 700;
+  background: linear-gradient(92.2deg, #fdfca4 0, #d9ad49 113.53%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #ffd700;
+  border: none;
+  border-bottom: none;
+  text-shadow: none;
+  text-decoration: none;
+  padding-bottom: 0;
+}
+
+.priceWrapper .price span {
+  font-size: 24px;
+}
+
+.priceWrapper .credit span {
+  font-size: 16px;
+  border-bottom: 2px solid;
+  border-image: linear-gradient(92.2deg, #fdfca4 0, #d9ad49 113.53%) 1;
+  display: inline-block;
+  padding-bottom: 1px;
+  vertical-align: middle;
+}
+
+@media (max-width: 480px) {
+  .priceWrapper .price span {
+    font-size: 18px;
+  }
+  .priceWrapper .credit span {
+    font-size: 13px;
+    padding-bottom: 2.5px;
+  }
+}
+
+.oformleniye {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .modalSubText {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 28px;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  .oformleniyeDescription {
+    position: relative;
+    display: inline-block;
+    width: fit-content;
+    background: linear-gradient($secondary-color, $primary-color);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 16px;
+    font-weight: 300;
+    cursor: pointer;
+    padding: 0;
+
+    &::after {
+      content: "";
+      display: block;
+      height: 2px;
+      width: 100%;
+      background: linear-gradient(to right, $secondary-color, $primary-color);
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      border-radius: 1px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .modalSubText {
+      font-size: 16px;
+    }
+    .oformleniyeDescription {
+      font-size: 14px;
+      width: fit-content;
+      &::after {
+        height: 1.5px;
+        bottom: -1.5px;
+      }
+    }
+  }
+}
+
+.modalButtonGroup {
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: 480px) {
+    padding-top: 10px;
+  }
+}
+
+.modalButton {
+  padding: 16px 40px;
+  font-size: 20px;
+  font-weight: 600;
+  border: 1px solid #fdfca4;
+  border-radius: 70px;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  &:hover {
+    background-color: #333333;
+    color: #fdfca4;
+  }
+
+  &:active {
+    background-color: #000000;
+    transform: translateY(1px);
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 40px;
+    width: 100%;
+  }
+}
+
+.descriptionText {
+  font-size: 14px;
+  text-decoration: underline;
+
+  @media (max-width: 480px) {
+    font-size: 11px;
+  }
+}

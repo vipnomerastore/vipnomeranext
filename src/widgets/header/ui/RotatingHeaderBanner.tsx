@@ -42,12 +42,12 @@ const RotatingHeaderBanner = ({
       <CSSTransition
         key={showFirst ? "header" : "second"}
         timeout={500}
-        classNames={{
-          enter: styles.bannerTransitionEnter,
-          enterActive: styles.bannerTransitionEnterActive,
-          exit: styles.bannerTransitionExit,
-          exitActive: styles.bannerTransitionExitActive,
-        }}
+        // classNames={{
+        //   enter: styles.bannerTransitionEnter,
+        //   enterActive: styles.bannerTransitionEnterActive,
+        //   exit: styles.bannerTransitionExit,
+        //   exitActive: styles.bannerTransitionExitActive,
+        // }}
         nodeRef={showFirst ? headerRef : secondRef}
         unmountOnExit
       >
