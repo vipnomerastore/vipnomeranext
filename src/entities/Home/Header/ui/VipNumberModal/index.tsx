@@ -93,6 +93,7 @@ const VipNumberModal = ({ isOpen, onClose }: VipNumberModalProps) => {
           <Input
             control={control}
             name="fio"
+            required
             placeholder="Введите ваше имя"
             fullWidth
           />
