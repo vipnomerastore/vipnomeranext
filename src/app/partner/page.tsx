@@ -37,7 +37,7 @@ export async function generateMetadata(): Promise<Metadata> {
     keywords:
       region !== "default"
         ? `партнёрская программа ${city}, стать партнёром ${city}, продажа номеров ${city}`
-        : `партнёрская программа, стать партнёром, продажа номеров`,
+        : `партнёрская программа, стать партнёром, продажа номеров, мобильные номера,`,
     openGraph: {
       title,
       description,

@@ -1,16 +1,14 @@
 "use client";
 
 import dynamic from "next/dynamic";
+
 import Loader from "@/shared/ui/Loader";
 import HomeHeader from "@/entities/Home/Header";
 import HomePromotion from "@/entities/Home/Promotion";
 import HomeFeature from "@/entities/Home/Feature";
-import HomeCredit from "@/entities/Home/Credit";
 import HomeCombination from "@/entities/Home/Combination";
+import PhoneModalManager from "@/entities/Home/PhoneModal";
 
-const HomeEsim = dynamic(() => import("@/entities/Home/Esim"), {
-  loading: () => <Loader />,
-});
 const HomeQuestion = dynamic(() => import("@/entities/Home/Question"), {
   loading: () => <Loader />,
 });
@@ -45,21 +43,17 @@ const HomePageClient = () => {
 
       <HomePromotion />
 
-      {/* <HomeGallery /> */}
-
       <HomeNeWBanner />
 
       <HomeCreditBanner />
 
       <HomeFeature />
 
-      {/* <HomeEsim /> */}
-
-      {/* <HomeCredit /> */}
-
       <HomeQuestion />
 
       <HomeMap />
+
+      <PhoneModalManager />
     </div>
   );
 };
