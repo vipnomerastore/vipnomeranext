@@ -139,7 +139,12 @@ const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
             </button>
           </div>
 
-          <Button disabled={isSubmitting} fullWidth variant="outline">
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            fullWidth
+            variant="outline"
+          >
             Зарегистрироваться
           </Button>
         </form>
