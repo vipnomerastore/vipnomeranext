@@ -52,11 +52,7 @@ const RotatingHeaderBanner = ({
         unmountOnExit
       >
         <div ref={showFirst ? headerRef : secondRef}>
-          {showFirst ? (
-            <HeaderBanner onClose={handleClose} visible={!hidden} />
-          ) : (
-            <SecondHeaderBanner onClose={handleClose} visible={!hidden} />
-          )}
+          <HeaderBanner onClose={handleClose} visible={true} />
         </div>
       </CSSTransition>
     </SwitchTransition>
