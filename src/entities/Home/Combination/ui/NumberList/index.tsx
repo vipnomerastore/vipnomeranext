@@ -10,21 +10,18 @@ import Image from "next/image";
 
 import { NumberItem, useCartStore } from "@/store/cartStore";
 import { useAuthStore } from "@/store/authStore";
-import { useHydration } from "@/hooks/useHydration";
 import {
   paginationStyle,
   getTierConfig,
   NumberTier,
   getNumberTier,
 } from "./const";
-// import PhoneDescriptionModal from "@/pages/PhoneDescriptionModal";
 import SparkleEffect from "./SparkleEffect";
 import TierStats from "./TierStats";
 import CustomizedMenus from "@/shared/ui/Menu";
-
-import styles from "./NumberList.module.scss";
 import AddToCartModal from "../AddToCartModal";
-import { useForm } from "react-hook-form";
+import PhoneDescriptionModal from "@/app/phone-descriptional/PhoneDescriptionalClient";
+import styles from "./NumberList.module.scss";
 
 const operatorIcons: Record<string, string> = {
   МТС: "/assets/home/operators/mts.svg",
@@ -199,6 +196,22 @@ const NumberList: React.FC<NumberListProps> = memo((props) => {
     isDefaultFilters,
   ]);
 
+  const handleNumberClick = useCallback(
+    (numberItem: NumberItem) => {
+      const params = new URLSearchParams({
+        id: numberItem.id,
+        phone: numberItem.phone || "",
+        price: numberItem.price?.toString() || "0",
+        operator: numberItem.operator || "",
+        region: numberItem.region.join(","),
+        modal: "true", // Добавляем параметр для модального режима
+      });
+
+      router.push(`/?${params.toString()}`);
+    },
+    [router]
+  );
+
   const handleAddToCart = useCallback(
     (item: NumberItem) => {
       // const cartItem = {
@@ -281,7 +294,11 @@ const NumberList: React.FC<NumberListProps> = memo((props) => {
 
     return (
       <div className={styles.numberWrapper} key={numberItem.id}>
-        <div className={`${styles.numberItem} ${styles[tierKey]}`}>
+        <div
+          className={`${styles.numberItem} ${styles[tierKey]}`}
+          onClick={() => handleNumberClick(numberItem)}
+          style={{ cursor: "pointer" }}
+        >
           <SparkleEffect
             tierConfig={getTierConfig(numberItem.price || 0)}
             isVisible
@@ -380,7 +397,10 @@ const NumberList: React.FC<NumberListProps> = memo((props) => {
             <button
               type="button"
               className={styles.numberItemCart}
-              onClick={() => handleAddToCart(numberItem)}
+              onClick={(e) => {
+                e.stopPropagation(); // Предотвращаем всплытие события
+                handleAddToCart(numberItem);
+              }}
               aria-label={`Добавить номер ${numberItem.phone} в корзину`}
             >
               <Image
@@ -482,16 +502,15 @@ const NumberList: React.FC<NumberListProps> = memo((props) => {
         </div>
       )}
 
-      {/* {showDescriptionModal && selectedNumber && (
+      {showDescriptionModal && selectedNumber && (
         <div>
-           <PhoneDescriptionModal
+          <PhoneDescriptionModal
             number={selectedNumber}
             isPartner={isPartner}
-            onClose={handleCloseModal}
-            onAddToCart={handleAddToCart}
-          /> 
+            onClose={() => setShowDescriptionModal(false)}
+          />
         </div>
-      )} */}
+      )}
 
       <AddToCartModal
         isOpen={openAddToCartModal}

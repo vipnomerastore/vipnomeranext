@@ -5,6 +5,7 @@ import LocalBusinessSchema from "@/schemas/LocalBusinessSchema";
 import OrganizationSchema from "@/schemas/OrganizationSchema";
 import WebSiteSchema from "@/schemas/WebSiteSchema";
 import { regionName } from "@/shared/utils";
+import regionsData from "./regions-data.json";
 import { getServerRegion } from "@/hooks/useServerRegion";
 
 // Принудительно делаем страницу динамической для лучшего SEO
@@ -18,23 +19,74 @@ export async function generateMetadata(): Promise<Metadata> {
       ? `https://${region}.vipnomerastore.ru`
       : `https://vipnomerastore.ru`;
 
+  // Найти данные по городу в regions-data.json
+  let regionMeta = null;
+
+  if (region !== "default") {
+    regionMeta = regionsData.find((item) => item["Город"] === city);
+  }
+
   const title =
-    region !== "default"
+    regionMeta?.Title ||
+    (region !== "default"
       ? `Купить красивый номер телефона ${city} | vipnomerastore.ru`
-      : `Купить красивый номер телефона | vipnomerastore.ru`;
+      : `Купить красивый номер телефона | vipnomerastore.ru`);
 
   const description =
-    region !== "default"
+    regionMeta?.Description ||
+    (region !== "default"
       ? `Купите красивые номера телефонов с доставкой ${city}. Большой выбор эксклюзивных номеров от МТС, Билайн, Мегафон, Теле2, Йота. Быстрая доставка и лучшие цены.`
-      : `Купите красивые номера телефонов с доставкой по России. Большой выбор эксклюзивных номеров от МТС, Билайн, Мегафон, Теле2, Йота. Быстрая доставка и лучшие цены.`;
+      : `Купите красивые номера телефонов с доставкой по России. Большой выбор эксклюзивных номеров от МТС, Билайн, Мегафон, Теле2, Йота. Быстрая доставка и лучшие цены.`);
 
   return {
     title,
     description,
     keywords:
-      region !== "default"
-        ? `красивые номера, купить номер телефона, доставка номеров, номера телефонов, ${city}`
-        : `красивые номера, купить номер телефона, доставка номеров, номера телефонов`,
+      region === "default"
+        ? `Купить красивый номер,
+Красивый номер телефона,
+Красивый мобильный номер,
+Красивый номер,
+Элитный номер,
+Вип номер,
+VIP номер,
+Золотой номер,
+Красивый локальный номер,
+Красивый городской номер,
+Красивый короткий номер,
+Красивый номер МТС,
+Красивый номер Билайн,
+Красивый номер Мегафон,
+Красивый номер Теле2,
+Красивый номер Йота,
+Красивый номер Т-банк,
+Красивый номер Yota,
+Красивый номер ВТБ,
+Красивый номер СБЕР,
+Уникальный номер,
+Эксклюзивный номер`
+        : `Купить красивый номер ${city},
+Красивый номер телефона ${city},
+Красивый мобильный номер ${city},
+Красивый номер ${city},
+Элитный номер ${city},
+Вип номер ${city},
+VIP номер ${city},
+Золотой номер ${city},
+Красивый локальный номер ${city},
+Красивый городской номер ${city},
+Красивый короткий номер ${city},
+Красивый номер МТС ${city},
+Красивый номер Билайн ${city},
+Красивый номер Мегафон ${city},
+Красивый номер Теле2 ${city},
+Красивый номер Йота ${city},
+Красивый номер Т-банк ${city},
+Красивый номер Yota ${city},
+Красивый номер ВТБ ${city},
+Красивый номер СБЕР ${city},
+Уникальный номер,
+Эксклюзивный номер`,
     openGraph: {
       title,
       description,
@@ -52,9 +104,10 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title,
       description:
-        region !== "default"
+        regionMeta?.Description ||
+        (region !== "default"
           ? `Купите красивый номер телефона с доставкой ${city}. Большой выбор номеров, удобный поиск и быстрая доставка.`
-          : `Купите красивый номер телефона с доставкой по России. Большой выбор номеров, удобный поиск и быстрая доставка.`,
+          : `Купите красивый номер телефона с доставкой по России. Большой выбор номеров, удобный поиск и быстрая доставка.`),
     },
     robots: {
       index: true,
