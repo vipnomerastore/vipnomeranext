@@ -101,7 +101,7 @@ const HomeCards = () => {
         <div
           onClick={() => {
             window.dispatchEvent(
-              new CustomEvent("scrollToNewBanner", { detail: 1 })
+              new CustomEvent("scrollToNewBanner", { detail: 0 })
             );
           }}
           className={styles.card}
@@ -113,7 +113,7 @@ const HomeCards = () => {
             height={50}
             className={styles.cardIcon}
           />
-          <p className={styles.cardDescription}>VIP НОМЕРА СО СКИДКОЙ</p>
+          <p className={styles.cardDescription}>VIP НОМЕР СО СКИДКОЙ</p>
           <h3 className={styles.cardTitle}>30%</h3>
         </div>
 
