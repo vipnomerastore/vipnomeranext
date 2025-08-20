@@ -55,7 +55,7 @@ const GetNumberModal = ({ isOpen, onClose }: GetNumberModalProps) => {
 
       const payload = {
         data: {
-          fio: data.fio,
+          name: data.fio,
           phone: data.phone,
         },
       };
