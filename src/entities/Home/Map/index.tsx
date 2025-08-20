@@ -106,6 +106,7 @@ const HomeMap = () => {
                 type="text"
                 placeholder="Введите ваше имя"
                 name="fio"
+                required
                 fullWidth
               />
 

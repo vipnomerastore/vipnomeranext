@@ -129,7 +129,12 @@ const Popup = () => {
             onSubmit={handleSubmit(onSubmitHandler)}
           >
             <div className={styles.inputGroup}>
-              <Input control={control} name="name" placeholder="Ваше имя" />
+              <Input
+                control={control}
+                name="name"
+                placeholder="Ваше имя"
+                required
+              />
 
               <MaskedInput name="phone" control={control} />
             </div>
