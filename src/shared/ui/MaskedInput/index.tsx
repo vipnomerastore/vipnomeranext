@@ -63,25 +63,36 @@ const MaskedInput = (props: MaskedInputProps) => {
             return true;
           },
         }}
-        render={({ field, fieldState: { error } }) => (
-          <>
-            <ReactMaskedInput
-              {...field}
-              mask={phoneMask}
-              type="tel"
-              name={name}
-              placeholder="Номер телефона"
-              className={`${styles.input} ${error ? styles.error : ""}`}
-              disabled={disabled}
-              aria-label="Номер телефона"
-              style={{ minWidth: fullWidth ? "100%" : "150px" }}
-            />
+        render={({ field, fieldState: { error } }) => {
+          const handleClick = (e: React.MouseEvent<HTMLInputElement>) => {
+            const input = e.target as HTMLInputElement;
+            // Устанавливаем курсор в начало после маски "+7 ("
+            setTimeout(() => {
+              input.setSelectionRange(4, 4);
+            }, 0);
+          };
 
-            {error && (
-              <span className={styles.errorMessage}>{error.message}</span>
-            )}
-          </>
-        )}
+          return (
+            <>
+              <ReactMaskedInput
+                {...field}
+                mask={phoneMask}
+                type="tel"
+                name={name}
+                placeholder="Номер телефона"
+                className={`${styles.input} ${error ? styles.error : ""}`}
+                disabled={disabled}
+                aria-label="Номер телефона"
+                style={{ minWidth: fullWidth ? "100%" : "150px" }}
+                onClick={handleClick}
+              />
+
+              {error && (
+                <span className={styles.errorMessage}>{error.message}</span>
+              )}
+            </>
+          );
+        }}
       />
     </div>
   );
