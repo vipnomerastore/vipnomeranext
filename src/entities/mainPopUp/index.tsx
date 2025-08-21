@@ -37,7 +37,7 @@ const Popup = () => {
 
     const timer = setTimeout(() => {
       setIsOpen(true);
-    }, 60000);
+    }, 45000);
 
     const handleOutsideClick = (e: MouseEvent) => {
       if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
@@ -95,7 +95,7 @@ const Popup = () => {
             </Link>
 
             <Image
-              src="/assets/popup/gift.svg"
+              src="/assets/popup/tg.png"
               width={52}
               height={52}
               alt="gift"
