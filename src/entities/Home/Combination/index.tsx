@@ -173,6 +173,121 @@ const HomeCombination = () => {
   const params = useParams();
   const urlPhone = typeof params.phone === "string" ? params.phone : "";
 
+  // Вспомогательная функция для обратного поиска последнего элемента
+  const findLastIndexHelper = useCallback(
+    (arr: string[], predicate: (item: string) => boolean) => {
+      for (let i = arr.length - 1; i >= 0; i--) {
+        if (predicate(arr[i])) return i;
+      }
+      return -1;
+    },
+    []
+  );
+
+  // Функция для определения позиции ввода в маске
+  const getInputPosition = useCallback(
+    (criteria: string[]) => {
+      const firstIndex = criteria.findIndex((c) => c !== "");
+      const lastIndex = findLastIndexHelper(criteria, (c) => c !== "");
+      return { first: firstIndex, last: lastIndex };
+    },
+    [findLastIndexHelper]
+  );
+
+  // Функция для создания паттерна из критериев
+  const createPattern = useCallback((criteria: string[]) => {
+    return criteria.filter((c) => c !== "").join("");
+  }, []);
+
+  // Функция для нормализации символов маски (поддержка русских и английских букв)
+  const normalizeMaskSymbol = useCallback((symbol: string) => {
+    return symbol.toUpperCase();
+  }, []);
+
+  // Функция для проверки, является ли символ буквой (английской или русской)
+  const isLetter = useCallback((char: string) => {
+    return /^[A-Z\u0410-\u042f]$/i.test(char);
+  }, []);
+
+  // Гибкая система скоринга для фильтрации
+  const calculateMatchScore = useCallback(
+    (phone: string, criteria: string[], isExact: boolean) => {
+      const digits = phone.replace(/[\s+]/g, "").slice(-10);
+      const pattern = createPattern(criteria);
+
+      if (!pattern) return 0;
+
+      if (isExact) {
+        // Для точного поиска
+        const { first, last } = getInputPosition(criteria);
+
+        // Точное совпадение по позиции - максимальный приоритет
+        const exactMatch = criteria.every(
+          (char, i) => !char || digits[i] === char
+        );
+        if (exactMatch) return 1000 + pattern.length;
+
+        // Если ввод в последних позициях - ищем окончания
+        if (last >= 7) {
+          if (digits.endsWith(pattern)) return 950 + pattern.length;
+
+          // Ищем частичные совпадения в конце с уменьшающимся приоритетом
+          for (let len = pattern.length - 1; len >= 1; len--) {
+            const partialPattern = pattern.slice(-len);
+            if (digits.endsWith(partialPattern)) {
+              return 850 - (pattern.length - len) * 50 + len;
+            }
+          }
+        }
+
+        // Если ввод в первых позициях - ищем начала
+        if (first <= 2) {
+          const phoneStart = digits.slice(1); // Убираем код страны
+          if (phoneStart.startsWith(pattern)) return 900 + pattern.length;
+
+          // Частичные совпадения в начале
+          for (let len = pattern.length - 1; len >= 1; len--) {
+            const partialPattern = pattern.slice(0, len);
+            if (phoneStart.startsWith(partialPattern)) {
+              return 800 - (pattern.length - len) * 50 + len;
+            }
+          }
+        }
+
+        // Общий поиск подстроки как fallback
+        if (digits.includes(pattern)) return 600;
+
+        return 0;
+      } else {
+        // Для поиска по маске - улучшенная логика с поддержкой русских букв
+        const letterToDigit = new Map<string, string>();
+        const usedDigits = new Set<string>();
+
+        for (let i = 0; i < 10; i++) {
+          const m = criteria[i];
+          const d = digits[i];
+          if (!m) continue;
+
+          // Нормализуем символ маски (приводим к верхнему регистру)
+          const normalizedMask = normalizeMaskSymbol(m);
+
+          if (letterToDigit.has(normalizedMask)) {
+            if (letterToDigit.get(normalizedMask) !== d) return 0;
+          } else {
+            if (usedDigits.has(d)) return 0;
+            letterToDigit.set(normalizedMask, d);
+            usedDigits.add(d);
+          }
+        }
+
+        // Дополнительные баллы за использование букв (поощряем сложные маски)
+        const letterCount = criteria.filter((c) => c && isLetter(c)).length;
+        return 1000 + pattern.length + letterCount * 10;
+      }
+    },
+    [getInputPosition, createPattern, normalizeMaskSymbol, isLetter]
+  );
+
   const matchesExact = useCallback((phone: string, criteria: string[]) => {
     const digits = phone.replace(/[\s+]/g, "").slice(-10);
 
@@ -185,17 +300,20 @@ const HomeCombination = () => {
     const usedDigits = new Set<string>();
 
     for (let i = 0; i < 10; i++) {
-      const m = mask[i],
-        d = digits[i];
+      const m = mask[i];
+      const d = digits[i];
 
       if (!m) continue;
 
-      if (letterToDigit.has(m)) {
-        if (letterToDigit.get(m) !== d) return false;
+      // Нормализуем символ маски (поддержка русских и английских букв)
+      const normalizedMask = m.toUpperCase();
+
+      if (letterToDigit.has(normalizedMask)) {
+        if (letterToDigit.get(normalizedMask) !== d) return false;
       } else {
         if (usedDigits.has(d)) return false;
 
-        letterToDigit.set(m, d);
+        letterToDigit.set(normalizedMask, d);
         usedDigits.add(d);
       }
     }
@@ -232,28 +350,43 @@ const HomeCombination = () => {
   );
 
   const filteredNumbers = useMemo(() => {
-    return allNumbers.filter((item) => {
+    let scored: (ExtendedNumberItem & { matchScore: number })[] = [];
+
+    allNumbers.forEach((item) => {
       const priceMatch =
         item.price! >= filterPrice[0] && item.price! <= filterPrice[1];
       const operatorMatch =
         operator === "Все операторы" || item.operator === operator;
       const birthMatch = matchesBirthNumber(item.phone!, birthNumber);
-
       const bestNumMatch = matchesBestNumberCombined(item.phone!, bestNumber);
 
-      let numberMatch = true;
-
-      if (filterNumber.some((n) => n !== "")) {
-        numberMatch =
-          filterActiveMaskTab === 0
-            ? matchesExact(item.phone!, filterNumber)
-            : matchesMask(item.phone!, filterNumber);
+      if (!priceMatch || !operatorMatch || !birthMatch || !bestNumMatch) {
+        return; // Исключаем номера, не прошедшие базовые фильтры
       }
 
-      return (
-        priceMatch && operatorMatch && birthMatch && bestNumMatch && numberMatch
-      );
+      let matchScore = 0;
+
+      if (filterNumber.some((n) => n !== "")) {
+        matchScore = calculateMatchScore(
+          item.phone!,
+          filterNumber,
+          filterActiveMaskTab === 0
+        );
+
+        // Если нет совпадений с фильтром по номеру, исключаем
+        if (matchScore === 0) return;
+      } else {
+        // Если фильтр по номеру не активен, даем базовый балл
+        matchScore = 500;
+      }
+
+      scored.push({ ...item, matchScore });
     });
+
+    // Сортируем по релевантности (чем выше score, тем лучше)
+    return scored
+      .sort((a, b) => b.matchScore - a.matchScore)
+      .map(({ matchScore, ...item }) => item); // Убираем matchScore из результата
   }, [
     allNumbers,
     filterPrice,
@@ -262,8 +395,7 @@ const HomeCombination = () => {
     bestNumber,
     filterNumber,
     filterActiveMaskTab,
-    matchesExact,
-    matchesMask,
+    calculateMatchScore,
     matchesBirthNumber,
     matchesBestNumberCombined,
   ]);
@@ -271,38 +403,47 @@ const HomeCombination = () => {
   const sortedNumbers = useMemo(() => {
     const endings = regionEndingsMap[region] || [];
 
-    const prioritizedNumbers = [...filteredNumbers].sort((a, b) => {
-      const aEndsWith = endings.some((end) =>
-        a.phone?.replace(/\D/g, "").endsWith(end)
-      );
-      const bEndsWith = endings.some((end) =>
-        b.phone?.replace(/\D/g, "").endsWith(end)
-      );
+    // Приоритизируем по региону, но сохраняем порядок по релевантности
+    let prioritizedNumbers = [...filteredNumbers];
 
-      if (aEndsWith && !bEndsWith) return -1;
-      if (!aEndsWith && bEndsWith) return 1;
+    // Только если нет активной сортировки, применяем региональные приоритеты
+    if (sortBy === "none" || order === "none") {
+      prioritizedNumbers = prioritizedNumbers.sort((a, b) => {
+        const aEndsWith = endings.some((end) =>
+          a.phone?.replace(/\D/g, "").endsWith(end)
+        );
+        const bEndsWith = endings.some((end) =>
+          b.phone?.replace(/\D/g, "").endsWith(end)
+        );
 
-      // fallback: регион приоритет
-      const isAInRegion = a.region?.includes(region);
-      const isBInRegion = b.region?.includes(region);
+        if (aEndsWith && !bEndsWith) return -1;
+        if (!aEndsWith && bEndsWith) return 1;
 
-      if (isAInRegion && !isBInRegion) return -1;
-      if (!isAInRegion && isBInRegion) return 1;
+        // fallback: регион приоритет
+        const isAInRegion = a.region?.includes(region);
+        const isBInRegion = b.region?.includes(region);
 
-      return 0;
-    });
+        if (isAInRegion && !isBInRegion) return -1;
+        if (!isAInRegion && isBInRegion) return 1;
 
-    if (sortBy === "none" || order === "none") return prioritizedNumbers;
+        return 0;
+      });
+    }
 
-    return prioritizedNumbers.sort((a, b) => {
-      if (sortBy === "price")
-        return order === "asc" ? a.price! - b.price! : b.price! - a.price!;
-      if (sortBy === "phone")
-        return order === "asc"
-          ? a.phone!.localeCompare(b.phone!)
-          : b.phone!.localeCompare(a.phone!);
-      return 0;
-    });
+    // Применяем дополнительную сортировку, если она активна
+    if (sortBy !== "none" && order !== "none") {
+      return prioritizedNumbers.sort((a, b) => {
+        if (sortBy === "price")
+          return order === "asc" ? a.price! - b.price! : b.price! - a.price!;
+        if (sortBy === "phone")
+          return order === "asc"
+            ? a.phone!.localeCompare(b.phone!)
+            : b.phone!.localeCompare(a.phone!);
+        return 0;
+      });
+    }
+
+    return prioritizedNumbers;
   }, [filteredNumbers, sortBy, order, region]);
 
   const fetchFirst20Numbers = useCallback(async () => {
