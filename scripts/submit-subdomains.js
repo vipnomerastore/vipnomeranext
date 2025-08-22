@@ -19,7 +19,7 @@ const regions = [
   "omsk",
   "smr",
   "rostov",
-  "ufa", //
+  "ufa",
   "krsk",
   "perm",
   "voronezh",
@@ -32,7 +32,7 @@ const regions = [
   "barnaul",
   "ulyanovsk",
   "irkutsk",
-  "habarovsk",
+  "habarovsk", //
   "yaroslavl",
   "vladivostok",
   "mahachkala",
