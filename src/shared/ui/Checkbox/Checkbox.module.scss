@@ -36,7 +36,7 @@
 
 /* кастомный квадрат */
 .checkboxCustom {
-  width: 30px;
+  min-width: 20px;
   height: 20px;
   border: 2px solid $primary-color;
   border-radius: 4px;
