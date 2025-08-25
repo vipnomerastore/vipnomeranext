@@ -19,6 +19,7 @@ const HeaderContent = ({ openModal }: HeaderContentProps) => {
         />
         <span className={styles.eliteText}>Элитные</span>
       </div>
+
       <h1 className={styles.mainTitle}>
         НОМЕРА <span className={styles.block}>ТЕЛЕФОНОВ</span>
         <span className={styles.description}>

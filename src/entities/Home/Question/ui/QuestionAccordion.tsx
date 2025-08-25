@@ -61,6 +61,7 @@ const QuestionAccordion = () => {
     <div className={styles.questionList}>
       {items.map(({ id, title, content }) => {
         const isOpen = id === openId;
+
         return (
           <div key={id} className={styles.accordionItem}>
             <button
@@ -74,6 +75,7 @@ const QuestionAccordion = () => {
               id={`header-${id}`}
             >
               <h3>{title}</h3>
+
               <div className={styles.endIcon}>
                 <Image
                   src="/assets/home/question/arrow.svg"

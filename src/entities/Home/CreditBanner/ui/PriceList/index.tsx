@@ -25,7 +25,7 @@ const PriceList: React.FC<PriceListProps> = (props) => {
   } = props;
 
   return (
-    <div className={styles.sixthActionPrices}>
+    <div className={styles.creditPrices}>
       {phoneNumbers.map((number) => (
         <div key={number.id} style={{ position: "relative", zIndex: 10 }}>
           <PriceCard
