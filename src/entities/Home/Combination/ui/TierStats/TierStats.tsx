@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 
 import { NumberItem } from "@/store/cartStore";
-import { NumberTier, getNumberTier, TIER_CONFIGS } from "./const";
+import { NumberTier, getNumberTier, TIER_CONFIGS } from "../NumberList/const";
 import styles from "./TierStats.module.scss";
 
 interface TierStatsProps {

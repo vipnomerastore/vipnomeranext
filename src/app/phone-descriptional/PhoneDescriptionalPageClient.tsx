@@ -4,7 +4,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useCartStore } from "@/store/cartStore";
 import { useAuthStore } from "@/store/authStore";
-import { toast } from "react-hot-toast";
 import PhoneDescriptionalContent from "./PhoneDescriptionalContent";
 import { NumberItem } from "@/store/cartStore";
 
@@ -75,18 +74,10 @@ export default function PhoneDescriptionalPageClient({
       .items.some((i) => i.phone === cartItem.phone);
 
     if (isAlreadyInCart) {
-      toast.error(`Номер ${item.phone} уже в корзине!`, {
-        duration: 6000,
-        position: "top-right",
-      });
       return;
     }
 
     addItem(cartItem);
-    toast.success(`Номер ${item.phone} добавлен в корзину!`, {
-      duration: 3000,
-      position: "top-right",
-    });
 
     router.push("/cart");
   };

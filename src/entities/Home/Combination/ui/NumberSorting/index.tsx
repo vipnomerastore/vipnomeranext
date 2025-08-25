@@ -1,11 +1,8 @@
 import { memo, useCallback, useState } from "react";
-import toast from "react-hot-toast";
 
 import { useAuthStore } from "@/store/authStore";
-import OperatorSelect from "../OperatorSelect";
-import BirthNumberSelect from "../BirthNumberSelect";
 import { getNumberTier } from "../NumberList/const";
-
+import Menu from "@/shared/ui/Menu";
 import styles from "./NumberSorting.module.scss";
 
 interface GroupedNumbers {
@@ -110,16 +107,8 @@ const NumberSort = (props: NumberSortProps) => {
 
     try {
       await navigator.clipboard.writeText(numbersText);
-
-      toast.success("Номера скопированы в буфер обмена!", {
-        duration: 3000,
-        position: "top-right",
-      });
     } catch (error) {
-      toast.error("Не удалось скопировать номера.", {
-        duration: 3000,
-        position: "top-right",
-      });
+      console.log(error);
     }
   }, [filteredNumbers, isPartner]);
 
@@ -153,16 +142,48 @@ const NumberSort = (props: NumberSortProps) => {
 
       <div className={filtersVisible ? styles.filters : styles.filtersHidden}>
         <div className={styles.selectFilters}>
-          <div className={styles.operatorsFilter}>
-            <OperatorSelect operator={operator} setOperator={setOperator} />
-          </div>
+          <Menu
+            value={operator}
+            onChange={(opt) => setOperator(opt.value!)}
+            options={[
+              { label: "Все операторы", value: "Все операторы" },
+              {
+                value: "МТС",
+                label: "МТС",
+                icon: "/assets/home/operators/mts.svg",
+              },
+              {
+                value: "Билайн",
+                label: "Билайн",
+                icon: "/assets/home/operators/beeline.svg",
+              },
 
-          <div className={styles.operatorsFilter}>
-            <BirthNumberSelect
-              birthNumber={birthNumber}
-              setBirthNumber={setBirthNumber}
-            />
-          </div>
+              {
+                value: "Мегафон",
+                label: "Мегафон",
+                icon: "/assets/home/operators/megafon.svg",
+              },
+              {
+                value: "Теле 2",
+                label: "Теле 2",
+                icon: "/assets/home/promotion/tele2.svg",
+              },
+            ]}
+          />
+
+          <Menu
+            value={birthNumber}
+            onChange={(opt) => setBirthNumber(opt.value!)}
+            options={[
+              { value: "Год рождения", label: "Год рождения" },
+              { value: "1960-е", label: "1960-е" },
+              { value: "1970-е", label: "1970-е" },
+              { value: "1980-е", label: "1980-е" },
+              { value: "1990-е", label: "1990-е" },
+              { value: "2000-е", label: "2000-е" },
+              { value: "2010-е", label: "2010-е" },
+            ]}
+          />
         </div>
       </div>
     </div>

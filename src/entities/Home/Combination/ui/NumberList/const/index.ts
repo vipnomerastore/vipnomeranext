@@ -135,3 +135,31 @@ export const TIER_FILTER_OPTIONS = [
   { value: NumberTier.PLATINUM, label: "До 150 000 ₽" },
   { value: NumberTier.VIP, label: "От 150 000 ₽" },
 ];
+
+export const operatorIcons: Record<string, string> = {
+  МТС: "/assets/home/operators/mts.svg",
+  Билайн: "/assets/home/operators/beeline.svg",
+  Мегафон: "/assets/home/operators/megafon.svg",
+  "Теле 2": "/assets/home/promotion/tele2.svg",
+};
+
+export const defaultOperatorIcon = "/assets/home/operators/megafon.svg";
+
+export const tierOrderForDisplay = [
+  NumberTier.BRONZE,
+  NumberTier.SILVER,
+  NumberTier.GOLD,
+  NumberTier.PLATINUM,
+  NumberTier.VIP,
+];
+
+export const defaultFilterValues = {
+  sortBy: "none",
+  order: "none",
+  operator: "Все операторы",
+  region: "Регионы",
+  birthNumber: "Год рождения",
+  minPrice: 1000,
+  maxPrice: 500000000,
+  activeMaskTab: 0,
+} as const;

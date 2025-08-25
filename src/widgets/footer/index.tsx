@@ -6,7 +6,7 @@ import ScrollNavLink from "../header/ui/ScrollNavLink";
 import styles from "./footer.module.scss";
 
 const Footer = () => (
-  <section className={styles.footerWrapper}>
+  <section className={styles.wrapper}>
     <div className={styles.footer}>
       <div className={styles.left}>
         <Link href="/" aria-label="На главную">

@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from "react";
-import { CSSTransition, SwitchTransition } from "react-transition-group";
 
 import HeaderBanner from "./HeaderBanner";
 import SecondHeaderBanner from "./SecondHeaderBanner";
@@ -38,24 +37,9 @@ const RotatingHeaderBanner = ({
   if (hidden) return null;
 
   return (
-    <SwitchTransition mode="out-in">
-      <CSSTransition
-        key={showFirst ? "header" : "second"}
-        timeout={500}
-        // classNames={{
-        //   enter: styles.bannerTransitionEnter,
-        //   enterActive: styles.bannerTransitionEnterActive,
-        //   exit: styles.bannerTransitionExit,
-        //   exitActive: styles.bannerTransitionExitActive,
-        // }}
-        nodeRef={showFirst ? headerRef : secondRef}
-        unmountOnExit
-      >
-        <div ref={showFirst ? headerRef : secondRef}>
-          <HeaderBanner onClose={handleClose} visible={true} />
-        </div>
-      </CSSTransition>
-    </SwitchTransition>
+    <div ref={showFirst ? headerRef : secondRef}>
+      <HeaderBanner onClose={handleClose} visible={true} />
+    </div>
   );
 };
 
