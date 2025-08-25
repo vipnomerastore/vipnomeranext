@@ -173,11 +173,36 @@ const HomeCombination = () => {
   const params = useParams();
   const urlPhone = typeof params.phone === "string" ? params.phone : "";
 
-  const matchesExact = useCallback((phone: string, criteria: string[]) => {
-    const digits = phone.replace(/[\s+]/g, "").slice(-10);
+  const matchesExactHierarchy = useCallback(
+    (phone: string, criteria: string[]): number => {
+      const digits = phone.replace(/[\s+]/g, "").slice(-10);
 
-    return criteria.every((char, i) => !char || digits[i] === char);
-  }, []);
+      const lastIndex = criteria.reduce((acc, c, i) => (c ? i : acc), -1);
+      if (lastIndex === -1) return 0;
+
+      for (let len = lastIndex + 1; len >= 2; len--) {
+        let matchCount = 0;
+
+        for (let i = 0; i < len; i++) {
+          const c = criteria[criteria.length - len + i];
+          if (!c) continue;
+
+          const digitIndex = digits.length - len + i;
+          if (digits[digitIndex] === c) {
+            matchCount++;
+          } else {
+            matchCount = -1;
+            break;
+          }
+        }
+
+        if (matchCount >= 2) return matchCount;
+      }
+
+      return 0;
+    },
+    []
+  );
 
   const matchesMask = useCallback((phone: string, mask: string[]) => {
     const digits = phone.replace(/[\s+]/g, "").slice(-10);
@@ -232,28 +257,71 @@ const HomeCombination = () => {
   );
 
   const filteredNumbers = useMemo(() => {
-    return allNumbers.filter((item) => {
+    const nonEmptyCriteriaLength = filterNumber.filter(Boolean).length;
+
+    // сначала ищем полное совпадение
+    let results = allNumbers.filter((item) => {
       const priceMatch =
         item.price! >= filterPrice[0] && item.price! <= filterPrice[1];
       const operatorMatch =
         operator === "Все операторы" || item.operator === operator;
       const birthMatch = matchesBirthNumber(item.phone!, birthNumber);
-
       const bestNumMatch = matchesBestNumberCombined(item.phone!, bestNumber);
 
-      let numberMatch = true;
+      const numberMatchLength = matchesExactHierarchy(
+        item.phone!,
+        filterNumber
+      );
 
-      if (filterNumber.some((n) => n !== "")) {
-        numberMatch =
-          filterActiveMaskTab === 0
-            ? matchesExact(item.phone!, filterNumber)
-            : matchesMask(item.phone!, filterNumber);
-      }
+      const numberMatch =
+        filterActiveMaskTab === 0
+          ? numberMatchLength === nonEmptyCriteriaLength
+          : matchesMask(item.phone!, filterNumber);
 
       return (
         priceMatch && operatorMatch && birthMatch && bestNumMatch && numberMatch
       );
     });
+
+    // если полного совпадения нет, ищем **максимальное совпадение** >1
+    if (results.length === 0 && filterNumber.some((n) => n !== "")) {
+      let maxMatchLength = 0;
+
+      // сначала найдём максимальную длину совпадения среди всех номеров
+      allNumbers.forEach((item) => {
+        const matchLength = matchesExactHierarchy(item.phone!, filterNumber);
+        if (matchLength > maxMatchLength) maxMatchLength = matchLength;
+      });
+
+      // фильтруем только номера с этой максимальной длиной
+      results = allNumbers.filter((item) => {
+        const priceMatch =
+          item.price! >= filterPrice[0] && item.price! <= filterPrice[1];
+        const operatorMatch =
+          operator === "Все операторы" || item.operator === operator;
+        const birthMatch = matchesBirthNumber(item.phone!, birthNumber);
+        const bestNumMatch = matchesBestNumberCombined(item.phone!, bestNumber);
+
+        const numberMatchLength = matchesExactHierarchy(
+          item.phone!,
+          filterNumber
+        );
+        const numberMatch =
+          filterActiveMaskTab === 0
+            ? numberMatchLength === maxMatchLength && numberMatchLength >= 2
+            : matchesMask(item.phone!, filterNumber);
+
+        return (
+          priceMatch &&
+          operatorMatch &&
+          birthMatch &&
+          bestNumMatch &&
+          numberMatch
+        );
+      });
+    }
+
+    return results;
   }, [
     allNumbers,
     filterPrice,
@@ -262,7 +330,7 @@ const HomeCombination = () => {
     bestNumber,
     filterNumber,
     filterActiveMaskTab,
-    matchesExact,
+    matchesExactHierarchy,
     matchesMask,
     matchesBirthNumber,
     matchesBestNumberCombined,
