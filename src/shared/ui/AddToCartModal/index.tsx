@@ -1,21 +1,23 @@
 "use client";
 
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 
 import { SERVER_URL } from "@/shared/api";
-import Button from "@/shared/ui/Button";
+import { NumberItem } from "@/store/cartStore";
 import Input from "@/shared/ui/Input";
 import MaskedInput from "@/shared/ui/MaskedInput";
 import Checkbox from "@/shared/ui/Checkbox";
-import styles from "./GetNumberModal.module.scss";
+import Button from "@/shared/ui/Button";
+import styles from "./AddToCartModal.module.scss";
 
 interface GetNumberModalProps {
   isOpen: boolean;
   onClose: () => void;
+  item: NumberItem | null;
 }
 
 interface FormData {
@@ -30,12 +32,12 @@ const defaultValues: FormData = {
   agreement: true,
 };
 
-const GetNumberModal = ({ isOpen, onClose }: GetNumberModalProps) => {
+const AddToCartModal = ({ isOpen, onClose, item }: GetNumberModalProps) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const router = useRouter();
 
-  const { control, handleSubmit, reset, formState } = useForm({
-    defaultValues,
-  });
+  const { control, handleSubmit, reset } = useForm({ defaultValues });
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
@@ -45,35 +47,45 @@ const GetNumberModal = ({ isOpen, onClose }: GetNumberModalProps) => {
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
-
-  const onSubmitHandler = async (data: { fio: string; phone: string }) => {
+  const onSubmitHandler = async (data: FormData) => {
     try {
+      if (isSubmitting) return;
+      setIsSubmitting(true);
+
       const payload = {
         data: {
           name: data.fio,
           phone: data.phone,
+          email: "",
+          city: "",
+          street: "",
+          podyezd: "",
+          floor: "",
+          apartment: "",
+          comment: "",
+          price: item?.price,
+          payment: "",
+          delivery: "",
+          numbers: { connect: [{ documentId: item?.id }] },
         },
       };
 
-      await axios.post(`${SERVER_URL}/forma-s-banneras`, payload);
+      await axios.post(`${SERVER_URL}/zayavkas`, payload);
 
-      reset();
       onClose();
-      router.push("/thank-you");
-    } catch (error: any) {
-      console.error("Ошибка при отправке формы:", error);
+      reset();
+      router.push("/success-order");
+    } catch (error: unknown) {
+      console.error("Ошибка:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
+  if (!isOpen) return null;
+
   const modalContent = (
-    <div
-      className={styles.modalOverlay}
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="get-number-modal-title"
-    >
+    <div className={styles.modalOverlay} onClick={onClose} role="dialog">
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <button
           className={styles.closeButton}
@@ -83,28 +95,30 @@ const GetNumberModal = ({ isOpen, onClose }: GetNumberModalProps) => {
           ×
         </button>
 
-        <h2 className={styles.title}>Заполните форму</h2>
+        <h2 className={styles.title}>Оставьте заявку на покупку номера</h2>
+
+        <p className={styles.titlePhone}>{item?.phone}</p>
 
         <form onSubmit={handleSubmit(onSubmitHandler)} className={styles.form}>
           <Input
-            name="fio"
-            required
             control={control}
+            required
+            name="fio"
             placeholder="Введите ваше имя"
             fullWidth
           />
 
-          <MaskedInput fullWidth name="phone" control={control} />
+          <MaskedInput name="phone" control={control} fullWidth />
 
           <Checkbox name="agreement" control={control} />
 
           <Button
             type="submit"
+            disabled={isSubmitting}
             variant="outline"
             fullWidth
-            disabled={formState.isSubmitting}
           >
-            Отправить
+            Сохранить
           </Button>
         </form>
       </div>
@@ -116,13 +130,7 @@ const GetNumberModal = ({ isOpen, onClose }: GetNumberModalProps) => {
       ? document.getElementById("modal-root")
       : null;
 
-  if (!modalRoot) {
-    console.error("Modal root element not found");
-
-    return null;
-  }
-
-  return createPortal(modalContent, modalRoot);
+  return modalRoot ? createPortal(modalContent, modalRoot) : null;
 };
 
-export default GetNumberModal;
+export default AddToCartModal;

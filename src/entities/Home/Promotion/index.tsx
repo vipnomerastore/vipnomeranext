@@ -1,16 +1,15 @@
-import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Scrollbar } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/scrollbar";
-import axios from "axios";
 import Image from "next/image";
 
 import { useHydration } from "../../../hooks/useHydration";
-import { NumberItem, useCartStore } from "@/store/cartStore";
+import { NumberItem } from "@/store/cartStore";
 import { SERVER_URL } from "@/shared/api";
 import Button from "@/shared/ui/Button";
+import AddToCartModal from "@/shared/ui/AddToCartModal";
 import styles from "./Promotion.module.scss";
 
 const operatorIcons: Record<string, string> = {
@@ -21,11 +20,11 @@ const operatorIcons: Record<string, string> = {
 };
 
 const getOperatorIcon = (operator: string) =>
-  operatorIcons[operator] ?? "/assets/home/promotion/tele2.svg";
+  operatorIcons[operator] ?? operatorIcons["Теле 2"];
 
 const HomePromotion = () => {
-  const router = useRouter();
-  const { addItem, lastAddedItem, clearLastAddedItem, items } = useCartStore();
+  const [openAddToCartModal, setOpenAddToCartModal] = useState(false);
+  const [phone, setPhone] = useState<NumberItem>();
   const isHydrated = useHydration();
 
   const [timeLeft, setTimeLeft] = useState({
@@ -48,21 +47,18 @@ const HomePromotion = () => {
       let totalPages = 1;
 
       do {
-        // Кэшированный API запрос с revalidate 30 минут
-        const response = await fetch(
+        const res = await fetch(
           `${SERVER_URL}/katalog-nomerovs?pagination[page]=${currentPage}&pagination[pageSize]=${pageSize}`,
-          {
-            next: { revalidate: 1800 }, // 30 минут кэш
-          }
+          { next: { revalidate: 1800 } }
         );
-        const data = await response.json();
 
-        const pageData = data?.data || [];
+        const data = await res.json();
+        const pageData = data?.data ?? [];
         const meta = data?.meta?.pagination;
 
         if (meta) totalPages = meta.pageCount;
 
-        allItems = allItems.concat(pageData);
+        allItems.push(...pageData);
         currentPage++;
       } while (currentPage <= totalPages);
 
@@ -83,8 +79,9 @@ const HomePromotion = () => {
         }));
 
       setAllNumbers(filtered);
-    } catch (error: unknown) {
-      console.log(error);
+    } catch (err) {
+      console.error(err);
+      setError("Ошибка при загрузке номеров");
     } finally {
       setLoading(false);
     }
@@ -94,31 +91,7 @@ const HomePromotion = () => {
     fetchNumbers();
   }, [fetchNumbers]);
 
-  useEffect(() => {
-    if (!isHydrated) return;
-
-    // Инициализируем время сразу после гидратации
-    setTimeLeft(calculateTimeLeft());
-
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [isHydrated]);
-
-  useEffect(() => {
-    const handler = () => {
-      const el = document.getElementById("promotion");
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    };
-    window.addEventListener("scrollToPromotion", handler);
-    return () => window.removeEventListener("scrollToPromotion", handler);
-  }, []);
-
-  function calculateTimeLeft() {
+  const calculateTimeLeft = useCallback(() => {
     const now = new Date();
     const endOfDay = new Date(
       now.getFullYear(),
@@ -128,73 +101,81 @@ const HomePromotion = () => {
       59,
       59
     );
+
     const diff = endOfDay.getTime() - now.getTime();
 
     if (diff <= 0) return { hours: 0, minutes: 0, seconds: 0 };
 
     return {
-      hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+      hours: Math.floor((diff / 1000 / 60 / 60) % 24),
       minutes: Math.floor((diff / 1000 / 60) % 60),
       seconds: Math.floor((diff / 1000) % 60),
     };
-  }
+  }, []);
+
+  useEffect(() => {
+    if (!isHydrated) return;
+
+    setTimeLeft(calculateTimeLeft());
+
+    const timer = setInterval(() => setTimeLeft(calculateTimeLeft()), 1000);
+
+    return () => clearInterval(timer);
+  }, [isHydrated, calculateTimeLeft]);
 
   const formattedTimeLeft = useMemo(() => {
-    const fmt = (num: number) => String(num).padStart(2, "0");
+    const pad = (num: number) => String(num).padStart(2, "0");
 
-    return `${fmt(timeLeft.hours)} ч ${fmt(timeLeft.minutes)} мин ${fmt(
+    return `${pad(timeLeft.hours)} ч ${pad(timeLeft.minutes)} мин ${pad(
       timeLeft.seconds
     )} сек`;
   }, [timeLeft]);
 
-  const handleAddToCart = useCallback(
-    (item: NumberItem) => {
-      const isAlreadyInCart = items.some((i) => i.phone === item.phone);
+  useEffect(() => {
+    const handler = () => {
+      const el = document.getElementById("promotion");
 
-      if (isAlreadyInCart) {
-        return;
-      }
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
 
-      addItem({ ...item, quantity: 1 });
-    },
-    [addItem, items]
-  );
+    window.addEventListener("scrollToPromotion", handler);
 
-  const handleCloseModal = () => clearLastAddedItem();
+    return () => window.removeEventListener("scrollToPromotion", handler);
+  }, []);
 
-  const handleGoToCart = () => {
-    clearLastAddedItem();
-    router.push("/cart");
-  };
+  const handleOpenModal = useCallback((item: NumberItem) => {
+    setPhone(item);
+    setOpenAddToCartModal(true);
+  }, []);
 
   return (
-    <div id="promotion" className={styles.PromotionWrapper}>
-      <div className={styles.Promotion}>
+    <div id="promotion" className={styles.promotionWrapper}>
+      <div className={styles.promotion}>
         <div className={styles.header}>
-          <div className={styles.PromotionTimer}>
+          <div className={styles.promotionTimer}>
             <p className={styles.timerTitle}>До смены номеров:</p>
 
             <div className={styles.timer}>
               <Image
                 loading="lazy"
                 src="/assets/home/promotion/hot.svg"
-                alt="Promotional hot image"
-                aria-hidden="true"
+                alt=""
                 width={24}
                 height={24}
               />
+
               <p className={styles.timerText}>
                 {isHydrated ? formattedTimeLeft : "-- ч -- мин -- сек"}
               </p>
             </div>
           </div>
 
-          <p className={styles.PromotionTitle}>
-            акции <span className={styles.PromotionTitleSpan}>на номера</span>
+          <p className={styles.promotionTitle}>
+            акции <span className={styles.promotionTitleSpan}>на номера</span>
           </p>
         </div>
 
-        <div className={styles.PromotionCarusels}>
+        <div className={styles.promotionCarusels}>
           {loading ? (
             <div className={styles.loaderContainer}>
               <div className={styles.loader} />
@@ -212,37 +193,38 @@ const HomePromotion = () => {
               grabCursor
               freeMode
               breakpoints={{
-                480: { slidesPerView: 1.5, spaceBetween: 20 },
-                640: { slidesPerView: 2, spaceBetween: 20 },
-                768: { slidesPerView: 2.5, spaceBetween: 20 },
-                1024: { slidesPerView: 3.5, spaceBetween: 20 },
-                1200: { slidesPerView: 4, spaceBetween: 20 },
+                480: { slidesPerView: 1.5 },
+                640: { slidesPerView: 2 },
+                768: { slidesPerView: 2.5 },
+                1024: { slidesPerView: 3.5 },
+                1200: { slidesPerView: 4 },
               }}
             >
               {allNumbers.map((item) => (
                 <SwiperSlide key={item.id}>
-                  <article className={styles.PromotionCarusel}>
-                    <div className={styles.PromotionCaruselTitle}>
+                  <article className={styles.promotionCarusel}>
+                    <div className={styles.promotionCaruselTitle}>
                       <Image
                         loading="lazy"
                         src={getOperatorIcon(item.operator!)}
-                        alt={`Логотип оператора ${item.operator}`}
+                        alt="оператор"
                         width={32}
                         height={32}
                       />
-                      <p className={styles.PromotionCaruselText}>
+
+                      <p className={styles.promotionCaruselText}>
                         {item.phone}
                       </p>
                     </div>
 
-                    <div className={styles.PromotionCaruselPrices}>
-                      <p className={styles.PromotionCaruselPrice}>
-                        {new Intl.NumberFormat("ru-RU").format(item.price || 0)}{" "}
+                    <div className={styles.promotionCaruselPrices}>
+                      <p className={styles.promotionCaruselPrice}>
+                        {new Intl.NumberFormat("ru-RU").format(item.price ?? 0)}{" "}
                         ₽
                       </p>
 
                       {item.old_price && (
-                        <p className={styles.PromotionCaruselOldPrice}>
+                        <p className={styles.promotionCaruselOldPrice}>
                           {new Intl.NumberFormat("ru-RU").format(
                             item.old_price
                           )}{" "}
@@ -252,10 +234,10 @@ const HomePromotion = () => {
                     </div>
 
                     <Button
-                      onClick={() => handleAddToCart(item)}
+                      onClick={() => handleOpenModal(item)}
                       variant="outline"
                     >
-                      В корзину
+                      Купить
                     </Button>
                   </article>
                 </SwiperSlide>
@@ -265,20 +247,11 @@ const HomePromotion = () => {
         </div>
       </div>
 
-      {lastAddedItem && (
-        <div className={styles.modalOverlay} onClick={handleCloseModal}>
-          <div
-            className={styles.modalContent}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <p className={styles.modalText}>Номер добавлен в корзину</p>
-
-            <button className={styles.modalButton} onClick={handleGoToCart}>
-              В корзину
-            </button>
-          </div>
-        </div>
-      )}
+      <AddToCartModal
+        isOpen={openAddToCartModal}
+        onClose={() => setOpenAddToCartModal(false)}
+        item={phone!}
+      />
     </div>
   );
 };

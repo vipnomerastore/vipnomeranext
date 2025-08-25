@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
 import axios from "axios";
 import Image from "next/image";
@@ -23,10 +23,16 @@ interface PhoneNumber {
 }
 
 interface PriceData {
-  [phone: string]: {
-    [duration: string]: number;
-  };
+  [phone: string]: { [duration: string]: number };
 }
+
+interface FormData {
+  name: string;
+  phone: string;
+  agreement: boolean;
+}
+
+const defaultValues: FormData = { name: "", phone: "+7 ", agreement: true };
 
 const DropdownArrowIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg
@@ -45,18 +51,6 @@ const DropdownArrowIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   </svg>
 );
 
-interface FormData {
-  name: string;
-  phone: string;
-  agreement: boolean;
-}
-
-const defaultValues: FormData = {
-  name: "",
-  phone: "",
-  agreement: true,
-};
-
 const HomeCreditBanner: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -64,177 +58,145 @@ const HomeCreditBanner: React.FC = () => {
   const [priceData, setPriceData] = useState<PriceData>({});
   const [isLoading, setIsLoading] = useState(true);
   const [bannerTitle, setBannerTitle] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
+  const { control, handleSubmit, reset, formState } = useForm({
+    defaultValues,
+  });
 
   const openModal = () => setIsModalOpen(true);
 
-  const { control, handleSubmit, reset } = useForm({ defaultValues });
-
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setIsModalOpen(false);
     reset();
-  };
+  }, [reset]);
 
-  const onSubmitHandler = async (data: { name: string; phone: string }) => {
-    if (isSubmitting) return;
-    setIsSubmitting(true);
-
+  const onSubmitHandler = async (data: FormData) => {
     try {
-      const payload = {
-        data: {
-          fio: data.name,
-          phone: data.phone.replace(/[^\d+]/g, ""),
-        },
-      };
-
-      await axios.post(`${SERVER_URL}/forma-s-banneras`, payload);
+      await axios.post(`${SERVER_URL}/forma-s-banneras`, {
+        data: { fio: data.name, phone: data.phone.replace(/[^\d+]/g, "") },
+      });
 
       closeModal();
       router.push("/thank-you");
-    } catch (error: unknown) {
-      console.error("Ошибка:", error);
-    } finally {
-      setIsSubmitting(false);
+    } catch (err) {
+      console.error(err);
     }
   };
 
-  useEffect(() => {
-    let isMounted = true;
+  const fetchBannerData = useCallback(async () => {
+    setIsLoading(true);
 
-    const fetchBannerData = async () => {
-      try {
-        setIsLoading(true);
-
-        const response = await fetch(
-          `${SERVER_URL}/banner-v-rassrochku?populate=numbers`,
-          {
-            next: { revalidate: CACHE_TIMES.LONG },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+    try {
+      const res = await fetch(
+        `${SERVER_URL}/banner-v-rassrochku?populate=numbers`,
+        {
+          next: { revalidate: CACHE_TIMES.LONG },
         }
+      );
 
-        const responseData = await response.json();
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-        if (!isMounted) return;
+      const data = await res.json();
 
-        const { title, numbers } = responseData.data;
+      const { title, numbers } = data.data;
 
-        setBannerTitle(title);
+      setBannerTitle(title);
 
-        const numbersList: PhoneNumber[] = numbers.map((item: any) => ({
-          phone: item.phone,
-          id: item.documentId,
-        }));
+      setPhoneNumbers(
+        numbers.map((n: any) => ({ phone: n.phone, id: n.documentId }))
+      );
 
-        const priceDataMap: PriceData = numbers.reduce(
-          (acc: PriceData, item: any) => {
-            const { phone, price, credit_month_count } = item;
+      setPriceData(
+        numbers.reduce((acc: PriceData, n: any) => {
+          const durations: string[] = Array.from(
+            { length: Math.floor(n.credit_month_count / 2) },
+            (_, i) => `${(i + 1) * 2} мес`
+          );
 
-            const durations: string[] = [];
+          acc[n.phone] = Object.fromEntries(durations.map((d) => [d, n.price]));
 
-            for (let i = 2; i <= credit_month_count; i += 2) {
-              durations.push(`${i} мес`);
-            }
-
-            acc[phone] = durations.reduce(
-              (durAcc: Record<string, number>, duration) => {
-                durAcc[duration] = price;
-                return durAcc;
-              },
-              {}
-            );
-
-            return acc;
-          },
-          {}
-        );
-
-        setPhoneNumbers(numbersList);
-        setPriceData(priceDataMap);
-      } catch (err) {
-        if (!isMounted) return;
-
-        setError("Не удалось загрузить данные. Попробуйте позже.");
-      } finally {
-        if (isMounted) setIsLoading(false);
-      }
-    };
-
-    fetchBannerData();
-
-    return () => {
-      isMounted = false;
-    };
+          return acc;
+        }, {})
+      );
+    } catch {
+      setError("Не удалось загрузить данные. Попробуйте позже.");
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   useEffect(() => {
-    const handler = () => {
-      const el = document.getElementById("credit-banner");
+    fetchBannerData();
+  }, [fetchBannerData]);
 
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    };
-
+  useEffect(() => {
+    const handler = () =>
+      document
+        .getElementById("credit-banner")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
     window.addEventListener("scrollToCreditBanner", handler);
 
     return () => window.removeEventListener("scrollToCreditBanner", handler);
   }, []);
-
-  const modalContent = (
-    <div className={styles.modalOverlay} onClick={closeModal}>
-      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-        <button
-          className={styles.closeButton}
-          onClick={closeModal}
-          aria-label="Закрыть"
-        >
-          ×
-        </button>
-
-        <h2 className={styles.title}>Заполните форму</h2>
-
-        <form onSubmit={handleSubmit(onSubmitHandler)} className={styles.form}>
-          <Input
-            name="fio"
-            required
-            control={control}
-            placeholder="Введите ваше имя"
-            fullWidth
-          />
-
-          <MaskedInput name="phone" control={control} fullWidth />
-
-          <Checkbox name="agreement" control={control} />
-
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            fullWidth
-            variant="outline"
-          >
-            Сохранить
-          </Button>
-        </form>
-      </div>
-    </div>
-  );
 
   const modalRoot =
     typeof document !== "undefined"
       ? document.getElementById("modal-root")
       : null;
 
+  const modalContent = useMemo(
+    () => (
+      <div className={styles.modalOverlay} onClick={closeModal}>
+        <div
+          className={styles.modalContent}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            className={styles.closeButton}
+            onClick={closeModal}
+            aria-label="Закрыть"
+          >
+            ×
+          </button>
+
+          <h2 className={styles.title}>Заполните форму</h2>
+
+          <form
+            onSubmit={handleSubmit(onSubmitHandler)}
+            className={styles.form}
+          >
+            <Input
+              name="name"
+              control={control}
+              required
+              placeholder="Введите ваше имя"
+              fullWidth
+            />
+            <MaskedInput name="phone" control={control} fullWidth />
+
+            <Checkbox name="agreement" control={control} />
+
+            <Button
+              type="submit"
+              disabled={formState.isSubmitting}
+              fullWidth
+              variant="outline"
+            >
+              Сохранить
+            </Button>
+          </form>
+        </div>
+      </div>
+    ),
+    [closeModal, control, handleSubmit, formState]
+  );
+
   return (
     <div id="credit-banner" className={styles.wrapper}>
       <div className={styles.content}>
-        <div className={styles.sixthAction}>
-          <div className={styles.sixthActionContent}>
+        <div className={styles.credit}>
+          <div className={styles.creditContent}>
             <div className={styles.innerContent}>
               <Image
                 src="/assets/home/newBanner/icon-2.webp"
@@ -246,7 +208,7 @@ const HomeCreditBanner: React.FC = () => {
                 style={{ height: "auto" }}
               />
 
-              <div className={styles.sixthActionHeader}>
+              <div className={styles.creditHeader}>
                 <div className={styles.timer}>
                   <Image
                     src="/assets/home/promotion/hot.svg"
@@ -259,7 +221,7 @@ const HomeCreditBanner: React.FC = () => {
                 </div>
               </div>
 
-              <p className={styles.sixthActionTitle}>
+              <p className={styles.creditTitle}>
                 {bannerTitle ||
                   "РЕЗЕРВИРУЙТЕ ЭКСКЛЮЗИВНЫЙ НОМЕР ДО СТАРТА ПРОДАЖ"}
               </p>
@@ -285,7 +247,7 @@ const HomeCreditBanner: React.FC = () => {
         </div>
       </div>
 
-      {isModalOpen && modalRoot ? createPortal(modalContent, modalRoot) : null}
+      {isModalOpen && modalRoot && createPortal(modalContent, modalRoot)}
     </div>
   );
 };

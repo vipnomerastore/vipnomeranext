@@ -79,17 +79,17 @@ const PriceCard: React.FC<PriceCardProps> = (props) => {
 
   if (!durations.length) {
     return (
-      <div className={styles.sixthActionPricesWrapper}>
-        <p className={styles.sixthActionPriceTitle}>{phoneNumber}</p>
+      <div className={styles.creditPricesWrapper}>
+        <p className={styles.creditPriceTitle}>{phoneNumber}</p>
         <p>Нет доступных периодов</p>
       </div>
     );
   }
 
   return (
-    <div className={styles.sixthActionPricesWrapper}>
+    <div className={styles.creditPricesWrapper}>
       <div className={styles.phoneAndSelect}>
-        <p className={styles.sixthActionPriceTitle}>{phoneNumber}</p>
+        <p className={styles.creditPriceTitle}>{phoneNumber}</p>
 
         <CustomSelect
           options={durations}

@@ -4,7 +4,14 @@ import Image from "next/image";
 
 import styles from "./Feature.module.scss";
 
-const FEATURE_ITEMS = [
+interface FeatureItem {
+  icon: string;
+  goldIcon: string;
+  title: string;
+  description: string;
+}
+
+const FEATURE_ITEMS: FeatureItem[] = [
   {
     icon: "/assets/home/features/card.svg",
     goldIcon: "/assets/home/features/gold-card.svg",
@@ -43,11 +50,11 @@ const FEATURE_ITEMS = [
   },
 ];
 
-const FeatureCard = ({ item }: { item: (typeof FEATURE_ITEMS)[0] }) => (
+const FeatureCard = ({ item }: { item: FeatureItem }) => (
   <div className={styles.cardWrapper}>
     <Image
       src={item.goldIcon}
-      alt="goldIcon"
+      alt="иконка"
       width={80}
       height={80}
       className={styles.goldIcon}
@@ -57,7 +64,7 @@ const FeatureCard = ({ item }: { item: (typeof FEATURE_ITEMS)[0] }) => (
     <div className={styles.card}>
       <Image
         src={item.icon}
-        alt="card"
+        alt="карточка"
         width={60}
         height={60}
         className={styles.icon}
@@ -83,8 +90,8 @@ const HomeFeature = () => {
         </div>
 
         <div className={styles.grid}>
-          {FEATURE_ITEMS.map((item, index) => (
-            <FeatureCard key={index} item={item} />
+          {FEATURE_ITEMS.map((item) => (
+            <FeatureCard key={item.title} item={item} />
           ))}
         </div>
 
@@ -97,8 +104,8 @@ const HomeFeature = () => {
               768: { slidesPerView: 2, spaceBetween: 20 },
             }}
           >
-            {FEATURE_ITEMS.map((item, index) => (
-              <SwiperSlide key={index}>
+            {FEATURE_ITEMS.map((item) => (
+              <SwiperSlide key={item.title}>
                 <FeatureCard item={item} />
               </SwiperSlide>
             ))}
