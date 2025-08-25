@@ -1,27 +1,3 @@
-import { SxProps, Theme } from "@mui/material";
-
-export const paginationStyle: SxProps<Theme> = {
-  "& .MuiPaginationItem-root": {
-    color: "#ffffff",
-    backgroundColor: "transparent",
-    border: "1px solid #333333",
-    borderRadius: "10px",
-    margin: "0 5px",
-    minWidth: "40px",
-    height: "40px",
-    fontSize: "14px",
-    fontWeight: "600",
-    "&:hover": {
-      backgroundColor: "rgba(253, 252, 164, 0.1)",
-      borderColor: "#fdfca4",
-    },
-    "&.Mui-selected": {
-      borderColor: "#fdfca4",
-      "&:hover": {},
-    },
-  },
-};
-
 // Система tier'ов для номеровя
 export enum NumberTier {
   BRONZE = "bronze",

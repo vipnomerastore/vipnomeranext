@@ -3,10 +3,8 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useCartStore } from "../../../store/cartStore";
 import { useAuthStore } from "../../../store/authStore";
-import RegionSelector from "./RegionSelector";
 
 import ScrollNavLink from "./ScrollNavLink";
-
 import styles from "../Header.module.scss";
 
 interface MobileMenuProps {
@@ -16,11 +14,14 @@ interface MobileMenuProps {
   hasBanner?: boolean;
 }
 
-const MobileMenu = (props: MobileMenuProps) => {
-  const { isOpen, toggleMenu, openLoginModal, hasBanner = true } = props;
-
+const MobileMenu = ({
+  isOpen,
+  toggleMenu,
+  openLoginModal,
+  hasBanner = true,
+}: MobileMenuProps) => {
   const cartCount = useCartStore((state) =>
-    state.items.reduce((total, item) => total + item.quantity!, 0)
+    state.items.reduce((total, item) => total + (item.quantity ?? 0), 0)
   );
   const { isAuthenticated, user, logout } = useAuthStore();
   const pathname = usePathname();
@@ -32,12 +33,15 @@ const MobileMenu = (props: MobileMenuProps) => {
     toggleMenu();
   };
 
-  const getLinkClass = (href: string) => {
-    const isActive = pathname === href;
-    return [styles.navItem, isActive ? styles.active : ""].join(" ");
-  };
+  const navLinks = [
+    { href: "/", label: "Выбрать номер" },
+    { href: "/partner", label: "Партнёрам" },
+    { href: "/redemption", label: "Продать номер" },
+    { href: "/blog", label: "Блог" },
+  ];
 
-  const isHomeActive = pathname === "/";
+  const getLinkClass = (href: string) =>
+    href === pathname ? `${styles.navItem} ${styles.active}` : styles.navItem;
 
   return (
     <div
@@ -72,55 +76,20 @@ const MobileMenu = (props: MobileMenuProps) => {
       </div>
 
       <nav className={styles.mobileMenuNav} aria-label="Основное меню">
-        <Link
-          href="/"
-          onClick={toggleMenu}
-          className={[styles.navItem, isHomeActive ? styles.active : ""].join(
-            " "
-          )}
-        >
-          Выбрать номер
-        </Link>
-
-        {/* <ScrollNavLink href="/#action" setMenuOpen={toggleMenu}>
-          Акции
-        </ScrollNavLink>
-
-        <Link
-          href="/credit"
-          onClick={toggleMenu}
-          className={getLinkClass("/credit")}
-        >
-          Рассрочка без банка
-        </Link> */}
-
-        <Link
-          href="/partner"
-          onClick={toggleMenu}
-          className={getLinkClass("/partner")}
-        >
-          Партнёрам
-        </Link>
-
-        <Link
-          href="/redemption"
-          onClick={toggleMenu}
-          className={getLinkClass("/redemption")}
-        >
-          Продать номер
-        </Link>
+        {navLinks.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            onClick={toggleMenu}
+            className={getLinkClass(link.href)}
+          >
+            {link.label}
+          </Link>
+        ))}
 
         <ScrollNavLink href="/#contacts" setMenuOpen={toggleMenu}>
           Контакты
         </ScrollNavLink>
-
-        <Link
-          href="/blog"
-          onClick={toggleMenu}
-          className={getLinkClass("/blog")}
-        >
-          Блог
-        </Link>
       </nav>
 
       <div className={styles.mobileActions}>
@@ -136,6 +105,7 @@ const MobileMenu = (props: MobileMenuProps) => {
               width={20}
               height={20}
             />
+
             <p>+7 933 333 33 11</p>
           </Link>
 
@@ -179,6 +149,7 @@ const MobileMenu = (props: MobileMenuProps) => {
                 width={24}
                 height={24}
               />
+
               <span>Войти</span>
             </button>
           )}

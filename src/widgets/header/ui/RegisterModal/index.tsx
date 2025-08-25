@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+"use client";
+
+import { useState, useMemo } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 import { useAuthStore } from "@/store/authStore";
 import styles from "./RegisterModal.module.scss";
@@ -27,53 +29,51 @@ const defaultValues: FormData = {
 
 const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { register } = useAuthStore();
-  const { control, handleSubmit, reset } = useForm({ defaultValues });
+  const { register: registerUser } = useAuthStore();
 
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
+  const { control, handleSubmit, reset, formState } = useForm<FormData>({
+    defaultValues,
+  });
 
-  if (!isOpen) return null;
-
-  const onSubmitHandler = async (data: FormData) => {
+  const onSubmitHandler: SubmitHandler<FormData> = async (data) => {
     try {
-      if (isSubmitting) return;
-      setIsSubmitting(true);
-
-      await register(data.username, data.email, data.password);
+      await registerUser(data.username, data.email, data.password);
 
       onClose();
       reset();
       setShowPassword(false);
-    } catch (err: unknown) {
-      console.error("Ошибка:", err);
-    } finally {
-      setIsSubmitting(false);
+    } catch (error: unknown) {
+      console.error("Ошибка регистрации:", error);
     }
   };
 
+  const passwordEye = useMemo(
+    () =>
+      showPassword ? "/assets/header/eyeoff.svg" : "/assets/header/eye.svg",
+    [showPassword]
+  );
+
+  if (!isOpen) return null;
+
   const modalContent = (
-    <div className={styles.modalOverlay} onClick={onClose} role="dialog">
+    <div
+      className={styles.modalOverlay}
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="register-title"
+    >
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <button
           className={styles.closeButton}
           onClick={onClose}
-          aria-label="Закрыть"
+          aria-label="Закрыть окно"
         >
           ×
         </button>
 
-        <h2 className={styles.title}>
+        <h2 id="register-title" className={styles.title}>
           Регистрация <span>партнера</span>
         </h2>
 
@@ -83,7 +83,7 @@ const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
 
         <form onSubmit={handleSubmit(onSubmitHandler)} className={styles.form}>
           <Input
-            name="email"
+            name="username"
             control={control}
             type="text"
             placeholder="Введите имя пользователя"
@@ -116,18 +116,12 @@ const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
               className={styles.passwordToggle}
               onClick={() => setShowPassword((prev) => !prev)}
               aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
-              tabIndex={-1}
-              disabled={isSubmitting}
             >
               <Image
                 loading="lazy"
                 width={13}
                 height={13}
-                src={
-                  showPassword
-                    ? "/assets/header/eyeoff.svg"
-                    : "/assets/header/eye.svg"
-                }
+                src={passwordEye}
                 alt={showPassword ? "Скрыть пароль" : "Показать пароль"}
               />
             </button>
@@ -135,11 +129,11 @@ const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
 
           <Button
             type="submit"
-            disabled={isSubmitting}
+            disabled={formState.isSubmitting}
             fullWidth
             variant="outline"
           >
-            Зарегистрироваться
+            {formState.isSubmitting ? "Регистрация..." : "Зарегистрироваться"}
           </Button>
         </form>
       </div>
@@ -151,12 +145,7 @@ const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
       ? document.getElementById("modal-root")
       : null;
 
-  if (!modalRoot) {
-    console.error("Modal root element not found");
-    return null;
-  }
-
-  return createPortal(modalContent, modalRoot);
+  return modalRoot ? createPortal(modalContent, modalRoot) : null;
 };
 
 export default RegisterModal;

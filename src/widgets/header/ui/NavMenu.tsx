@@ -1,46 +1,38 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
 import { useHydration } from "../../../hooks/useHydration";
-
 import ScrollNavLink from "./ScrollNavLink";
-
 import styles from "../Header.module.scss";
 
-const NavMenu = ({ setMenuOpen }: { setMenuOpen: (open: boolean) => void }) => {
+interface NavMenuProps {
+  setMenuOpen: (open: boolean) => void;
+}
+
+const NavMenu = ({ setMenuOpen }: NavMenuProps) => {
   const pathname = usePathname();
   const isHydrated = useHydration();
 
   const getNavLinkClass = (href: string) => {
-    const isActive = pathname === href;
+    if (href === "/" && !isHydrated) return styles.navItem;
+
+    const isActive =
+      href === "/"
+        ? pathname === "/" && window.location.hash === ""
+        : pathname === href;
+
     return [styles.navItem, isActive ? styles.active : ""].join(" ");
   };
-
-  const isHomeActive =
-    pathname === "/" && (!isHydrated || window.location.hash === "");
 
   return (
     <div className={styles.navWrapper}>
       <Link
         href="/"
-        className={[styles.navItem, isHomeActive ? styles.active : ""].join(
-          " "
-        )}
+        className={getNavLinkClass("/")}
         onClick={() => setMenuOpen(false)}
       >
         Выбрать номер
       </Link>
-
-      {/* <ScrollNavLink href="#action" setMenuOpen={setMenuOpen}>
-        Акции
-      </ScrollNavLink> */}
-
-      {/* <Link
-        href="/credit"
-        className={getNavLinkClass("/credit")}
-        onClick={() => setMenuOpen(false)}
-      >
-        Рассрочка без банка
-      </Link> */}
 
       <Link
         href="/partner"
