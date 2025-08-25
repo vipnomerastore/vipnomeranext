@@ -2,7 +2,6 @@ import React from "react";
 import { Tooltip } from "@mui/material";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
-import { toast } from "react-hot-toast";
 
 import { NumberItem, useCartStore } from "@/store/cartStore";
 import {
@@ -41,18 +40,10 @@ const PhoneDescriptionModal: React.FC<Props> = ({
       .items.some((i) => i.phone === cartItem.phone);
 
     if (isAlreadyInCart) {
-      toast.error(`Номер ${number.phone} уже в корзине!`, {
-        duration: 6000,
-        position: "top-right",
-      });
       return;
     }
 
     addItem(cartItem);
-    toast.success(`Номер ${number.phone} добавлен в корзину!`, {
-      duration: 3000,
-      position: "top-right",
-    });
 
     onClose();
     router.push("/cart");

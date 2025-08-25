@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { toast } from "react-hot-toast";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 
@@ -52,11 +51,6 @@ const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
       setIsSubmitting(true);
 
       await register(data.username, data.email, data.password);
-
-      toast.success("Регистрация успешна! Вы вошли в аккаунт.", {
-        duration: 3000,
-        position: "top-right",
-      });
 
       onClose();
       reset();

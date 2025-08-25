@@ -5,15 +5,13 @@ import { Scrollbar } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/scrollbar";
 import axios from "axios";
-import { toast } from "react-hot-toast";
 import Image from "next/image";
-import { useHydration } from "../../../hooks/useHydration";
 
+import { useHydration } from "../../../hooks/useHydration";
 import { NumberItem, useCartStore } from "@/store/cartStore";
 import { SERVER_URL } from "@/shared/api";
-
-import styles from "./Promotion.module.scss";
 import Button from "@/shared/ui/Button";
+import styles from "./Promotion.module.scss";
 
 const operatorIcons: Record<string, string> = {
   МТС: "/assets/home/operators/mts.svg",
@@ -86,19 +84,7 @@ const HomePromotion = () => {
 
       setAllNumbers(filtered);
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        toast.error(
-          error.response?.data?.error?.message || "Ошибка при отправке формы",
-          { duration: 4000, position: "top-right" }
-        );
-      } else if (error instanceof Error) {
-        toast.error(error.message, { duration: 4000, position: "top-right" });
-      } else {
-        toast.error("Неизвестная ошибка", {
-          duration: 4000,
-          position: "top-right",
-        });
-      }
+      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -166,19 +152,10 @@ const HomePromotion = () => {
       const isAlreadyInCart = items.some((i) => i.phone === item.phone);
 
       if (isAlreadyInCart) {
-        toast.error(`Номер ${item.phone} уже в корзине!`, {
-          duration: 6000,
-          position: "top-right",
-        });
         return;
       }
 
       addItem({ ...item, quantity: 1 });
-
-      toast.success(`Номер ${item.phone} добавлен в корзину!`, {
-        duration: 3000,
-        position: "top-right",
-      });
     },
     [addItem, items]
   );

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { toast } from "react-hot-toast";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 
@@ -63,6 +62,10 @@ const LoginModal = ({ isOpen, onClose, onOpenRegister }: LoginModalProps) => {
     }
   };
 
+  const passwordEye = showPassword
+    ? "/assets/header/eyeoff.svg"
+    : "/assets/header/eye.svg";
+
   const modalContent = (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
@@ -111,11 +114,7 @@ const LoginModal = ({ isOpen, onClose, onOpenRegister }: LoginModalProps) => {
                 loading="lazy"
                 width={13}
                 height={13}
-                src={
-                  showPassword
-                    ? "/assets/header/eyeoff.svg"
-                    : "/assets/header/eye.svg"
-                }
+                src={passwordEye}
                 alt={showPassword ? "Скрыть пароль" : "Показать пароль"}
               />
             </button>
