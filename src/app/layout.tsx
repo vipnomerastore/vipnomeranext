@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 
 import EmotionProvider from "@/app/EmotionProvider";
 import ClientThemeProvider from "@/app/ClientThemeProvider";
@@ -174,10 +172,6 @@ export default function RootLayout({
         />
 
         <WebSiteSchema />
-
-        <SpeedInsights />
-
-        <VercelAnalytics />
       </body>
     </html>
   );

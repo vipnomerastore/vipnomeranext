@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import { toast } from "react-hot-toast";
 
 import { useCartStore } from "@/store/cartStore";
 import CustomSelect from "../CreditBannerSelect";
@@ -42,11 +41,6 @@ const PriceCard: React.FC<PriceCardProps> = (props) => {
 
   const handleAddToCart = () => {
     if (!priceData[phoneNumber]?.[selectedDuration]) {
-      toast.error("Ценовая информация недоступна.", {
-        duration: 4000,
-        position: "top-right",
-      });
-
       return;
     }
 
@@ -55,11 +49,6 @@ const PriceCard: React.FC<PriceCardProps> = (props) => {
     const monthlyPrice = totalPrice / months;
 
     if (cartItems.some((item) => item.id === id)) {
-      toast.error(`Номер ${phoneNumber} уже в корзине!`, {
-        duration: 4000,
-        position: "top-right",
-      });
-
       return;
     }
 
@@ -71,11 +60,6 @@ const PriceCard: React.FC<PriceCardProps> = (props) => {
       part_price: monthlyPrice,
       credit_month_count: months,
       region: [],
-    });
-
-    toast.success(`Номер ${phoneNumber} добавлен в корзину!`, {
-      duration: 3000,
-      position: "top-right",
     });
   };
 

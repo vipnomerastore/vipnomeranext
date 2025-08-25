@@ -32,7 +32,7 @@ const regions = [
   "barnaul",
   "ulyanovsk",
   "irkutsk",
-  "habarovsk", //
+  "habarovsk",
   "yaroslavl",
   "vladivostok",
   "mahachkala",
@@ -41,7 +41,7 @@ const regions = [
   "kemerovo",
   "ryazan",
   "astrakhan",
-  "penza",
+  "penza", //
   "lipetsk",
 
   "sochi",

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Toaster, toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
@@ -108,10 +107,6 @@ const CartPage = () => {
     setIsSubmitting(true);
 
     if (!form.fullName.trim() || !form.phone.trim() || !form.agreedToTerms) {
-      toast.error(
-        "Пожалуйста, заполните все обязательные поля и согласитесь с условиями."
-      );
-
       setIsSubmitting(false);
 
       return;
@@ -120,7 +115,6 @@ const CartPage = () => {
     const cleanPhone = form.phone.replace(/\D/g, "");
 
     if (!/^7\d{10}$/.test(cleanPhone)) {
-      toast.error("Введите корректный номер телефона.");
       setIsSubmitting(false);
       return;
     }
@@ -154,8 +148,6 @@ const CartPage = () => {
         throw new Error("Ошибка при отправке формы");
       }
 
-      toast.success("Заказ успешно создан!");
-
       router.push("/success-order");
 
       // setForm(initialFormState);
@@ -168,19 +160,7 @@ const CartPage = () => {
       //   )}&delivery=${activeDeliveryTab}&payment=${activePaymentTab}&installment=${activeInstallmentPeriod}`
       // );
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        toast.error(
-          error.response?.data?.error?.message || "Ошибка при отправке формы",
-          { duration: 4000, position: "top-right" }
-        );
-      } else if (error instanceof Error) {
-        toast.error(error.message, { duration: 4000, position: "top-right" });
-      } else {
-        toast.error("Неизвестная ошибка", {
-          duration: 4000,
-          position: "top-right",
-        });
-      }
+      console.log(error);
     } finally {
       setIsSubmitting(false);
     }
@@ -199,13 +179,10 @@ const CartPage = () => {
       const exists = items.some((i) => i.phone === item.phone);
 
       if (exists) {
-        toast.error(`Номер ${item.phone} уже в корзине!`);
         return;
       }
 
       addItem({ ...item, quantity: 1 });
-
-      toast.success(`Номер ${item.phone} добавлен в корзину!`);
     },
     [addItem, items]
   );
@@ -222,8 +199,6 @@ const CartPage = () => {
 
   return (
     <>
-      <Toaster toastOptions={TOASTER_STYLE} />
-
       <div className={styles.cartWrapper}>
         <Breadcrumbs />
 

@@ -757,6 +757,7 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
+  z-index: 10;
 
   @media (max-width: 480px) {
     width: 100%;

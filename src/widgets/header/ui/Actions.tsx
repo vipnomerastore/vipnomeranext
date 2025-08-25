@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { useCartStore } from "../../../store/cartStore";
 import { useAuthStore } from "../../../store/authStore";
-import { toast } from "react-hot-toast";
 
 import styles from "../Header.module.scss";
 
@@ -21,11 +20,6 @@ const Actions = ({ openLoginModal, toggleMenu }: ActionsProps) => {
   const handleLogout = () => {
     logout();
     clearCart();
-
-    toast.success("Вы вышли из аккаунта", {
-      duration: 3000,
-      position: "top-right",
-    });
   };
 
   return (

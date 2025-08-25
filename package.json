@@ -16,22 +16,13 @@
     "@emotion/styled": "^11.14.1",
     "@mui/material": "^7.2.0",
     "@pbe/react-yandex-maps": "^1.2.5",
-    "@react-input/mask": "^2.0.4",
-    "@vercel/analytics": "^1.5.0",
-    "@vercel/speed-insights": "^1.2.0",
     "axios": "^1.11.0",
-    "gray-matter": "^4.0.3",
     "next": "15.4.5",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "react-helmet-async": "^2.0.5",
     "react-hook-form": "^7.62.0",
-    "react-hot-toast": "^2.5.2",
     "react-markdown": "^10.1.0",
     "react-text-mask": "^5.5.0",
-    "react-transition-group": "^4.4.5",
-    "remark": "^15.0.1",
-    "remark-html": "^16.0.1",
     "sass": "^1.89.2",
     "swiper": "^11.2.10",
     "zustand": "^5.0.7"
@@ -39,14 +30,11 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@next/bundle-analyzer": "^15.4.5",
-    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-text-mask": "^5.4.14",
     "eslint": "^9",
-    "eslint-config-next": "15.4.5",
-    "tailwindcss": "^4",
     "typescript": "^5"
   }
 }
