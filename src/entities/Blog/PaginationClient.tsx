@@ -1,39 +1,17 @@
 "use client";
 
-import { Pagination, SxProps, Theme } from "@mui/material";
+import React from "react";
+import styles from "./PaginationClient.module.scss";
 
 interface PaginationClientProps {
   page: number;
   count: number;
 }
 
-export const paginationStyle: SxProps<Theme> = {
-  "& .MuiPaginationItem-root": {
-    color: "#ffffff",
-    backgroundColor: "transparent",
-    border: "1px solid #333333",
-    borderRadius: "10px",
-    margin: "0 5px",
-    minWidth: "40px",
-    height: "40px",
-    fontSize: "14px",
-    fontWeight: "600",
-    "&:hover": {
-      backgroundColor: "rgba(253, 252, 164, 0.1)",
-      borderColor: "#fdfca4",
-    },
-    "&.Mui-selected": {
-      borderColor: "#fdfca4",
-      "&:hover": {},
-    },
-  },
-};
+const PaginationClient = ({ page, count }: PaginationClientProps) => {
+  if (count <= 1) return null;
 
-export default function PaginationClient({
-  page,
-  count,
-}: PaginationClientProps) {
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+  const handleClick = (value: number) => {
     if (value === 1) {
       window.location.href = "/blog";
     } else {
@@ -41,15 +19,22 @@ export default function PaginationClient({
     }
   };
 
+  const pages = Array.from({ length: count }, (_, i) => i + 1);
+
   return (
-    <Pagination
-      page={page}
-      onChange={handleChange}
-      count={count}
-      shape="rounded"
-      sx={paginationStyle}
-      siblingCount={1}
-      boundaryCount={1}
-    />
+    <div className={styles.pagination}>
+      {pages.map((p) => (
+        <button
+          key={p}
+          className={`${styles.pageItem} ${p === page ? styles.active : ""}`}
+          onClick={() => handleClick(p)}
+          aria-current={p === page ? "page" : undefined}
+        >
+          {p}
+        </button>
+      ))}
+    </div>
   );
-}
+};
+
+export default PaginationClient;

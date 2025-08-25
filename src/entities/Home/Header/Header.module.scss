@@ -108,8 +108,8 @@ $bp-mobile: 608px;
     &::-webkit-scrollbar-thumb:hover {
       background: linear-gradient(
         90deg,
-        darken($secondary-color, 10%),
-        darken($primary-color, 10%)
+        color.adjust($secondary-color, $lightness: -10%),
+        color.adjust($primary-color, $lightness: -10%)
       );
     }
   }

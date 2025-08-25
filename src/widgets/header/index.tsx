@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -10,7 +12,6 @@ import MobileMenu from "./ui/MobileMenu";
 import Actions from "./ui/Actions";
 import LoginModal from "./ui/LoginModal";
 import RegisterModal from "./ui/RegisterModal";
-
 import styles from "./Header.module.scss";
 
 const Header = ({ hasBanner = true }: { hasBanner?: boolean }) => {
@@ -19,8 +20,23 @@ const Header = ({ hasBanner = true }: { hasBanner?: boolean }) => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const isHydrated = useHydration();
-
   const pathname = usePathname();
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 10);
+
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    setMenuOpen(false);
+    setIsLoginModalOpen(false);
+    setIsRegisterModalOpen(false);
+  }, [pathname]);
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
@@ -38,30 +54,8 @@ const Header = ({ hasBanner = true }: { hasBanner?: boolean }) => {
 
   const closeRegisterModal = () => setIsRegisterModalOpen(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (typeof window !== "undefined") {
-        setScrolled(window.scrollY > 10);
-      }
-    };
-
-    handleScroll();
-
-    if (typeof window !== "undefined") {
-      window.addEventListener("scroll", handleScroll);
-
-      return () => window.removeEventListener("scroll", handleScroll);
-    }
-  }, []);
-
-  useEffect(() => {
-    setMenuOpen(false);
-    setIsLoginModalOpen(false);
-    setIsRegisterModalOpen(false);
-  }, [pathname]);
-
   return (
-    <div
+    <header
       className={`${styles.headerWrapper} ${
         isHydrated && scrolled ? styles.scrolled : ""
       } ${!hasBanner ? styles.noBanner : ""}`}
@@ -75,7 +69,11 @@ const Header = ({ hasBanner = true }: { hasBanner?: boolean }) => {
 
         <Actions openLoginModal={openLoginModal} toggleMenu={toggleMenu} />
 
-        <button className={styles.burgerButton} onClick={toggleMenu}>
+        <button
+          className={styles.burgerButton}
+          onClick={toggleMenu}
+          aria-label="Открыть меню"
+        >
           <Image
             src="/assets/header/menu.svg"
             alt="Меню"
@@ -102,7 +100,7 @@ const Header = ({ hasBanner = true }: { hasBanner?: boolean }) => {
           onClose={closeRegisterModal}
         />
       </div>
-    </div>
+    </header>
   );
 };
 

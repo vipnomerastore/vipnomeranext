@@ -1,9 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { MouseEvent } from "react";
 
 import styles from "../Header.module.scss";
 
-interface ScrollNavLinkProps {
+interface ScrollNavLinkProps
+  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string;
   children: React.ReactNode;
   setMenuOpen?: (open: boolean) => void;
@@ -14,41 +18,40 @@ const ScrollNavLink = ({
   href,
   children,
   setMenuOpen,
-  className,
+  className = "",
   ...props
 }: ScrollNavLinkProps) => {
   const pathname = usePathname();
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const targetPathname = href.split("#")[0] || "/";
-    const hash = href.includes("#") ? "#" + href.split("#")[1] : "";
+  const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    const [targetPath, hash] = href.split("#");
+    const normalizedTargetPath = targetPath || "/";
 
-    if (targetPathname === pathname && hash) {
+    // Если ссылка на тот же путь и есть хэш
+    if (normalizedTargetPath === pathname && hash) {
       e.preventDefault();
 
       if (typeof document !== "undefined") {
-        const elementId = hash.startsWith("#") ? hash.slice(1) : hash;
-        const element = document.getElementById(elementId);
+        const element = document.getElementById(hash);
 
         if (element) {
           element.scrollIntoView({ behavior: "smooth" });
           setMenuOpen?.(false);
         }
       }
+    } else {
+      setMenuOpen?.(false);
     }
   };
 
-  const isActive = () => {
-    const [path] = href.split("#");
-    return pathname === (path || "/");
-  };
+  const isActive = pathname === (href.split("#")[0] || "/");
 
   return (
     <Link
       href={href}
-      className={`${className || ""} ${styles.navItem} ${
-        isActive() ? styles.active : ""
-      }`}
+      className={`${styles.navItem} ${
+        isActive ? styles.active : ""
+      } ${className}`}
       onClick={handleClick}
       {...props}
     >

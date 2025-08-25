@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
@@ -26,53 +26,50 @@ const defaultValues: FormData = {
 
 const LoginModal = ({ isOpen, onClose, onOpenRegister }: LoginModalProps) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { login } = useAuthStore();
-  const { control, reset, handleSubmit } = useForm<FormData>({ defaultValues });
+  const { control, reset, handleSubmit, formState } = useForm<FormData>({
+    defaultValues,
+  });
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    if (!isOpen) return;
+
+    document.body.style.overflow = "hidden";
 
     return () => {
       document.body.style.overflow = "";
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
-
   const onSubmitHandler = async (data: FormData) => {
     try {
-      if (isSubmitting) return;
-      setIsSubmitting(true);
-
       await login(data.email, data.password);
 
       onClose();
       reset();
       setShowPassword(false);
-    } catch (err: unknown) {
-      console.error("Ошибка:", err);
-    } finally {
-      setIsSubmitting(false);
+    } catch (error) {
+      console.error("Ошибка:", error);
     }
   };
 
-  const passwordEye = showPassword
-    ? "/assets/header/eyeoff.svg"
-    : "/assets/header/eye.svg";
+  const passwordEye = useMemo(
+    () =>
+      showPassword ? "/assets/header/eyeoff.svg" : "/assets/header/eye.svg",
+    [showPassword]
+  );
+
+  if (!isOpen) return null;
 
   const modalContent = (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <button
+          type="button"
           className={styles.closeButton}
           onClick={onClose}
-          aria-label="Закрыть"
+          aria-label="Закрыть модальное окно"
         >
           ×
         </button>
@@ -108,14 +105,16 @@ const LoginModal = ({ isOpen, onClose, onOpenRegister }: LoginModalProps) => {
             <button
               type="button"
               className={styles.passwordToggle}
-              onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
+              aria-pressed={showPassword}
+              onClick={() => setShowPassword((prev) => !prev)}
             >
               <Image
                 loading="lazy"
                 width={13}
                 height={13}
                 src={passwordEye}
-                alt={showPassword ? "Скрыть пароль" : "Показать пароль"}
+                alt="passwordEye"
               />
             </button>
           </div>
@@ -124,9 +123,9 @@ const LoginModal = ({ isOpen, onClose, onOpenRegister }: LoginModalProps) => {
             type="submit"
             fullWidth
             variant="outline"
-            disabled={isSubmitting}
+            disabled={formState.isSubmitting}
           >
-            Войти
+            {formState.isSubmitting ? "Вход..." : "Войти"}
           </Button>
 
           <p className={styles.registerLink}>

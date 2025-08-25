@@ -1,21 +1,13 @@
-import { useRouter } from "next/navigation";
+"use client";
 
+import { useState } from "react";
 import styles from "../Header.module.scss";
 
-interface HeaderBannerProps {
-  onClose: () => void;
-  visible: boolean;
-}
+const HeaderBanner = () => {
+  const [hidden, setHidden] = useState(false);
 
-const HeaderBanner = ({ onClose, visible }: HeaderBannerProps) => {
-  const router = useRouter();
-
-  if (!visible) return null;
-
-  const handleCloseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-
-    onClose();
+  const handleClose = () => {
+    setHidden(true);
   };
 
   return (
@@ -27,7 +19,10 @@ const HeaderBanner = ({ onClose, visible }: HeaderBannerProps) => {
     >
       <button
         className={styles.bannerClose}
-        onClick={handleCloseClick}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleClose();
+        }}
         aria-label="Закрыть баннер"
         type="button"
       >
@@ -35,15 +30,10 @@ const HeaderBanner = ({ onClose, visible }: HeaderBannerProps) => {
       </button>
 
       <span className={styles.whiteText}>Выгодная рассрочка до </span>
-
       <span className={styles.gradientText}>12</span>
-
       <span className={styles.whiteText}> месяцев </span>
-
       <span className={styles.gradientText}>без банка</span>
-
       <span className={styles.whiteText}> и </span>
-
       <span className={styles.gradientText}>без переплат</span>
     </div>
   );

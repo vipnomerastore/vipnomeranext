@@ -2,31 +2,26 @@
 
 import { memo, useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
-import Pagination from "@mui/material/Pagination";
 import Script from "next/script";
 
 import { NumberItem } from "@/store/cartStore";
 import { useAuthStore } from "@/store/authStore";
-import { paginationStyle } from "./const";
 import TierStats from "../TierStats/TierStats";
-import CustomizedMenus from "@/shared/ui/Menu";
 import AddToCartModal from "../AddToCartModal";
 import PhoneDescriptionModal from "@/app/phone-descriptional/PhoneDescriptionalClient";
 import { useNumberDisplay } from "./hooks/useNumberDisplay";
 import { useTierManagement } from "./hooks/useTierManagement";
 import { NumberItemComponent } from "../NumberItem";
 import { createNumberParams } from "./utils";
-import styles from "./NumberList.module.scss";
 import Menu from "@/shared/ui/Menu";
+import Pagination from "@/shared/ui/Pagination";
+import styles from "./NumberList.module.scss";
 
 interface NumberListProps {
   onSortChange: (sortBy: string, order: "asc" | "desc" | "none") => void;
   paginationValue: number;
   itemsPerPage: number;
-  handlePaginationChange: (
-    event: React.ChangeEvent<unknown>,
-    value: number
-  ) => void;
+  handlePaginationChange: (value: number) => void;
   sortedNumbers: NumberItem[];
   loading: boolean;
   error: string | null;
@@ -203,14 +198,8 @@ const NumberList: React.FC<NumberListProps> = memo((props) => {
         <div className={styles.paginationContainer}>
           <Pagination
             page={paginationValue}
-            onChange={handlePaginationChange}
+            onChange={(value: number) => handlePaginationChange(value)}
             count={totalPages}
-            shape="rounded"
-            hidePrevButton
-            hideNextButton
-            sx={paginationStyle}
-            siblingCount={1}
-            boundaryCount={1}
           />
         </div>
       )}

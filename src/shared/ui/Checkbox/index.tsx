@@ -2,15 +2,9 @@
 
 import React from "react";
 import { Controller } from "react-hook-form";
-import { Checkbox as MaterialCheckbox } from "@mui/material";
 import Link from "next/link";
 
 import styles from "./Checkbox.module.scss";
-
-const checkboxStyle = {
-  color: "#fdfca4",
-  "&.Mui-checked": { color: "#fdfca4" },
-};
 
 interface CheckboxProps {
   name: string;
@@ -18,9 +12,7 @@ interface CheckboxProps {
   control: any;
 }
 
-const Checkbox = (props: CheckboxProps) => {
-  const { name, control } = props;
-
+const Checkbox = ({ name, control, disabled }: CheckboxProps) => {
   return (
     <div className={styles.wrapper}>
       <Controller
@@ -34,15 +26,19 @@ const Checkbox = (props: CheckboxProps) => {
           },
         }}
         render={({ field, fieldState: { error } }) => (
-          <div className={styles.wrapper}>
-            <div className={styles.checkboxWrapper}>
-              <MaterialCheckbox
+          <>
+            <label className={styles.checkboxWrapper}>
+              <input
+                type="checkbox"
                 checked={!!field.value}
                 onChange={(e) => field.onChange(e.target.checked)}
-                sx={checkboxStyle}
+                disabled={disabled}
+                className={styles.checkboxInput}
               />
 
-              <p className={styles.checkboxText}>
+              <span className={styles.checkboxCustom}></span>
+
+              <span className={styles.checkboxText}>
                 Согласен с{" "}
                 <Link href="/privacy-policy" className={styles.link}>
                   Политикой конфиденциальности
@@ -51,13 +47,13 @@ const Checkbox = (props: CheckboxProps) => {
                 <Link href="/terms-of-use" className={styles.link}>
                   Пользовательским соглашением
                 </Link>
-              </p>
-            </div>
+              </span>
+            </label>
 
             {error && (
               <span className={styles.errorMessage}>{error.message}</span>
             )}
-          </div>
+          </>
         )}
       />
     </div>
