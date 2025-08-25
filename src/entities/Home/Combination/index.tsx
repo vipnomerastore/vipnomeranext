@@ -116,12 +116,9 @@ const HomeCombination = () => {
     setPaginationValue(1);
   }, [resetFilters]);
 
-  const handlePaginationChange = useCallback(
-    (_: React.ChangeEvent<unknown>, value: number) => {
-      setPaginationValue(value);
-    },
-    []
-  );
+  const handlePaginationChange = useCallback((value: number) => {
+    setPaginationValue(value);
+  }, []);
 
   const handleSortChange = useCallback(
     (newSortBy: string, newOrder: "asc" | "desc" | "none") => {

@@ -1,7 +1,7 @@
-import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 
-import styles from "../Question.module.scss";
+import styles from "./QuestionAccordion.module.scss";
 
 interface QuestionItem {
   id: number;
@@ -42,60 +42,66 @@ const items: QuestionItem[] = [
 ];
 
 const QuestionAccordion = () => {
+  const [openId, setOpenId] = useState<number | null>(null);
+  const contentRefs = useRef<Record<number, HTMLDivElement | null>>({});
+
+  const toggle = (id: number) => {
+    setOpenId((prev) => (prev === id ? null : id));
+  };
+
+  useEffect(() => {
+    Object.entries(contentRefs.current).forEach(([key, ref]) => {
+      if (ref) {
+        ref.style.maxHeight = openId === +key ? `${ref.scrollHeight}px` : "0px";
+      }
+    });
+  }, [openId]);
+
   return (
     <div className={styles.questionList}>
-      {items.map(({ id, title, content }) => (
-        <Accordion
-          key={id}
-          sx={{
-            width: "100%",
-            backgroundColor: "transparent",
-            color: "#fff",
-            boxShadow: "none",
-
-            "&:before": { display: "none" },
-          }}
-          disableGutters
-        >
-          <AccordionSummary
-            expandIcon={
-              <div className={styles.endIcon} aria-hidden="true">
+      {items.map(({ id, title, content }) => {
+        const isOpen = id === openId;
+        return (
+          <div key={id} className={styles.accordionItem}>
+            <button
+              type="button"
+              className={`${styles.accordionSummary} ${
+                isOpen ? styles.active : ""
+              }`}
+              onClick={() => toggle(id)}
+              aria-expanded={isOpen}
+              aria-controls={`panel-${id}`}
+              id={`header-${id}`}
+            >
+              <h3>{title}</h3>
+              <div className={styles.endIcon}>
                 <Image
-                  loading="lazy"
                   src="/assets/home/question/arrow.svg"
                   alt="arrow"
                   width={16}
                   height={16}
+                  style={{
+                    transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                    transition: "transform 0.3s",
+                  }}
                 />
               </div>
-            }
-            sx={{
-              backgroundColor: "transparent",
-              color: "#fff",
-              minHeight: 48,
-              fontWeight: 500,
-              "&.Mui-expanded": { color: "#d9ad49" },
-              "& .MuiAccordionSummary-content": { margin: "12px 0" },
-            }}
-            aria-controls={`panel-content-${id}`}
-            id={`panel-header-${id}`}
-          >
-            <h3>{title}</h3>
-          </AccordionSummary>
+            </button>
 
-          <AccordionDetails
-            sx={{
-              backgroundColor: "transparent",
-              color: "#fff",
-              padding: "10px 16px 16px",
-            }}
-            id={`panel-content-${id}`}
-            aria-labelledby={`panel-header-${id}`}
-          >
-            <div>{content}</div>
-          </AccordionDetails>
-        </Accordion>
-      ))}
+            <div
+              id={`panel-${id}`}
+              role="region"
+              aria-labelledby={`header-${id}`}
+              className={styles.accordionDetails}
+              ref={(el) => {
+                contentRefs.current[id] = el;
+              }}
+            >
+              <div className={styles.content}>{content}</div>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };

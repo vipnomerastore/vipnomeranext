@@ -1,5 +1,4 @@
 import React from "react";
-import { Tooltip } from "@mui/material";
 import { NumberItem } from "@/store/cartStore";
 import {
   getTierConfig,

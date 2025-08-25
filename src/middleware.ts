@@ -11,6 +11,7 @@ export function middleware(request: NextRequest) {
   // Обработка sitemap.xml для поддоменов
   if (pathname === "/sitemap.xml" && host !== "vipnomerastore.ru") {
     const subdomain = host.split(".")[0];
+
     if (subdomain && subdomain !== "vipnomerastore") {
       // Перенаправляем на специальный sitemap для поддомена
       return NextResponse.rewrite(
@@ -22,6 +23,7 @@ export function middleware(request: NextRequest) {
   // Обработка robots.txt для поддоменов
   if (pathname === "/robots.txt" && host !== "vipnomerastore.ru") {
     const subdomain = host.split(".")[0];
+
     if (subdomain && subdomain !== "vipnomerastore") {
       // Перенаправляем на специальный robots для поддомена
       return NextResponse.rewrite(

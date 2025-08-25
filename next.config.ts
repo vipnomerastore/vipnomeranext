@@ -74,12 +74,6 @@ const nextConfig: NextConfig = {
   // Output для standalone deployment
   output: process.env.NODE_ENV === "production" ? "standalone" : undefined,
 
-  // Экспериментальные функции для production
-  experimental: {
-    // Оптимизация пакетов
-    optimizePackageImports: ["@mui/material", "@mui/icons-material"],
-  },
-
   // Переменные окружения
   env: {
     CUSTOM_KEY: process.env.CUSTOM_KEY,

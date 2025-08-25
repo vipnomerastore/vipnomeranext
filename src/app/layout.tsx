@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 
-import EmotionProvider from "@/app/EmotionProvider";
-import ClientThemeProvider from "@/app/ClientThemeProvider";
 import ClientLayout from "@/app/clientLayout";
 import OrganizationSchema from "@/schemas/OrganizationSchema";
 import WebSiteSchema from "@/schemas/WebSiteSchema";
@@ -157,11 +155,7 @@ export default function RootLayout({
 
         <div id="modal-root"></div>
 
-        <EmotionProvider>
-          <ClientThemeProvider>
-            <ClientLayout>{children}</ClientLayout>
-          </ClientThemeProvider>
-        </EmotionProvider>
+        <ClientLayout>{children}</ClientLayout>
 
         <OrganizationSchema
           name="VIP nomera store"
