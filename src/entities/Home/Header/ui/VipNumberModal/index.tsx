@@ -111,7 +111,7 @@ const VipNumberModal = ({ isOpen, onClose }: VipNumberModalProps) => {
             fullWidth
             disabled={formState.isSubmitting}
           >
-            Отправить
+            {formState.isSubmitting ? "Отправка..." : "Отправить"}
           </Button>
         </form>
       </div>

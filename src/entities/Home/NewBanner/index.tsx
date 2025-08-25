@@ -212,7 +212,7 @@ const HomeNewBanner = () => {
             fullWidth
             variant="outline"
           >
-            Отправить
+            {formState.isSubmitting ? "Отправка..." : "Отправить"}
           </Button>
         </form>
       </div>

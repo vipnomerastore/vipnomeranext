@@ -104,7 +104,7 @@ const GetNumberModal = ({ isOpen, onClose }: GetNumberModalProps) => {
             fullWidth
             disabled={formState.isSubmitting}
           >
-            Отправить
+            {formState.isSubmitting ? "Отправка..." : "Отправить"}
           </Button>
         </form>
       </div>

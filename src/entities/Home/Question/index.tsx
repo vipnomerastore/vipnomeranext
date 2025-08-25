@@ -114,7 +114,7 @@ const HomeQuestion = () => {
                     arrow
                     disabled={formState.isSubmitting}
                   >
-                    Отправить
+                    {formState.isSubmitting ? "Отправка..." : "Отправить"}
                   </Button>
                 </div>
               </div>

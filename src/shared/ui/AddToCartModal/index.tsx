@@ -33,11 +33,11 @@ const defaultValues: FormData = {
 };
 
 const AddToCartModal = ({ isOpen, onClose, item }: GetNumberModalProps) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const router = useRouter();
 
-  const { control, handleSubmit, reset } = useForm({ defaultValues });
+  const { control, handleSubmit, reset, formState } = useForm({
+    defaultValues,
+  });
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
@@ -49,9 +49,6 @@ const AddToCartModal = ({ isOpen, onClose, item }: GetNumberModalProps) => {
 
   const onSubmitHandler = async (data: FormData) => {
     try {
-      if (isSubmitting) return;
-      setIsSubmitting(true);
-
       const payload = {
         data: {
           name: data.fio,
@@ -77,8 +74,6 @@ const AddToCartModal = ({ isOpen, onClose, item }: GetNumberModalProps) => {
       router.push("/success-order");
     } catch (error: unknown) {
       console.error("Ошибка:", error);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -114,11 +109,11 @@ const AddToCartModal = ({ isOpen, onClose, item }: GetNumberModalProps) => {
 
           <Button
             type="submit"
-            disabled={isSubmitting}
+            disabled={formState.isSubmitting}
             variant="outline"
             fullWidth
           >
-            Сохранить
+            {formState.isSubmitting ? "Отправка..." : "Отправить"}
           </Button>
         </form>
       </div>

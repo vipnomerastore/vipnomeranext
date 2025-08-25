@@ -98,7 +98,7 @@ const EsimModal = ({ isOpen, onClose }: EsimModalProps) => {
             disabled={formState.isSubmitting}
             fullWidth
           >
-            Отправить
+            {formState.isSubmitting ? "Отправка..." : "Отправить"}
           </Button>
         </form>
       </div>
