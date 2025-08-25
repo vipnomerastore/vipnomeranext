@@ -15,7 +15,7 @@ const NumberMaskInput = (props: NumberMaskInputProps) => {
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
 
   const charLimit = useMemo(
-    () => (activeMaskTab === 1 ? /^[A-Z\u0410-\u042f]$/i : /^\d$/),
+    () => (activeMaskTab === 1 ? /^[A-Z]$/i : /^\d$/),
     [activeMaskTab]
   );
 
@@ -134,7 +134,7 @@ const NumberMaskInput = (props: NumberMaskInputProps) => {
                 inputMode={activeMaskTab === 1 ? "text" : "numeric"}
                 pattern={activeMaskTab === 1 ? undefined : "\\d*"}
                 value={number[refIndex] || ""}
-                placeholder={activeMaskTab === 1 ? "А" : "X"}
+                placeholder={activeMaskTab === 1 ? "A" : "X"}
                 ref={setInputRef(refIndex)}
                 disabled={refIndex === 0}
                 readOnly={refIndex === 0}
