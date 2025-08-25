@@ -27,20 +27,15 @@ const defaultValues: FormData = {
 };
 
 const FormSection = forwardRef<HTMLElement>((_, ref) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const router = useRouter();
 
-  const { control, reset, handleSubmit } = useForm<FormData>({
+  const { control, reset, handleSubmit, formState } = useForm<FormData>({
     defaultValues,
   });
 
   const onSubmitHandler = useCallback(
     async (data: FormData) => {
       try {
-        if (isSubmitting) return;
-        setIsSubmitting(true);
-
         const payload = {
           data: {
             fio: data.fullName,
@@ -55,8 +50,6 @@ const FormSection = forwardRef<HTMLElement>((_, ref) => {
         router.push("/thank-you");
       } catch (error: unknown) {
         console.error(error);
-      } finally {
-        setIsSubmitting(false);
       }
     },
     [router]
@@ -89,8 +82,13 @@ const FormSection = forwardRef<HTMLElement>((_, ref) => {
 
           <Checkbox control={control} name="agreement" />
 
-          <Button type="submit" arrow variant="outline" disabled={isSubmitting}>
-            Отправить
+          <Button
+            type="submit"
+            arrow
+            variant="outline"
+            disabled={formState.isSubmitting}
+          >
+            {formState.isSubmitting ? "Отправка..." : "Отправить"}
           </Button>
         </form>
       </div>

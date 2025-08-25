@@ -127,7 +127,7 @@ const HomeMap = () => {
                   arrow
                   disabled={formState.isSubmitting}
                 >
-                  Отправить
+                  {formState.isSubmitting ? "Отправка..." : "Отправить"}
                 </Button>
               </div>
             </form>

@@ -38,12 +38,11 @@ const defaultValues: FormData = {
 };
 
 const SellFormSection: React.FC = memo(() => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [operator, setOperator] = useState("");
 
   const router = useRouter();
 
-  const { control, handleSubmit, reset } = useForm<FormData>({
+  const { control, handleSubmit, reset, formState } = useForm<FormData>({
     defaultValues,
   });
 
@@ -55,9 +54,6 @@ const SellFormSection: React.FC = memo(() => {
   const onSubmitHandler = useCallback(
     async (data: FormData) => {
       try {
-        if (isSubmitting) return;
-        setIsSubmitting(true);
-
         const sellNumberString = data.sellNumbers
           .map((item) => `${item.number} ${item.price.replace(/\s/g, "")}₽`)
           .join(", ");
@@ -79,8 +75,6 @@ const SellFormSection: React.FC = memo(() => {
         router.push("/thank-you");
       } catch (error: any) {
         console.error("Ошибка при отправке формы:", error);
-      } finally {
-        setIsSubmitting(false);
       }
     },
     [router, operator, setOperator]
@@ -215,10 +209,10 @@ const SellFormSection: React.FC = memo(() => {
           arrow
           variant="outline"
           type="submit"
-          disabled={isSubmitting}
+          disabled={formState.isSubmitting}
           fullWidth
         >
-          Получить предложение
+          {formState.isSubmitting ? "Отправка..." : "Получить предложение  "}
         </Button>
       </form>
     </section>
