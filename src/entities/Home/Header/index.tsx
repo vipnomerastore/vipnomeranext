@@ -4,11 +4,10 @@ import { useState } from "react";
 import Image from "next/image";
 
 import HeaderContent from "./ui/HeaderContent";
-
+import HomeCards from "./ui/HomeCards";
 import VipNumberModal from "./ui/VipNumberModal";
 
 import styles from "./Header.module.scss";
-import HomeCards from "./ui/HomeCards";
 
 const HomeHeader = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

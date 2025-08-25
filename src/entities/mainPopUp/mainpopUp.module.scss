@@ -50,6 +50,7 @@ $secondary-color: #d9ad49;
   padding: 40px;
   animation: scaleIn 400ms ease-in-out forwards 100ms;
   width: 100%;
+  backdrop-filter: blur(14px);
 
   @media (max-width: 767px) {
     padding: 20px;

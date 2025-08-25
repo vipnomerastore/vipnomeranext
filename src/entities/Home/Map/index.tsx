@@ -14,7 +14,6 @@ import MaskedInput from "@/shared/ui/MaskedInput";
 import TextArea from "@/shared/ui/TextArea";
 import Checkbox from "@/shared/ui/Checkbox";
 import styles from "./Map.module.scss";
-import { useState } from "react";
 
 const YANDEX_MAPS_API_KEY = "11bca4c6-71bc-4e20-85ae-39d33f81d802";
 
@@ -35,39 +34,31 @@ const defaultValues: FormData = {
 };
 
 const HomeMap = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const router = useRouter();
-
-  const { control, reset, handleSubmit } = useForm({ defaultValues });
+  const { control, reset, handleSubmit, formState } = useForm<FormData>({
+    defaultValues,
+  });
 
   const onSubmitHandler = async (data: FormData) => {
     try {
-      if (isSubmitting) return;
-      setIsSubmitting(true);
-
-      const payload = {
+      await axios.post(`${SERVER_URL}/forma-svyazatsya-s-namis`, {
         data: {
           name: data.fio,
           email: data.email,
           phone: data.phone,
           question: data.info,
         },
-      };
-
-      await axios.post(`${SERVER_URL}/forma-svyazatsya-s-namis`, payload);
+      });
 
       reset();
       router.push("/thank-you");
     } catch (error) {
-      console.error("Ошибка:", error);
-    } finally {
-      setIsSubmitting(false);
+      console.error("Ошибка отправки формы:", error);
     }
   };
 
   return (
-    <div id="contacts" className={styles.mapWrapper}>
+    <section id="contacts" className={styles.mapWrapper}>
       <div className={styles.content}>
         <h2 className={styles.title}>Контакты</h2>
 
@@ -95,7 +86,7 @@ const HomeMap = () => {
           </YMaps>
 
           <div className={styles.formContainer}>
-            <h2>Связаться с нами</h2>
+            <h3 className={styles.formTitle}>Связаться с нами</h3>
 
             <form
               onSubmit={handleSubmit(onSubmitHandler)}
@@ -118,7 +109,7 @@ const HomeMap = () => {
                 fullWidth
               />
 
-              <MaskedInput fullWidth name="phone" control={control} />
+              <MaskedInput control={control} name="phone" fullWidth />
 
               <TextArea
                 control={control}
@@ -134,7 +125,7 @@ const HomeMap = () => {
                   type="submit"
                   variant="outline"
                   arrow
-                  disabled={isSubmitting}
+                  disabled={formState.isSubmitting}
                 >
                   Отправить
                 </Button>
@@ -143,53 +134,49 @@ const HomeMap = () => {
           </div>
 
           <div className={styles.chips}>
-            <div className={styles.chipWrapper}>
-              <span className={styles.chip}>+7 933 333 33 11</span>{" "}
-            </div>
+            {[
+              { label: "+7 933 333 33 11" },
+              { label: "Пн-Пт 10:00–19:00" },
+              { label: "Оренбург, пр. Победы, 73/1" },
+            ].map((item, idx) => (
+              <div key={idx} className={styles.chipWrapper}>
+                <span className={styles.chip}>{item.label}</span>
+              </div>
+            ))}
 
-            <div className={styles.chipWrapper}>
-              <span className={styles.chip}>Пн-Пт 10:00–19:00</span>
-            </div>
+            <Link
+              href="https://t.me/+WNyOLaEoQ_dlMmEy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.linkChip}
+            >
+              <Image
+                src="/assets/header/tg.svg"
+                alt="Telegram"
+                width={18}
+                height={18}
+                className={styles.chipIcon}
+              />
+            </Link>
 
-            <div className={styles.chipWrapper}>
-              <span className={styles.chip}>Оренбург, пр. Победы, 73/1</span>
-            </div>
-
-            <span className={styles.linkChip}>
-              <Link
-                href="https://t.me/+WNyOLaEoQ_dlMmEy"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Image
-                  src="/assets/header/tg.svg"
-                  alt="Telegram"
-                  className={styles.chipIcon}
-                  width={18}
-                  height={18}
-                />
-              </Link>
-            </span>
-
-            <span className={styles.linkChip}>
-              <Link
-                href="https://api.whatsapp.com/send/?phone=%2B79333333311&text&type=phone_number&app_absent=0"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Image
-                  width={28}
-                  height={28}
-                  src="/assets/header/whatsapp.svg"
-                  alt="WhatsApp"
-                  className={styles.chipIcon}
-                />
-              </Link>
-            </span>
+            <Link
+              href="https://api.whatsapp.com/send/?phone=%2B79333333311&text&type=phone_number&app_absent=0"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.linkChip}
+            >
+              <Image
+                src="/assets/header/whatsapp.svg"
+                alt="WhatsApp"
+                width={28}
+                height={28}
+                className={styles.chipIcon}
+              />
+            </Link>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -33,11 +33,12 @@ const defaultValues: FormData = {
 
 const VipNumberModal = ({ isOpen, onClose }: VipNumberModalProps) => {
   const [purpose, setPurpose] = useState("Личное пользование");
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
 
-  const { control, reset, handleSubmit } = useForm({ defaultValues });
+  const { control, reset, handleSubmit, formState } = useForm({
+    defaultValues,
+  });
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
@@ -48,9 +49,6 @@ const VipNumberModal = ({ isOpen, onClose }: VipNumberModalProps) => {
   }, [isOpen]);
 
   const onSubmitHandler = async (data: FormData) => {
-    if (isSubmitting) return;
-    setIsSubmitting(true);
-
     try {
       const payload = {
         data: {
@@ -67,8 +65,6 @@ const VipNumberModal = ({ isOpen, onClose }: VipNumberModalProps) => {
       router.push("/thank-you");
     } catch (error: unknown) {
       console.error("Ошибка:", error);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -113,7 +109,7 @@ const VipNumberModal = ({ isOpen, onClose }: VipNumberModalProps) => {
             type="submit"
             variant="outline"
             fullWidth
-            disabled={isSubmitting}
+            disabled={formState.isSubmitting}
           >
             Отправить
           </Button>

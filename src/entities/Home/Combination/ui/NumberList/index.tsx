@@ -7,7 +7,7 @@ import Script from "next/script";
 import { NumberItem } from "@/store/cartStore";
 import { useAuthStore } from "@/store/authStore";
 import TierStats from "../TierStats/TierStats";
-import AddToCartModal from "../AddToCartModal";
+import AddToCartModal from "../../../../../shared/ui/AddToCartModal";
 import PhoneDescriptionModal from "@/app/phone-descriptional/PhoneDescriptionalClient";
 import { useNumberDisplay } from "./hooks/useNumberDisplay";
 import { useTierManagement } from "./hooks/useTierManagement";

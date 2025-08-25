@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -31,11 +31,10 @@ const defaultValues: FormData = {
 };
 
 const EsimModal = ({ isOpen, onClose }: EsimModalProps) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const router = useRouter();
-
-  const { control, reset, handleSubmit } = useForm({ defaultValues });
+  const { control, reset, handleSubmit, formState } = useForm<FormData>({
+    defaultValues,
+  });
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
@@ -47,32 +46,27 @@ const EsimModal = ({ isOpen, onClose }: EsimModalProps) => {
 
   const onSubmitHandler = async (data: FormData) => {
     try {
-      if (isSubmitting) return;
-      setIsSubmitting(true);
+      await axios.post(`${SERVER_URL}/esims`, {
+        data: { name: data.fio, phone: data.phone },
+      });
 
-      const payload = {
-        data: {
-          name: data.fio,
-          phone: data.phone,
-        },
-      };
-
-      await axios.post(`${SERVER_URL}/esims`, payload);
-
-      onClose();
       reset();
+      onClose();
       router.push("/thank-you");
-    } catch (error: unknown) {
-      console.log(error);
-    } finally {
-      setIsSubmitting(false);
+    } catch (error) {
+      console.error("Ошибка отправки формы:", error);
     }
   };
 
   if (!isOpen) return null;
 
   const modalContent = (
-    <div className={styles.modalOverlay} onClick={onClose} role="dialog">
+    <div
+      className={styles.modalOverlay}
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+    >
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <button
           className={styles.closeButton}
@@ -82,16 +76,15 @@ const EsimModal = ({ isOpen, onClose }: EsimModalProps) => {
           ×
         </button>
 
-        <h2 className={styles.title}>ПОЛУЧИТЬ ESIM НОМЕР</h2>
-
+        <h2 className={styles.title}>Получить ESIM номер</h2>
         <p className={styles.subtitle}>Оставь заявку на ESIM</p>
 
         <form onSubmit={handleSubmit(onSubmitHandler)} className={styles.form}>
           <Input
             control={control}
             name="fio"
-            required
             placeholder="Введите ваше имя"
+            required
             fullWidth
           />
 
@@ -102,7 +95,7 @@ const EsimModal = ({ isOpen, onClose }: EsimModalProps) => {
           <Button
             type="submit"
             variant="outline"
-            disabled={isSubmitting}
+            disabled={formState.isSubmitting}
             fullWidth
           >
             Отправить

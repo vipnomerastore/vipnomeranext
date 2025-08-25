@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -29,20 +29,15 @@ const defaultValues: FormData = {
 };
 
 const HomeQuestion = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const router = useRouter();
 
-  const { control, handleSubmit, reset } = useForm<FormData>({
+  const { control, handleSubmit, reset, formState } = useForm<FormData>({
     defaultValues,
   });
 
   const onSubmitHandler = useCallback(
     async (data: FormData) => {
       try {
-        if (isSubmitting) return;
-        setIsSubmitting(true);
-
         const payload = {
           data: {
             name: data.name,
@@ -58,8 +53,6 @@ const HomeQuestion = () => {
         router.push("/thank-you");
       } catch (error: unknown) {
         console.log(error);
-      } finally {
-        setIsSubmitting(false);
       }
     },
     [router]
@@ -119,7 +112,7 @@ const HomeQuestion = () => {
                     type="submit"
                     variant="outline"
                     arrow
-                    disabled={isSubmitting}
+                    disabled={formState.isSubmitting}
                   >
                     Отправить
                   </Button>
