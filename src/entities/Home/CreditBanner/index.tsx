@@ -183,7 +183,7 @@ const HomeCreditBanner: React.FC = () => {
               fullWidth
               variant="outline"
             >
-              Сохранить
+              {formState.isSubmitting ? "Отправка..." : "Отправить"}
             </Button>
           </form>
         </div>
