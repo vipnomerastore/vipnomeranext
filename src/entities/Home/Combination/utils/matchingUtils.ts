@@ -1,36 +1,76 @@
+import { NumberItem } from "@/store/cartStore";
+
 /**
  * Hierarchical matching function that finds the longest consecutive match
- * starting from the end of the phone number pattern
+ * starting from the beginning of the phone number pattern for Russian numbers
  */
 export const matchesExactHierarchy = (
   phone: string,
   criteria: string[]
 ): number => {
-  const digits = phone.replace(/[\s+]/g, "").slice(-10);
-  const lastIndex = criteria.reduce((acc, c, i) => (c ? i : acc), -1);
+  // Получаем только цифры номера без +7
+  const digits = phone.replace(/\D/g, "");
+  // Для российских номеров берем 10 цифр после +7
+  const phoneDigits = digits.slice(-10);
 
-  if (lastIndex === -1) return 0;
+  let matchCount = 0;
 
-  for (let len = lastIndex + 1; len >= 2; len--) {
-    let matchCount = 0;
+  // Проверяем совпадения с начала номера
+  for (let i = 0; i < criteria.length && i < phoneDigits.length; i++) {
+    const criteriaDigit = criteria[i];
+    const phoneDigit = phoneDigits[i];
 
-    for (let i = 0; i < len; i++) {
-      const c = criteria[criteria.length - len + i];
-      if (!c) continue;
+    if (criteriaDigit && criteriaDigit === phoneDigit) {
+      matchCount++;
+    } else if (criteriaDigit) {
+      // Если есть критерий, но он не совпадает, прерываем поиск
+      break;
+    }
+  }
 
-      const digitIndex = digits.length - len + i;
-      if (digits[digitIndex] === c) {
-        matchCount++;
-      } else {
-        matchCount = -1;
+  return matchCount;
+};
+
+/**
+ * Finds the best matching numbers with hierarchical fallback
+ * If no exact matches found, gradually reduces requirements
+ */
+export const findBestMatches = (
+  allNumbers: NumberItem[],
+  criteria: string[]
+): NumberItem[] => {
+  const nonEmptyCriteriaLength = criteria.filter(Boolean).length;
+
+  if (nonEmptyCriteriaLength === 0) {
+    return allNumbers;
+  }
+
+  // Сначала ищем точные совпадения
+  let results = allNumbers.filter((item) => {
+    const matchLength = matchesExactHierarchy(item.phone!, criteria);
+    return matchLength === nonEmptyCriteriaLength;
+  });
+
+  // Если точных совпадений нет, ищем с постепенным уменьшением требований
+  if (results.length === 0) {
+    for (
+      let requiredMatches = nonEmptyCriteriaLength - 1;
+      requiredMatches >= 1;
+      requiredMatches--
+    ) {
+      results = allNumbers.filter((item) => {
+        const matchLength = matchesExactHierarchy(item.phone!, criteria);
+        return matchLength >= requiredMatches;
+      });
+
+      // Если нашли совпадения, останавливаемся
+      if (results.length > 0) {
         break;
       }
     }
-
-    if (matchCount >= 2) return matchCount;
   }
 
-  return 0;
+  return results;
 };
 
 /**

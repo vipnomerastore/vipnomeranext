@@ -6,6 +6,7 @@ import {
   matchesMask,
   matchesBirthNumber,
   matchesBestNumberCombined,
+  findBestMatches,
 } from "../utils/matchingUtils";
 
 interface UseFilteredNumbersProps {
@@ -35,9 +36,8 @@ export const useFilteredNumbers = ({
 }: UseFilteredNumbersProps) => {
   // Filtered numbers with hierarchical search
   const filteredNumbers = useMemo(() => {
-    const nonEmptyCriteriaLength = filterNumber.filter(Boolean).length;
-
-    const filterItem = (item: NumberItem, exactMatch: boolean = true) => {
+    // Сначала фильтруем по всем критериям кроме номера
+    const baseFilteredNumbers = allNumbers.filter((item) => {
       const priceMatch =
         item.price! >= filterPrice[0] && item.price! <= filterPrice[1];
       const operatorMatch =
@@ -45,43 +45,23 @@ export const useFilteredNumbers = ({
       const birthMatch = matchesBirthNumber(item.phone!, birthNumber);
       const bestNumMatch = matchesBestNumberCombined(item.phone!, bestNumber);
 
-      let numberMatch = true;
-      if (filterNumber.some((n) => n !== "")) {
-        if (filterActiveMaskTab === 0) {
-          const matchLength = matchesExactHierarchy(item.phone!, filterNumber);
-          numberMatch = exactMatch
-            ? matchLength === nonEmptyCriteriaLength
-            : matchLength >= 2;
-        } else {
-          numberMatch = matchesMask(item.phone!, filterNumber);
-        }
-      }
+      return priceMatch && operatorMatch && birthMatch && bestNumMatch;
+    });
 
-      return (
-        priceMatch && operatorMatch && birthMatch && bestNumMatch && numberMatch
-      );
-    };
-
-    // Try exact match first
-    let results = allNumbers.filter((item) => filterItem(item, true));
-
-    // If no exact matches and we have criteria, try partial matches
-    if (results.length === 0 && filterNumber.some((n) => n !== "")) {
-      const maxMatchLength = Math.max(
-        ...allNumbers.map((item) =>
-          matchesExactHierarchy(item.phone!, filterNumber)
-        )
-      );
-
-      if (maxMatchLength >= 2) {
-        results = allNumbers.filter((item) => {
-          const matchLength = matchesExactHierarchy(item.phone!, filterNumber);
-          return filterItem(item, false) && matchLength === maxMatchLength;
-        });
+    // Если есть критерии поиска по номеру, применяем иерархический поиск
+    if (filterNumber.some((n) => n !== "")) {
+      if (filterActiveMaskTab === 0) {
+        // Для поиска по номеру используем новую логику с постепенным снижением требований
+        return findBestMatches(baseFilteredNumbers, filterNumber);
+      } else {
+        // Для поиска по маске используем старую логику
+        return baseFilteredNumbers.filter((item) =>
+          matchesMask(item.phone!, filterNumber)
+        );
       }
     }
 
-    return results;
+    return baseFilteredNumbers;
   }, [
     allNumbers,
     filterPrice,
