@@ -9,6 +9,14 @@ export function middleware(request: NextRequest) {
   const regionFromNginx = request.headers.get("x-region");
   const currentRegionCookie = request.cookies.get("region")?.value;
 
+  // 1️⃣ Пропуск основного sitemap для vipnomerastore.ru и localhost
+  if (
+    pathname === "/sitemap.xml" &&
+    (host === "vipnomerastore.ru" || host.startsWith("localhost"))
+  ) {
+    return NextResponse.next();
+  }
+
   // Обработка sitemap.xml для поддоменов
   if (
     (pathname === "/sitemap.xml" || pathname === "/robots.txt") &&
