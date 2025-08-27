@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
 
   // 1️⃣ Пропуск основного sitemap для vipnomerastore.ru и localhost
   if (
-    pathname === "/sitemap.xml" &&
+    (pathname === "/sitemap.xml" || pathname === "/robots.txt") &&
     (host === "vipnomerastore.ru" || host.startsWith("localhost"))
   ) {
     return NextResponse.next();
