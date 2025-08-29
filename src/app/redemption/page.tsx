@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+
 import RedemptionPageClient from "./RedemptionPageClient";
 import { regionName, regionDisplay } from "@/shared/utils";
 import { getServerRegion } from "@/hooks/useServerRegion";

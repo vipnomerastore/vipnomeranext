@@ -1,13 +1,11 @@
 import React from "react";
 import { createPortal } from "react-dom";
-import { useRouter } from "next/navigation";
 
-import { NumberItem, useCartStore } from "@/store/cartStore";
+import { NumberItem } from "@/store/cartStore";
 import {
   getTierConfig,
   getNumberTier,
 } from "@/entities/Home/Combination/ui/NumberList/const";
-
 import styles from "./PhoneDescriptionalClient.module.scss";
 
 interface Props {
@@ -22,31 +20,8 @@ const PhoneDescriptionModal: React.FC<Props> = ({
   onClose,
 }) => {
   const modalRoot = document.getElementById("modal-root");
-  const router = useRouter();
-  const { addItem } = useCartStore();
 
   if (!modalRoot) return null;
-
-  const handleAddToCart = () => {
-    const cartItem = {
-      ...number,
-      price: isPartner ? number.partner_price : number.price,
-      quantity: 1,
-    };
-
-    const isAlreadyInCart = useCartStore
-      .getState()
-      .items.some((i) => i.phone === cartItem.phone);
-
-    if (isAlreadyInCart) {
-      return;
-    }
-
-    addItem(cartItem);
-
-    onClose();
-    router.push("/cart");
-  };
 
   const tierKey = getNumberTier(number.price || 0);
   const tierConfig = getTierConfig(number.price || 0);
@@ -66,9 +41,11 @@ const PhoneDescriptionModal: React.FC<Props> = ({
         <p id="description-modal-text" className={styles.modalText}>
           {number.phone}
         </p>
+
         <p className={styles.modalSubText}>
           Оператор: <span>{number.operator}</span>
         </p>
+
         <p className={styles.modalSubText}>
           Регион:{" "}
           <span>
@@ -82,12 +59,15 @@ const PhoneDescriptionModal: React.FC<Props> = ({
             Цена:{" "}
             <span>{isPartner ? number.partner_price : number.price} ₽</span>
           </p>
-          <p className={styles.credit}>
-            Рассрочка без банка:{" "}
-            <span>
-              {number.part_price} ₽ x {number.credit_month_count} мес
-            </span>
-          </p>
+
+          {!isPartner && (
+            <p className={styles.credit}>
+              Рассрочка без банка:{" "}
+              <span>
+                {number.part_price} ₽ x {number.credit_month_count} мес
+              </span>
+            </p>
+          )}
         </div>
       </div>
     </div>,

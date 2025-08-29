@@ -4,11 +4,10 @@
   position: sticky;
   top: 80px;
   margin-top: 80px;
-  z-index: 1001;
+  z-index: 98;
   width: 100%;
   transition: background-color 0.3s ease, backdrop-filter 0.3s ease,
     box-shadow 0.3s ease;
-
   background: transparent;
   backdrop-filter: none;
   box-shadow: none;
@@ -25,7 +24,7 @@
     justify-content: space-between;
     height: 102px;
     max-width: 1166px;
-    margin: 0 auto;
+    margin: 10px auto;
     padding: 0 2%;
     gap: 15px;
     position: relative;
@@ -269,12 +268,12 @@
       width: 100vw;
       height: 100vh;
       background-color: #121212;
-      padding: 16px 8px;
-      padding-top: 3px;
-      margin-top: 60px;
+      padding: 68px 8px 0px 8px;
       display: flex;
       flex-direction: column;
-      z-index: 9999;
+      z-index: 98;
+      overflow: hidden;
+      overscroll-behavior: none;
 
       .mobileMenuHeader {
         display: flex;
@@ -366,26 +365,30 @@
     }
 
     @media (max-width: 569px) {
-      height: 60px;
+      height: 50px;
 
       .mainControls {
         .burgerButton {
           display: flex;
         }
+
         .mobileControls {
           .phoneWrapper {
             display: none;
             text-decoration: none;
           }
         }
+
         .actionsWrapper {
           .phoneWrapperBig {
             display: none;
             text-decoration: none;
           }
+
           .loginButton {
             display: none;
           }
+
           .iconButton {
             display: none;
             text-decoration: none;
@@ -396,9 +399,7 @@
         display: none;
       }
 
-      // Скрываем RegionSelector в хедере на мобильных (показываем в меню)
       .header > *:nth-child(3) {
-        // RegionSelector
         display: none;
       }
     }
@@ -434,9 +435,7 @@
         display: none;
       }
 
-      // Скрываем RegionSelector в хедере на планшетах (показываем в меню)
       .header > *:nth-child(3) {
-        // RegionSelector
         display: none;
       }
     }
@@ -472,9 +471,7 @@
         display: none;
       }
 
-      // Скрываем RegionSelector в хедере на планшетах (показываем в меню)
       .header > *:nth-child(3) {
-        // RegionSelector
         display: none;
       }
     }
@@ -518,9 +515,28 @@
   }
 }
 
-.headerWrapper.noBanner {
-  top: 0 !important;
-  margin-top: 10px !important;
+.userWrapperMobile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #2c2c2b;
+  padding: 1.5px 10px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  border-left: 1px solid #ffffff54;
+  border-right: 1px solid #ffffff54;
+  max-width: 160px;
+  min-width: 0;
+
+  &:hover {
+    background-color: #3c3c3b;
+  }
+
+  @media (max-width: 767px) {
+    border-radius: 10px;
+    gap: 10px;
+    max-width: 100%;
+  }
 }
 
 .userWrapper {
@@ -544,6 +560,10 @@
     border-radius: 10px;
     gap: 10px;
     max-width: 100%;
+  }
+
+  @media (max-width: 576px) {
+    display: none;
   }
 }
 
@@ -609,6 +629,7 @@
     width: 36px;
     height: 36px;
     border-radius: 10px;
+
     img {
       width: 18px;
       height: 18px;
@@ -642,9 +663,7 @@
 
 .bannerTop {
   position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1100;
+  z-index: 99;
   width: 100%;
   height: 80px;
   background: url("/assets/banner/banner-bg.png") center/cover no-repeat;
@@ -654,12 +673,6 @@
   text-align: center;
   font-weight: 750;
   font-size: 30px;
-  line-height: 30px;
-  font-family: inherit, ExtraBold, sans-serif;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
-  letter-spacing: 0.5px;
-  border-bottom: 1.5px solid rgba(255, 255, 255, 0.18);
-  padding: 0 16px;
 
   span {
     margin-right: 8px;
@@ -674,231 +687,16 @@
   }
 
   .gradientText {
-    display: inline-block;
     background: linear-gradient(90deg, #d9ad49, #fdfca4);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-weight: 750;
-    font-size: 30px;
-    line-height: 30px;
-    font-family: inherit, ExtraBold, sans-serif;
-  }
-
-  .bannerClose {
-    position: absolute;
-    top: 2px;
-    right: 7px;
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 28px;
-    font-weight: 700;
-    cursor: pointer;
-    z-index: 2;
-    opacity: 0.7;
-    transition: opacity 0.2s;
-    line-height: 1;
-    padding: 0;
-
-    &:hover {
-      opacity: 1;
-    }
   }
 
   @media (max-width: 767px) {
     font-size: 14px;
-    line-height: 18px;
     padding: 8px;
     flex-wrap: wrap;
     height: 60px;
-
-    span,
-    .gradientText {
-      font-size: 14px;
-      line-height: 18px;
-    }
-  }
-}
-
-.secondBannerTop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1100;
-  width: 100%;
-  height: 80px;
-  background: url("/assets/banner/banner-bg.png") center/cover no-repeat,
-    #ffd600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  text-align: center;
-  font-weight: 700;
-  font-size: 30px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
-  letter-spacing: 0.5px;
-  border-bottom: 1.5px solid rgba(255, 255, 255, 0.18);
-  padding: 0 10px;
-
-  span {
-    margin-right: 8px;
-  }
-
-  span:last-child {
-    margin-right: 0;
-  }
-
-  .whiteText {
-    color: #fff;
-  }
-
-  .gradientText {
-    display: inline-block;
-    background: linear-gradient(90deg, #d9ad49, #fdfca4);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-family: inherit, ExtraBold, sans-serif;
-  }
-
-  .firstColumn {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-
-    .title {
-      font-size: 28px;
-      font-weight: 700;
-      line-height: 30px;
-    }
-
-    .subtitle {
-      text-align: right;
-      font-weight: 400;
-      font-size: 24px;
-    }
-  }
-
-  .numbers {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-
-    .number {
-      font-size: 28px;
-      font-weight: 700;
-      line-height: 30px;
-    }
-  }
-
-  .bannerClose {
-    position: absolute;
-    top: 2px;
-    right: 7px;
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 28px;
-    font-weight: 700;
-    cursor: pointer;
-    z-index: 2;
-    opacity: 0.7;
-    transition: opacity 0.2s;
-    line-height: 1;
-    padding: 0;
-
-    &:hover {
-      opacity: 1;
-    }
-  }
-
-  @media (max-width: 767px) {
-    height: 80px;
-    gap: 5px;
-    font-size: 14px;
-    line-height: 18px;
-    padding: 8px;
-    flex-wrap: wrap;
-    word-break: normal;
-    white-space: normal;
-
-    span,
-    .gradientText {
-      font-size: 16px;
-      line-height: 18px;
-    }
-  }
-}
-
-.bannerClose {
-  position: absolute;
-  top: 2px;
-  right: 7px;
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 28px;
-  font-weight: 700;
-  cursor: pointer;
-  z-index: 2;
-  opacity: 0.7;
-  transition: opacity 0.2s;
-  line-height: 1;
-  padding: 0;
-}
-
-.bannerClose:hover {
-  opacity: 1;
-}
-
-.fadeEnter {
-  opacity: 0;
-  z-index: 1;
-}
-
-.fadeEnterActive {
-  opacity: 1;
-  transition: opacity 400ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.fadeExit {
-  opacity: 1;
-}
-
-.fadeExitActive {
-  opacity: 0;
-  transition: opacity 400ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.bannerTransitionEnter {
-  opacity: 0;
-  transform: translateY(-40px) scale(0.98);
-}
-
-.bannerTransitionEnterActive {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  transition: opacity 500ms cubic-bezier(0.4, 0, 0.2, 1),
-    transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.bannerTransitionExit {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.bannerTransitionExitActive {
-  opacity: 0;
-  transform: translateY(-40px) scale(0.98);
-  transition: opacity 500ms cubic-bezier(0.4, 0, 0.2, 1),
-    transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@media (max-width: 767px) {
-  .headerWrapper {
-    margin-top: 90px;
   }
 }

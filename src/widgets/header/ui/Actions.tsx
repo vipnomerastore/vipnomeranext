@@ -60,6 +60,7 @@ const UserBlock = ({
     <span className={styles.userName} title={username}>
       {username}
     </span>
+
     <button
       className={styles.logoutButton}
       onClick={onLogout}
