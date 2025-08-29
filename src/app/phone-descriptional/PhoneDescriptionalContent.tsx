@@ -47,7 +47,7 @@ const PhoneDescriptionalContent: React.FC<Props> = ({
         <p className={styles.price}>
           Цена: <span>{isPartner ? number.partner_price : number.price} ₽</span>
         </p>
-        {number.part_price && (
+        {!isPartner && (
           <p className={styles.credit}>
             Рассрочка без банка:{" "}
             <span>
@@ -59,7 +59,6 @@ const PhoneDescriptionalContent: React.FC<Props> = ({
     </div>
   );
 
-  // Если это модальное окно, оборачиваем в overlay
   if (isModal && onClose) {
     return (
       <div
@@ -73,7 +72,6 @@ const PhoneDescriptionalContent: React.FC<Props> = ({
     );
   }
 
-  // Если это обычная страница, возвращаем просто контент
   return <div className={styles.pageContainer}>{content}</div>;
 };
 

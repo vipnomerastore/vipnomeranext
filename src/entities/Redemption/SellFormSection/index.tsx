@@ -1,27 +1,41 @@
+"use client";
+
 import { memo, useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import Image from "next/image";
 
 import { SERVER_URL } from "@/shared/api";
+import { useAuthStore } from "@/store/authStore";
 import Button from "@/shared/ui/Button";
 import Input from "@/shared/ui/Input";
 import MaskedInput from "@/shared/ui/MaskedInput";
 import TextArea from "@/shared/ui/TextArea";
 import Select from "@/shared/ui/Select";
 import Checkbox from "@/shared/ui/Checkbox";
+import SellAuthModal from "@/entities/Redemption/SellAuthModal";
+import ConfirmationModal from "@/entities/Redemption/ConfirmationModal";
 import styles from "./SellFormSection.module.scss";
 
-interface SellNumberItem {
-  number: string;
+// Локальные типы для этого компонента
+interface StrapiSellRequest {
+  name: string;
+  phone: string;
+  operator: string;
   price: string;
+  email: string;
+  sell_number: string;
+  comment: string;
+  isPaid: "НА МОДЕРАЦИИ" | "ВЫСТАВЛЕН НА ПРОДАЖУ" | "ПРОДАН";
 }
 
 interface FormData {
   name: string;
   contactPhone: string;
   operator: string;
-  sellNumbers: SellNumberItem[];
+  sellNumber: string;
+  price: string;
   email: string;
   comment: string;
   agreement: boolean;
@@ -31,7 +45,8 @@ const defaultValues: FormData = {
   name: "",
   contactPhone: "+7 ",
   operator: "",
-  sellNumbers: [{ number: "", price: "" }],
+  sellNumber: "",
+  price: "",
   email: "",
   comment: "",
   agreement: true,
@@ -39,182 +54,173 @@ const defaultValues: FormData = {
 
 const SellFormSection: React.FC = memo(() => {
   const [operator, setOperator] = useState("");
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [submittedPhoneNumber, setSubmittedPhoneNumber] = useState("");
 
-  const router = useRouter();
+  const { isAuthenticated } = useAuthStore();
 
   const { control, handleSubmit, reset, formState } = useForm<FormData>({
     defaultValues,
   });
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "sellNumbers",
-  });
-
   const onSubmitHandler = useCallback(
     async (data: FormData) => {
-      try {
-        const sellNumberString = data.sellNumbers
-          .map((item) => `${item.number} ${item.price.replace(/\s/g, "")}₽`)
-          .join(", ");
+      if (!isAuthenticated) {
+        setShowAuthModal(true);
+        return;
+      }
 
-        const payload = {
-          data: {
-            name: data.name,
-            phone: data.contactPhone,
-            operator: operator,
-            sell_number: sellNumberString,
-            email: data.email,
-            comment: data.comment,
-          },
+      try {
+        const sellRequestData: StrapiSellRequest = {
+          name: data.name,
+          phone: data.contactPhone,
+          price: data.price,
+          operator: operator,
+          sell_number: data.sellNumber,
+          email: data.email,
+          comment: data.comment,
+          isPaid: "НА МОДЕРАЦИИ",
         };
 
-        await axios.post(`${SERVER_URL}/forma-srochnyj-vykups`, payload);
+        const response = await axios.post(
+          `${SERVER_URL}/forma-srochnyj-vykups`,
+          {
+            data: sellRequestData,
+          }
+        );
 
-        reset();
-        router.push("/thank-you");
+        if (response.data) {
+          setSubmittedPhoneNumber(data.sellNumber);
+          setShowConfirmationModal(true);
+          reset();
+        }
       } catch (error: any) {
         console.error("Ошибка при отправке формы:", error);
       }
     },
-    [router, operator, setOperator]
+    [isAuthenticated, operator, reset]
   );
 
+  const handleAuthSuccess = useCallback(() => {
+    handleSubmit(onSubmitHandler)();
+  }, [handleSubmit, onSubmitHandler]);
+
   return (
-    <section className={styles.formContainer}>
-      <h2 className={styles.formTitle}>Заполните форму для продажи номера</h2>
+    <section className={styles.formContainer} id="sell-form">
+      <h2 className={styles.formTitle}>
+        Узнайте стоимость вашего номера за 5 минут
+      </h2>
 
-      <form
-        className={styles.redemptionForm}
-        onSubmit={handleSubmit(onSubmitHandler)}
-      >
-        <Input
-          control={control}
-          name="name"
-          placeholder="Ваше имя"
-          fullWidth
-          required
-        />
-
-        <MaskedInput fullWidth control={control} name="contactPhone" />
-
-        <Select
-          value={operator}
-          fullWidth
-          onChange={(e) => setOperator(e.target.value)}
-          options={["МТС", "Билайн", "Мегафон", "Теле 2"]}
-        />
-
-        {fields.map((item, idx) => (
-          <div
-            className={styles.operatorRow}
-            key={item.id}
-            style={{ alignItems: "center" }}
-          >
-            <Controller
-              name={`sellNumbers.${idx}.number`}
-              control={control}
-              render={({ field }) => (
-                <MaskedInput {...field} control={control} fullWidth />
-              )}
-            />
-            <div
-              className={styles.inputWrapper}
-              style={{ flex: 1, position: "relative" }}
-            >
-              <Controller
-                name={`sellNumbers.${idx}.price`}
+      <div className={styles.formWrapper}>
+        <form
+          className={styles.redemptionForm}
+          onSubmit={handleSubmit(onSubmitHandler)}
+        >
+          <div className={styles.formGroup}>
+            <label className={styles.formLabel}>Ваши контактные данные</label>
+            <div className={styles.inputGroup}>
+              <Input
                 control={control}
-                render={() => (
+                name="name"
+                placeholder="Ваше имя"
+                fullWidth
+                required
+              />
+
+              <MaskedInput fullWidth control={control} name="contactPhone" />
+
+              <Input
+                control={control}
+                required
+                type="email"
+                name="email"
+                placeholder="Ваш email"
+                fullWidth
+              />
+            </div>
+          </div>
+
+          <div className={styles.formGroup}>
+            <label className={styles.formLabel}>Информация о номере</label>
+            <div className={styles.inputGroup}>
+              <Select
+                required
+                value={operator}
+                fullWidth
+                onChange={(e) => setOperator(e.target.value)}
+                options={[
+                  "Выберите оператора",
+                  "МТС",
+                  "Билайн",
+                  "Мегафон",
+                  "Теле 2",
+                ]}
+              />
+
+              <div className={styles.numberPriceRow}>
+                <MaskedInput name="sellNumber" control={control} fullWidth />
+
+                <div className={styles.priceInput}>
                   <Input
                     control={control}
-                    name={`sellNumbers.${idx}.price`}
+                    name="price"
                     type="text"
-                    placeholder="Цена"
+                    placeholder="Желаемая цена"
                     fullWidth
+                    required
                   />
-                )}
-              />
-              <span
-                style={{
-                  position: "absolute",
-                  right: 12,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  color: "#fff",
-                  pointerEvents: "none",
-                }}
-              >
-                ₽
-              </span>
+                  <span className={styles.currencySymbol}>₽</span>
+                </div>
+              </div>
             </div>
-
-            {idx !== 0 && (
-              <button
-                type="button"
-                onClick={() => remove(idx)}
-                style={{
-                  marginLeft: 8,
-                  background: "none",
-                  border: "none",
-                  color: "#ff6b6b",
-                  fontSize: 32,
-                  cursor: "pointer",
-                }}
-                aria-label="Удалить номер"
-              >
-                ×
-              </button>
-            )}
-
-            {idx === 0 && (
-              <button
-                type="button"
-                onClick={() => append({ number: "", price: "" })}
-                style={{
-                  marginLeft: 8,
-                  background: "none",
-                  border: "none",
-                  color: "#d9ad49",
-                  fontSize: 32,
-                  cursor: "pointer",
-                }}
-                aria-label="Добавить номер"
-              >
-                +
-              </button>
-            )}
           </div>
-        ))}
 
-        <Input
-          control={control}
-          type="email"
-          name="email"
-          placeholder="Почта"
-          fullWidth
-        />
+          <div className={styles.formGroup}>
+            <label className={styles.formLabel}>
+              Дополнительная информация
+            </label>
 
-        <TextArea
-          control={control}
-          name="comment"
-          placeholder="Комментарий"
-          fullWidth
-          rows={4}
-        />
+            <TextArea
+              control={control}
+              name="comment"
+              placeholder="Расскажите о особенностях номера (необязательно)"
+              fullWidth
+              rows={4}
+            />
+          </div>
 
-        <Checkbox control={control} name="agreement" />
+          <div className={styles.formActions}>
+            <Checkbox control={control} name="agreement" />
 
-        <Button
-          arrow
-          variant="outline"
-          type="submit"
-          disabled={formState.isSubmitting}
-          fullWidth
-        >
-          {formState.isSubmitting ? "Отправка..." : "Получить предложение  "}
-        </Button>
-      </form>
+            <Button
+              arrow
+              variant="default"
+              type="submit"
+              disabled={formState.isSubmitting}
+              fullWidth
+            >
+              {formState.isSubmitting
+                ? "Обрабатываем заявку..."
+                : "Получить оценку номера"}
+            </Button>
+          </div>
+        </form>
+      </div>
+
+      {/* Модалка авторизации */}
+      <SellAuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={handleAuthSuccess}
+      />
+
+      {/* Модалка подтверждения */}
+      <ConfirmationModal
+        isOpen={showConfirmationModal}
+        onClose={() => setShowConfirmationModal(false)}
+        phoneNumber={submittedPhoneNumber}
+      />
     </section>
   );
 });

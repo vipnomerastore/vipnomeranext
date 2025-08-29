@@ -1,0 +1,258 @@
+@import "../../styles/variables.scss";
+
+.container {
+  max-width: 1166px;
+  margin: 0 auto;
+  padding: 32px 20px;
+  min-height: 100vh;
+}
+
+// Заголовок
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 8px 0;
+
+  @media (max-width: 768px) {
+    font-size: 28px;
+    justify-content: center;
+  }
+}
+
+.subtitle {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+}
+
+.count {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.error {
+  text-align: center;
+  padding: 80px 20px;
+
+  h3 {
+    color: #fff;
+    font-size: 24px;
+    margin: 16px 0 8px;
+  }
+
+  p {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 24px;
+  }
+}
+
+// Список объявлений
+.listings {
+  display: grid;
+  gap: 24px;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  }
+}
+
+.listingCard {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    border-color: rgba(217, 173, 73, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.listingHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  gap: 10px;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+.phoneInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.phoneNumber {
+  font-size: 18px;
+  color: #ffffff;
+}
+
+.operator {
+  display: inline-block;
+  padding: 4px 12px;
+  background: rgba(27, 26, 23, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.priceInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.price {
+  font-size: 15px;
+  color: #fff;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusPending {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.statusActive {
+  background: rgba(40, 167, 69, 0.2);
+  color: #28a745;
+  border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.statusSold {
+  background: rgba(23, 162, 184, 0.2);
+  color: #17a2b8;
+  border: 1px solid rgba(23, 162, 184, 0.3);
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.infoLabel {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.infoValue {
+  font-size: 14px;
+  color: #fff;
+  font-weight: 500;
+}
+
+.comment {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.commentLabel {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.commentText {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.5;
+}
+
+// Адаптивность
+@media (max-width: 768px) {
+  .container {
+    padding: 24px 16px;
+  }
+
+  .listings {
+    grid-template-columns: 1fr;
+  }
+
+  .listingCard {
+    padding: 20px;
+  }
+
+  .infoGrid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 24px;
+  }
+
+  .phoneNumber {
+    font-size: 18px;
+  }
+
+  .price {
+    font-size: 20px;
+  }
+}

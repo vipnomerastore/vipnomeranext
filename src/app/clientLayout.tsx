@@ -31,13 +31,13 @@ export default function ClientLayout({
 
   return (
     <div className={styles.layout}>
-      <div className={headerStyles.bannerHeaderSmoke}>
+      <header className={headerStyles.bannerHeaderSmoke}>
         <HeaderBanner />
 
-        <header className={styles.header}>
+        <div className={styles.header}>
           <Header />
-        </header>
-      </div>
+        </div>
+      </header>
 
       <RegionManager />
 

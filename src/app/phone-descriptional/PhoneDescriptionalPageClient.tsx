@@ -2,7 +2,6 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
-import { useCartStore } from "@/store/cartStore";
 import { useAuthStore } from "@/store/authStore";
 import PhoneDescriptionalContent from "./PhoneDescriptionalContent";
 import { NumberItem } from "@/store/cartStore";
@@ -14,36 +13,30 @@ interface PhoneDescriptionalPageClientProps {
 export default function PhoneDescriptionalPageClient({
   defaultNumber,
 }: PhoneDescriptionalPageClientProps) {
+  const [isModal, setIsModal] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { addItem } = useCartStore();
   const { user } = useAuthStore();
   const isPartner = user?.role?.name === "Партнёр";
 
-  // Определяем, пришел ли пользователь с главной страницы (т.е. нужна ли модалка)
-  const [isModal, setIsModal] = useState(false);
-
   useEffect(() => {
-    // Если есть referrer и это главная страница, показываем как модалку
     const referrer = document.referrer;
+
     const isFromMainPage =
       referrer.includes(window.location.origin) &&
       (referrer.endsWith("/") || referrer.includes("/?"));
 
-    // Или можно проверить наличие специального параметра modal=true
     const modalParam = searchParams.get("modal");
 
     setIsModal(isFromMainPage || modalParam === "true");
   }, [searchParams]);
 
-  // Получаем данные номера из URL параметров
   const phoneParam = searchParams.get("phone");
   const priceParam = searchParams.get("price");
   const operatorParam = searchParams.get("operator");
   const regionParam = searchParams.get("region");
   const idParam = searchParams.get("id");
 
-  // Мок-объект для fallback
   const mockNumber: NumberItem = defaultNumber || {
     id: idParam || "1",
     phone: phoneParam || "+7 (999) 123-45-67",
@@ -60,26 +53,6 @@ export default function PhoneDescriptionalPageClient({
 
   const handleClose = () => {
     router.back();
-  };
-
-  const handleAddToCart = (item: NumberItem) => {
-    const cartItem = {
-      ...item,
-      price: isPartner ? item.partner_price : item.price,
-      quantity: 1,
-    };
-
-    const isAlreadyInCart = useCartStore
-      .getState()
-      .items.some((i) => i.phone === cartItem.phone);
-
-    if (isAlreadyInCart) {
-      return;
-    }
-
-    addItem(cartItem);
-
-    router.push("/cart");
   };
 
   return (

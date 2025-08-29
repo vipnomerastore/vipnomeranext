@@ -5,265 +5,109 @@
   display: flex;
   flex-direction: column;
   max-width: 1166px;
-  gap: 20px;
+  gap: 40px;
   margin: 0 auto;
+  padding: 30px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   overflow: hidden;
   width: 100%;
 
   @media (max-width: 1200px) {
     max-width: 960px;
-    padding: 0 10px;
+    padding: 50px 30px;
   }
 
   @media (max-width: 768px) {
     max-width: 100%;
-    gap: 15px;
-  }
-}
-
-.bgCard {
-  position: absolute;
-  right: 0;
-  bottom: -15%;
-  z-index: 2;
-
-  @media (max-width: 1200px) {
-    display: none;
-  }
-
-  @media (max-width: 768px) {
-    display: none;
-  }
-
-  @media (max-width: 500px) {
-    display: none;
+    gap: 32px;
+    padding: 40px 20px;
   }
 }
 
 .formTitle {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  border-left: 1px solid $border-color;
-  padding-left: 20px;
-  font-size: 40px;
+  font-size: 36px;
   font-weight: 700;
-  text-transform: uppercase;
-  color: $text-color;
+  text-align: center;
+  color: #ffffff;
 
   @media (max-width: 768px) {
-    padding-left: 15px;
     font-size: 24px;
-    gap: 10px;
   }
 }
 
-.inputWrapper {
-  width: 100%;
-  position: relative;
+.formWrapper {
+  display: flex;
+  flex-direction: column;
 }
 
 .redemptionForm {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  max-width: 660px;
-  margin-right: auto;
+  gap: 25px;
 
   @media (max-width: 768px) {
-    gap: 10px;
-    max-width: 100%;
-  }
-}
-
-.input,
-.select,
-.textarea {
-  width: 100%;
-  padding: 12px 18px;
-  border-radius: 10px;
-  background-color: $input-bg;
-  color: $text-color;
-  font-size: 14px;
-  border: 1px solid $input-bg;
-  transition: all 0.3s linear;
-
-  @media (max-width: 768px) {
-    padding: 10px;
-    font-size: 13px;
-  }
-}
-
-.input:focus,
-.select:focus,
-.textarea:focus {
-  outline: none;
-  border-color: $primary-color;
-}
-
-.input:hover:not(:focus),
-.select:hover:not(:focus),
-.textarea:hover:not(:focus) {
-  border-color: $primary-color;
-}
-
-.selectWrapper {
-  position: relative;
-  width: 100%;
-
-  &::after {
-    content: "";
-    position: absolute;
-    right: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 0;
-    height: 0;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-top: 6px solid $primary-color;
-    pointer-events: none;
-    transition: border-top-color 0.3s ease;
-  }
-
-  &:hover::after,
-  &:focus-within::after {
-    border-top-color: $secondary-color;
-  }
-}
-
-.select,
-.operatorSelect {
-  width: 100%;
-  padding: 12px 40px 12px 18px;
-  border-radius: 10px;
-  background-color: $input-bg;
-  color: $text-color;
-  font-size: 14px;
-  border: 1px solid $input-bg;
-  transition: all 0.3s linear;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  cursor: pointer;
-  color-scheme: dark;
-
-  @media (max-width: 768px) {
-    padding: 10px 40px 10px 10px;
-    font-size: 13px;
-  }
-
-  option {
-    background-color: #212121;
-    color: $text-color;
-    font-size: 14px;
-  }
-}
-
-.select:focus,
-.operatorSelect:focus {
-  outline: none;
-  border-color: $primary-color;
-}
-
-.select:hover:not(:focus),
-.operatorSelect:hover:not(:focus) {
-  border-color: $primary-color;
-}
-
-.operatorRow {
-  width: 100%;
-  display: flex;
-  gap: 12px;
-
-  @media (max-width: 500px) {
-    flex-direction: column;
-    gap: 10px;
-  }
-}
-
-.textarea {
-  min-height: 100px;
-  resize: vertical;
-}
-
-.checkboxContainer {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  @media (max-width: 500px) {
-    align-items: flex-start;
-    gap: 5px;
-  }
-}
-
-.checkboxText {
-  color: $gray-dark;
-  font-size: 14px;
-  margin: 0;
-
-  @media (max-width: 768px) {
-    font-size: 12px;
-  }
-}
-
-.link {
-  color: $primary-color;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-.bottom {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  gap: 30px;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: flex-start;
     gap: 15px;
   }
 }
 
-.submitButton {
-  position: relative;
-  z-index: 1;
+.formGroup {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   gap: 15px;
-  padding: 12px 16px;
-  background: linear-gradient(#212121, #212121) padding-box,
-    linear-gradient(131deg, $primary-color 0, $secondary-color 100%) border-box;
-  border: 1px solid transparent;
-  color: $text-color;
-  border-radius: 8px;
-  transition: box-shadow 0.5s;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 700;
-  width: 500px;
-  height: 40px;
+}
 
-  span {
-    background: linear-gradient($secondary-color, $primary-color);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+.formLabel {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+
+  @media (max-width: 768px) {
+    font-size: 15px;
   }
+}
 
-  &:hover {
-    box-shadow: -1px 6px 22px 2px $shadow-color;
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.numberPriceRow {
+  display: grid;
+  grid-template-columns: 1fr minmax(250px, 300px);
+  gap: 12px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr 1fr;
   }
 
   @media (max-width: 768px) {
-    align-self: center;
-    width: 100%;
-    max-width: 300px;
+    grid-template-columns: 1fr;
   }
+}
+
+.priceInput {
+  position: relative;
+}
+
+.currencySymbol {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 16px;
+  pointer-events: none;
+
+  @media (max-width: 768px) {
+    right: 12px;
+    font-size: 14px;
+  }
+}
+
+.formActions {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }

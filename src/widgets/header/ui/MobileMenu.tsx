@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 import { useCartStore } from "../../../store/cartStore";
 import { useAuthStore } from "../../../store/authStore";
 
@@ -18,13 +19,39 @@ const MobileMenu = ({
   isOpen,
   toggleMenu,
   openLoginModal,
-  hasBanner = true,
 }: MobileMenuProps) => {
   const cartCount = useCartStore((state) =>
     state.items.reduce((total, item) => total + (item.quantity ?? 0), 0)
   );
   const { isAuthenticated, user, logout } = useAuthStore();
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (isOpen) {
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+    } else {
+      const scrollY = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      }
+    }
+
+    return () => {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -37,6 +64,9 @@ const MobileMenu = ({
     { href: "/", label: "Выбрать номер" },
     { href: "/partner", label: "Партнёрам" },
     { href: "/redemption", label: "Продать номер" },
+    ...(isAuthenticated
+      ? [{ href: "/my-listings", label: "Мои объявления" }]
+      : []),
     { href: "/blog", label: "Блог" },
   ];
 
@@ -44,10 +74,7 @@ const MobileMenu = ({
     href === pathname ? `${styles.navItem} ${styles.active}` : styles.navItem;
 
   return (
-    <div
-      className={styles.mobileMenu}
-      style={{ paddingTop: hasBanner ? 22 : 0 }}
-    >
+    <div className={styles.mobileMenu}>
       <div className={styles.mobileMenuHeader}>
         <Link href="/" onClick={toggleMenu} aria-label="На главную">
           <Image
@@ -110,7 +137,7 @@ const MobileMenu = ({
           </Link>
 
           {isAuthenticated && user ? (
-            <div className={styles.userWrapper}>
+            <div className={styles.userWrapperMobile}>
               <Image
                 src="/assets/header/user.svg"
                 alt="Пользователь"

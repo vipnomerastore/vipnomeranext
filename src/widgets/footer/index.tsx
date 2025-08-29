@@ -35,20 +35,12 @@ const Footer = () => (
             Акции
           </ScrollNavLink>
 
-          <ScrollNavLink href="/#credit" className={styles.navLink}>
-            Рассрочка
-          </ScrollNavLink>
-
           <Link href="/partner" className={styles.navLink}>
             Партнерам
           </Link>
         </nav>
 
         <nav className={styles.navColumn}>
-          <Link href="/credit" className={styles.navLink}>
-            Рассрочка без банка
-          </Link>
-
           <Link href="/redemption" className={styles.navLink}>
             Продать номер
           </Link>

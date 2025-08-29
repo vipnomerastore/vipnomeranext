@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { useAuthStore } from "@/store/authStore";
 import { useHydration } from "../../../hooks/useHydration";
 import ScrollNavLink from "./ScrollNavLink";
 import styles from "../Header.module.scss";
@@ -12,6 +13,7 @@ interface NavMenuProps {
 const NavMenu = ({ setMenuOpen }: NavMenuProps) => {
   const pathname = usePathname();
   const isHydrated = useHydration();
+  const { isAuthenticated } = useAuthStore();
 
   const getNavLinkClass = (href: string) => {
     if (href === "/" && !isHydrated) return styles.navItem;
@@ -49,6 +51,16 @@ const NavMenu = ({ setMenuOpen }: NavMenuProps) => {
       >
         Продать номер
       </Link>
+
+      {isAuthenticated && (
+        <Link
+          href="/my-listings"
+          className={getNavLinkClass("/my-listings")}
+          onClick={() => setMenuOpen(false)}
+        >
+          Мои объявления
+        </Link>
+      )}
 
       <ScrollNavLink href="#contacts" setMenuOpen={setMenuOpen}>
         Контакты
